@@ -1,0 +1,25 @@
+{
+  "id": "./",
+  "name": "Daily Reps",
+  "short_name": "Daily Reps",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d1629",
+  "theme_color": "#0d1629",
+  "description": "20-minute circuits with rep tracking.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
