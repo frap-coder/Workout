@@ -11,6 +11,7 @@ function harness(seed={},extras={}){
 }
 if(require.main===module)(async()=>{
  const h=harness();await h.run('bootReady');const {run}=h;
+ run('profile().equipment=EQUIPMENT.slice();delete profile().experience;profile().onboardingComplete=true;tab="Workout"');
  assert.equal(run('state.schemaVersion'),3);assert.equal(run('profile().mode'),'rotation');
  for(let d=0;d<3;d++){
   run(`day=${d}`);assert.equal(run('currentCircuit().length'),5);assert(run('currentCircuit().every(r=>r.main&&!r.main.name.includes(" + "))'));

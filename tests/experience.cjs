@@ -1,0 +1,25 @@
+const assert=require('node:assert/strict');const {harness}=require('./release.cjs');
+(async()=>{
+ const fresh=harness();await fresh.run('bootReady');const {run}=fresh;
+ assert.equal(run('tab'),'Setup');assert.equal(run('setupDraft.fresh'),true);assert.equal(run('profile().equipment.join()'),'Bodyweight');
+ assert.equal(run('setupDraft.step'),1);assert(run('setupView()').includes('When will you train?'));
+ run('setupDraft.target=2;setupDraft.days=SPACING[2].slice()');assert.equal(run('planSequence().join()'),'Full Body');
+ assert(run('plannedProfile().schedule.every(p=>p.type==="Full Body")'));
+ run('setupDraft.target=5');assert.equal(run('planSequence().join()'),'Push,Pull,Lower');
+ run('setupDraft.target=2;setupDraft.system="ppl"');assert.equal(run('planSequence().join()'),'Push,Pull,Lower');
+ run('setupDraft.system="auto";setupDraft.mode="fixed";setupDraft.days=[1,4]');assert.equal(run('plannedProfile().schedule.filter(p=>p.type!=="Rest").length'),2);
+ run('setupDraft.mode="rotation";setupDraft.experience="beginner";applySetup()');assert.equal(run('profile().onboardingComplete'),true);assert.equal(run('tab'),'Workout');assert(run('currentCircuit().every(r=>r.main&&allowed(r.main))'));
+ assert(run('currentCircuit().every(r=>(challengeFor(r.main)?.level||5)<=2)'));
+ const home=run('workout()');assert(home.includes('workout-compact-list'));assert(!home.includes('calendar-panel'));assert(!home.includes('timer-panel'));assert(home.includes('Start workout'));
+ assert.equal(run('challengeRelation(MOVES.benchpress,MOVES.kneepush)'),'Much lighter variant');assert.equal(run('challengeRelation(MOVES.kneepush,MOVES.benchpress)'),'Much harder variant');assert.equal(run('challengeDirection(MOVES.pushup,MOVES.kneepush)'),'lighter');assert.equal(run('challengeBadge({name:"My custom move",group:"press"})'),'Unrated');
+ assert(run('Object.values(MOVES).every(m=>Number.isInteger(m.challenge)&&m.challenge>=1&&m.challenge<=5)'));
+ run('profile().equipment=EQUIPMENT.slice();start();saveLoad(1,"30");addReps(1,12)');assert.equal(run('previousSet(currentCircuit()[1].main).amount'),12);assert.equal(run('previousSet(currentCircuit()[1].main).weightKg'),30);
+ const repeat=fresh.events.click.find(fn=>fn.toString().includes("a==='repeat-set'"));repeat({target:{closest:()=>({dataset:{action:'repeat-set',i:'1'}})}});
+ assert.equal(run('countTotal(repEntries(activeSession()))'),24);run('undoReps(1)');assert.equal(run('countTotal(repEntries(activeSession()))'),12);
+ const snap=run('JSON.stringify(state)');const reload=harness({'daily-reps-engine-v2':snap});await reload.run('bootReady');assert.equal(reload.run('tab'),'Workout');assert(reload.run('hasActive()'));assert.equal(reload.run('currentCircuit()[1].main.weightKg'),30);
+ const remaining=run('remaining()'),before=run('countTotal(repEntries(activeSession()))');run('openExercisePicker(1);swapExercise(1,0)');assert.equal(run('remaining()'),remaining);assert.equal(run('countTotal(repEntries(activeSession()))'),before);assert(run('activeSession().echoInvalid'));
+ assert(fresh.nodes.get('#modal').innerHTML.includes('data-direction="harder"'));assert(fresh.nodes.get('#modal').innerHTML.includes('data-level-filter'));
+ const legacy=JSON.parse(snap);delete legacy.profiles[0].onboardingComplete;legacy.profiles[0].session=null;const old=harness({'daily-reps-engine-v2':JSON.stringify(legacy)});await old.run('bootReady');assert.equal(old.run('tab'),'Workout');assert.equal(old.run('profile().onboardingComplete'),true);assert.equal(old.run('profile().schedule[0].type'),'Full Body');
+ run('profile().session=null;openSetup();setupDraft.bans=["chest"];applySetup()');assert.equal(run('tab'),'Setup');assert(run('previewStep()').includes('empty slots'));
+ console.log('PASS: first-run onboarding, legacy bypass, full-body recommendation, fixed schedules, empty-slot protection, challenge comparisons, compact home, repeat/undo sets, saved load, running swap, resumed session.');
+})().catch(e=>{console.error(e);process.exit(1)});

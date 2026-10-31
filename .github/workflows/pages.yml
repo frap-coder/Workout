@@ -32,6 +32,7 @@ jobs:
           node tests/release.cjs
           node tests/offline-runtime.cjs
           node tests/library.cjs
+          node tests/experience.cjs
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
         with:
@@ -43,3 +44,4 @@ jobs:
       - name: Publish
         id: deployment
         uses: actions/deploy-pages@v4
+

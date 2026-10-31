@@ -2313,3 +2313,21 @@ MOVES.triceps.id='triceps';
 MOVES.dbextension.libraryAlias='triceps';
 
 for(const m of Object.values(MOVES)){if(m.group==='biceps')m.pattern='elbow flexion';if(m.group==='triceps'&&m.pattern!=='close-grip press')m.pattern='elbow extension';}
+
+// Reference challenge at a typical controlled working load, within a muscle group.
+// This is a selection aid, not a measurement of personal effort, calories or strength.
+move('benchpress','Barbell Bench Press',['Barbell','Stable Bench / Support','Squat Rack'],'press','8–12 reps','Use a secured bench and correctly set rack safety arms or a spotter. Keep feet planted, lower the bar under control and press without bouncing.');
+MOVES.benchpress.pattern='horizontal press';
+move('dbbench','Dumbbell Bench Press',['Dumbbells','Stable Bench / Support'],'press','8–12 reps','Use a stable bench. Keep wrists stacked, lower through a comfortable range and press with control.');
+MOVES.dbbench.pattern='horizontal press';
+const PATTERN_LEVELS={'horizontal press':3,'overhead press':3,'shoulder raise':2,'shoulder control':1,'shoulder circling':2,'shoulder sliding':1,'shoulder rotation':1,'rear delt fly':2,'row':3,'pulldown':3,'scapular control':1,'straight-arm pulldown':2,'high pull':4,'hip hinge':3,'swing':4,'squat':3,'lunge':3,'hip extension':2,'knee flexion':2,'hip abduction':1,'hip adduction':1,'hip internal rotation':1,'hip external rotation':1,'hip control':1,'hip flexion':2,'lateral stepping':2,'calf raise':2,'elbow extension':2,'elbow flexion':2,'close-grip press':3,'anti-extension':3,'anti-rotation':2,'anti-lateral flexion':2,'trunk flexion':2,'trunk rotation':2,'trunk stability':1,'conditioning':3,'loaded march':3};
+const LEVEL_OVERRIDES={kneepush:1,pushup:3,tempo:4,pausepush:4,pike:4,wallslide:1,halo:2,dbpress:3,kbpress:3,benchpress:4,dbbench:4,squat:1,bodyhinge:1,bridge:1,bwhipthrust:2,singlebridge:3,lunge:3,split:2,lateralunge:3,swing:4,wheel:5,vup:4,plank:2,hollow:3,deadbug:1,birddog:1,selfcurl:1,prone:1,pronet:1,reverseangel:1,closepush:4,calf:1,singlecalf:3,kneecalf:1,seatedcalf:1,clamshell:1,hydrant:1,sideleg:1,standhip:1,thruster:4,clean:5,snatch:5,climber:3,march:2};
+const NAMED_LEVELS={'Wall Push-ups':1,'Incline Push-ups':2,'Eccentric Push-ups':2,'Hand-Release Push-ups':3,'Single-Arm Dumbbell Floor Press':4,'Kneeling Close-Grip Push-ups':2,'Incline Close-Grip Push-ups':2,'Wall Triceps Extensions':1,'Single-Leg Dumbbell Romanian Deadlift':4,'Single-Leg Kettlebell Romanian Deadlift':4,'Bodyweight Kickstand Hinge':2,'Forward Lunges':3,'Walking Lunges':3,'Dumbbell Forward Lunges':4,'Dumbbell Walking Lunges':4,'Dumbbell Reverse Lunges':4,'Dumbbell Split Squat':4,'Kettlebell Split Squat':4,'Dumbbell Lateral Lunge':4,'Kettlebell Reverse Lunge':4,'Sandbag Reverse Lunge':4,'Paused Bodyweight Squat':2,'Side Plank':3,'Kneeling Side Plank':1,'Bear Plank':2,'Dead Bug Heel Slide':1,'Supine Toe Taps':1,'Hollow Body Rocks':4,'Single-Leg Hip Thrust':4,'Dumbbell Single-Leg Glute Bridge':4,'Kettlebell Single-Leg Glute Bridge':4,'Step Jacks':1,'Jumping Jacks':3,'High-Knee March':1,'Standing Shadow Boxing':2,'Step-Back Burpee':4,'Bear Crawl Steps':4};
+for(const m of Object.values(MOVES)){
+ const body=m.equipment.every(e=>e==='Bodyweight'||e==='Stable Bench / Support');
+ m.challenge=NAMED_LEVELS[m.name]??LEVEL_OVERRIDES[m.id]??PATTERN_LEVELS[m.pattern]??({shoulder:2,triceps:2,biceps:2,core:2,full:4}[m.group])??2;
+ if(body&&m.group==='squat'&&m.pattern==='squat'&&!NAMED_LEVELS[m.name])m.challenge=2;
+ m.loadDependent=!body;
+}
+
+if(!TYPES.includes('Full Body'))TYPES.splice(TYPES.length-1,0,'Full Body');

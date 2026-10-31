@@ -12,6 +12,8 @@ function validateState(value){
  const ids=new Set();
  for(const p of value.profiles){
   if(typeof p.id!=='string'||ids.has(p.id)||typeof p.name!=='string'||p.name.length>100)throw Error('Invalid profile.');ids.add(p.id);
+  if(p.onboardingComplete!=null&&typeof p.onboardingComplete!=='boolean')throw Error('Invalid setup status.');
+  if(p.experience!=null&&!['beginner','intermediate','advanced'].includes(p.experience))throw Error('Invalid experience level.');
   if(p.loads&&(typeof p.loads!=='object'||Array.isArray(p.loads)||Object.values(p.loads).some(v=>v!=null&&(!Number.isFinite(v)||v<0||v>1000))))throw Error('Invalid saved loads.');
   if(p.preferences&&(typeof p.preferences!=='object'||Array.isArray(p.preferences)||Object.entries(p.preferences).some(([k,v])=>['sound','compact','keepAwake'].includes(k)&&typeof v!=='boolean')))throw Error('Invalid preferences.');
   if(p.rotationIndex!=null&&(!Number.isInteger(p.rotationIndex)||p.rotationIndex<0))throw Error('Invalid rotation.');
@@ -36,6 +38,7 @@ function readStoredState(key='daily-reps-engine-v2'){
 function migrateState(value){
  validateState(value);
  for(const p of value.profiles){
+  if(p.onboardingComplete===undefined)p.onboardingComplete=true;
   p.loads??={};p.preferences??={keepAwake:true,sound:true,compact:true};
   // Saved history and live circuits are immutable. Only old built-in compound
   // movements in upcoming custom plans are replaced with one movement.

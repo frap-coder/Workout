@@ -12,6 +12,7 @@ Serve `dist/` over HTTPS (or localhost for development) and open `index.html`. N
 node tests/release.cjs
 node tests/offline-runtime.cjs
 node tests/library.cjs
+node tests/experience.cjs
 ```
 
 These exercise the real app logic in a Node VM and the actual service-worker handlers with browser API doubles. They are not a substitute for physical-device acceptance tests.
@@ -57,11 +58,11 @@ A browser cannot promise an alarm when it is closed or suspended or the device i
 
 ## Expanded exercise library — 30 October 2026
 
-The library contains 282 distinct selectable exercises, grouped by primary training role:
+The library contains 284 distinct selectable exercises, grouped by primary training role:
 
 | Group | Exercises |
 | --- | ---: |
-| Chest | 23 |
+| Chest | 25 |
 | Shoulders | 24 |
 | Triceps | 23 |
 | Back | 26 |
@@ -80,6 +81,18 @@ Open “Form & choose exercise” on any workout card. Search by exercise name, 
 
 Choosing an exercise updates the current workout, including during a running session, without resetting the timer or losing recorded reps. During a session it disables Echo comparisons. Use “Save choices as my … routine” before starting or after finishing to retain those choices for future workouts. Builder groups its library by muscle groups belonging to the selected workout. Timed holds continue to use seconds rather than reps.
 
-Run locally with `python -m http.server 8000 --directory dist` and open http://localhost:8000. Hosting should serve the contents of `dist/`; no build step is required. This repository does not automatically publish a public app.
+Run locally with `python -m http.server 8000 --directory dist` and open http://localhost:8000. Hosting should serve the contents of `dist/`; no build step is required. Changes to main run the release checks and publish dist/ automatically through GitHub Pages.
 
 Automated checks cover library completeness, equipment/exclusion rules, lunges, search, saved routines, existing timer/storage behavior and service-worker cache consistency. Physical-device acceptance checks in RELEASE_CHECKLIST.md remain necessary, especially for audio, wake lock and background suspension.
+
+## Compact experience — 31 October 2026
+
+The home screen presents the five exercises, reference workout challenge and start action before secondary schedule details. Calendar and full weekly progress live in Progress. Selecting an exercise opens a native modal dialog with search, challenge comparison filters and form cues; the library no longer expands inside the workout page.
+
+New profiles enter a five-step setup: frequency and schedule, actual equipment, excluded exercises/categories, experience, and plan preview. Only Bodyweight is selected initially. Recommend mode chooses Full Body for 1–3 weekly sessions and Push/Pull/Lower for higher frequencies; users may override this. Experience ranks suitable variants when generating a new plan. Existing profiles, history, overrides and active sessions retain their saved state and bypass first-run setup. Applying a new plan explicitly replaces upcoming custom circuits; its preview warns about this.
+
+Exercise levels run from 1 to 5 and describe reference challenge within a primary muscle group. Kneeling push-ups are 1, standard push-ups 3, and barbell bench press 4 at a typical working load. Loaded exercises show an asterisk because actual effort depends on load, strength, technique and range. Custom unknown exercises are unrated. These editorial reference levels are not validated physiological measurements, calorie estimates or guaranteed rankings at every load. Different movement patterns remain labelled separately. Workout challenge summarizes the selected reference levels.
+
+Last weights are retained per exercise. Repeat last set copies the last logged entry for that exercise and unit, restores its recorded load, and adds an undoable entry. Logging buttons remain +1/+5/+10 for quick adjustments. Reps and timed holds remain separate. Swaps retain earlier entries and the timer while invalidating Echo comparisons. Backup access is available in the footer, Settings, and a reminder after training when no recent export exists. Advertising is not included.
+
+Run all four automated suites before publication. Full-device browser acceptance remains a separate check; the restricted development environment could not complete the Chromium run. Check compact layout at 360px/390px widths, first-use setup, dialog scrolling and keyboard focus, and real-device timer/audio/offline behavior.

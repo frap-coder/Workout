@@ -45,3 +45,15 @@ Run on current Android Chrome, including a smaller screen, and at least one addi
 - [ ] Swap during a running session; verify timer, previous rep entries and Echo invalidation.
 - [ ] No schematic people or pose images appear in exercise details.
 - [ ] Install the offline update after a session ends and verify the expanded library is available offline.
+
+## Compact experience acceptance
+
+- [ ] New storage enters all five setup steps; only Bodyweight is initially selected.
+- [ ] Two sessions recommend Full Body; five recommend Push/Pull/Lower; either can be overridden.
+- [ ] Existing saved profiles bypass first-use setup and preserve routines/history/session.
+- [ ] At 390×844 and 360×740, verify five compact exercise rows and Start before secondary schedule information; check no horizontal overflow.
+- [ ] Picker opens as a modal; search and lighter/similar/harder filters combine; close returns keyboard focus.
+- [ ] Bench press to kneeling push-up clearly shows a much lighter reference variant; loaded exercise caveat is present.
+- [ ] Repeat last set restores the previous logged load and amount; Undo removes only that entry.
+- [ ] Refresh paused/running sessions and check retained reps, timer and audio re-enablement.
+- [ ] Export remains accessible from footer and Settings; reminders do not interrupt training.

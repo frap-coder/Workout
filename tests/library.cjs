@@ -12,7 +12,7 @@ const {harness}=require('./release.cjs');
   for(let i=0;i<5;i++){
    context.slot=i;
    // Every matching non-duplicate library entry must appear, not just the first five.
-   assert(run(`(()=>{const rows=currentCircuit(),r=rows[slot],got=alternativesFor(r,slot);return libraryForGroup(moveGroup(r.main)).filter(m=>allowed(m)&&!rows.some(r=>r.main?.name===m.name)).every(m=>got.some(a=>a.id===m.id));})()`));
+   assert(run(`(()=>{const rows=currentCircuit(),r=rows[slot],got=alternativesFor(r,slot);return libraryForGroup(moveGroup(r.main)).filter(m=>allowed(m)&&!rows.some(r=>r.main?.name===m.name)).every(m=>got.some(a=>a.name===m.name));})()`));
    assert(run('alternativesFor(currentCircuit()[slot],slot).length')>=20);
   }
   assert(!run('builder()').includes('<optgroup label="'+(day===2?'Chest':'Calves')+'">'));
@@ -23,7 +23,7 @@ const {harness}=require('./release.cjs');
  run('profile().bans=["lunge"]');assert(!run('alternativesFor(currentCircuit()[0],0).some(m=>/lunge/i.test(m.name))'));
  run('profile().bans=[];profile().equipment=["Bodyweight"];openAlts.add(0)');
  assert(run('alternativesFor(currentCircuit()[0],0).every(m=>m.equipment.every(e=>e==="Bodyweight"))'));
- const html=run('exercise(currentCircuit()[0],0,null)');assert(html.includes('data-exercise-search'));assert(html.includes('Quads &amp; legs'));assert(!html.includes('<svg'));assert(!html.includes('<img'));
+ run('openExercisePicker(0)');const html=context.document.querySelector('#modal').innerHTML;assert(html.includes('data-exercise-search'));assert(html.includes('Quads &amp; legs'));assert(!html.includes('<svg'));assert(!html.includes('<img'));
  // A filtered result keeps its original choice index, then swaps that exact exercise.
  run('profile().equipment=EQUIPMENT.slice();profile().bans=[]');
  const chosen=run('alternativesFor(currentCircuit()[0],0).findIndex(m=>m.id==="lunge")');
@@ -35,8 +35,8 @@ const {harness}=require('./release.cjs');
  assert(!run('movementGuide(MOVES.lunge)').includes('<svg'));
  // Search AND-matches terms, hides non-matches and reports an empty state.
  const nodes=[{dataset:{search:'dumbbell walking lunges quads legs'},hidden:false},{dataset:{search:'kettlebell goblet squat'},hidden:false}];
- const count={},empty={};context.document.querySelectorAll=()=>nodes;context.document.querySelector=sel=>sel.includes('count')?count:empty;
- const input=events.input[events.input.length-1];input({target:{dataset:{exerciseSearch:'0'},value:'db lunges'}});assert.equal(nodes[0].hidden,false);assert.equal(nodes[1].hidden,true);assert.equal(count.textContent,'1 options');
- input({target:{dataset:{exerciseSearch:'0'},value:'nothing matches'}});assert.equal(empty.hidden,false);
+ const count={},empty={},search={value:''},filter={value:'all'};context.document.querySelectorAll=()=>nodes;context.document.querySelector=sel=>sel.startsWith('#search')?search:sel.includes('level-filter')?filter:sel.includes('count')?count:empty;
+ const input=events.input[events.input.length-1];search.value='db lunges';input({target:{dataset:{exerciseSearch:'0'},value:'db lunges'}});assert.equal(nodes[0].hidden,false);assert.equal(nodes[1].hidden,true);assert.equal(count.textContent,'1 options');
+ search.value='nothing matches';input({target:{dataset:{exerciseSearch:'0'},value:'nothing matches'}});assert.equal(empty.hidden,false);
  console.log('PASS: >=20 unique exercises per group; complete untruncated choices; lunges; equipment and bans; workout-specific builder; saved routine; text-only coaching; search and empty state.');console.log(counts);
 })().catch(e=>{console.error(e);process.exit(1)});
