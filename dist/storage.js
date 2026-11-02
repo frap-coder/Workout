@@ -12,6 +12,8 @@ function validateState(value){
  const ids=new Set();
  for(const p of value.profiles){
   if(typeof p.id!=='string'||ids.has(p.id)||typeof p.name!=='string'||p.name.length>100)throw Error('Invalid profile.');ids.add(p.id);
+  if(p.dumbbellCount!=null&&![1,2].includes(p.dumbbellCount))throw Error('Invalid dumbbell quantity.');
+  if(p.preferences?.weightUnit!=null&&!['kg','lb'].includes(p.preferences.weightUnit))throw Error('Invalid weight unit.');
   if(p.kettlebellCount!=null&&![1,2].includes(p.kettlebellCount))throw Error('Invalid kettlebell quantity.');
   if(p.onboardingComplete!=null&&typeof p.onboardingComplete!=='boolean')throw Error('Invalid setup status.');
   if(p.experience!=null&&!['beginner','intermediate','advanced'].includes(p.experience))throw Error('Invalid experience level.');
@@ -41,7 +43,7 @@ function readStoredState(key='daily-reps-engine-v2'){
 function migrateState(value){
  validateState(value);
  for(const p of value.profiles){
-  p.equipment=normalizeEquipment(p.equipment);p.kettlebellCount??=1;
+  p.equipment=normalizeEquipment([...p.equipment,'Bodyweight']);p.kettlebellCount??=1;p.dumbbellCount??=2;
   if(p.onboardingComplete===undefined)p.onboardingComplete=true;
   p.loads??={};p.preferences??={keepAwake:true,sound:true,compact:true};
   // Saved history and live circuits are immutable. Only old built-in compound

@@ -87,3 +87,13 @@ Run on current Android Chrome, including a smaller screen, and at least one addi
 - [ ] Step-ups require a Step / Platform; cable/band leg extensions require the proper accessories.
 - [ ] Wall sits log hold seconds and never add to rep totals.
 - [ ] Excluding squat and lunge still permits step-ups, wall sits and knee extensions with compatible equipment.
+
+## Public-app defaults
+
+- [ ] Selecting only external equipment still permits bodyweight movements.
+- [ ] Single vs paired dumbbell choices filter correctly and survive reload.
+- [ ] Switch kg/lb with saved loads: history displays converted values and original weightKg is unchanged. Test a decimal comma.
+- [ ] Fixed weekday assignments can be changed individually; unchanged custom circuits survive Setup.
+- [ ] Import a legacy week without a mode: preserve its days, routines, history and session.
+- [ ] Verify a waiting update shows Install update outside a workout and remains deferred during a session.
+- [ ] About & data accurately explains local storage and backups; no fake contact details are shown.

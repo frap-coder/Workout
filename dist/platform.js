@@ -1,12 +1,14 @@
 'use strict';
 let screenLock=null,wakePending=false,wakeStatus='Not active',offlineStatus='Checking offline availability…',swRegistration=null;
 const browserNavigator=()=>typeof navigator==='undefined'?{}:navigator;
-function runtimeStatus(){return `${browserNavigator().onLine===false?'Offline':'Online'} · ${offlineStatus}`;}
+function runtimeStatus(){return `${browserNavigator().onLine===false?'Offline':'Online'} · ${swRegistration?.waiting?(hasActive()?'Update ready · finish your session before installing':'Update ready · tap Install update'):offlineStatus}`;}
 function paintRuntimeStatus(){
  const sound=document.querySelector('#sound-state'),enable=document.querySelector('#sound-enable');if(sound)sound.textContent=profile().preferences?.sound===false?'20-minute chime off':audioCtx?.state==='running'?'20-minute chime ready · keep the page open':'Tap to enable the 20-minute chime';if(enable)enable.hidden=profile().preferences?.sound===false||audioCtx?.state==='running';
  const status=document.querySelector('#runtime-status');if(status)status.textContent=runtimeStatus();
  const wake=document.querySelector('#wake-status');if(wake)wake.textContent=wakeStatus;
  const offline=document.querySelector('#offline-detail');if(offline)offline.textContent=runtimeStatus();
+ const notice=document.querySelector('#app-update-notice');if(notice){notice.hidden=!swRegistration?.waiting||hasActive();notice.innerHTML=notice.hidden?'':'<span>A new version is ready. Your local training data stays saved.</span><button data-action="update-app">Install update</button>';}
+ const update=document.querySelector('#update-app-button');if(update){update.textContent=swRegistration?.waiting?'Install update':'Check for updates';update.disabled=hasActive();}
  const storage=document.querySelector('#storage-health');if(storage)storage.textContent=storageHealth;
 }
 function wantsWakeLock(){return !!(activeSession()?.running&&!activeSession().finished&&profile().preferences?.keepAwake!==false&&!document.hidden);}
@@ -27,7 +29,7 @@ async function initOffline(){
  const nav=browserNavigator();if(!('serviceWorker' in nav)){offlineStatus='Offline caching unavailable';paintRuntimeStatus();return;}
  try{
   swRegistration=await nav.serviceWorker.register('./sw.js',{updateViaCache:'none'});
-  const refresh=async()=>{offlineStatus=nav.serviceWorker.controller?'Offline copy ready':'Preparing offline copy';if(swRegistration.waiting)offlineStatus='Update ready · finish your session before reloading';paintRuntimeStatus();};
+  const refresh=async()=>{offlineStatus=nav.serviceWorker.controller?'Offline copy ready':'Preparing offline copy';paintRuntimeStatus();};
   nav.serviceWorker.addEventListener('controllerchange',refresh);
   swRegistration.addEventListener('updatefound',()=>{const worker=swRegistration.installing;worker?.addEventListener('statechange',()=>{if(worker.state==='redundant'){offlineStatus='Offline copy unavailable · retry while online';paintRuntimeStatus();}else refresh();});});
   await refresh();
@@ -35,7 +37,7 @@ async function initOffline(){
 }
 async function updateOfflineApp(){
  if(hasActive()){toast('Finish or reset the session before updating.');return;}
- if(swRegistration?.waiting){swRegistration.waiting.postMessage({type:'ACTIVATE_UPDATE'});browserNavigator().serviceWorker.addEventListener('controllerchange',()=>location.reload(),{once:true});}
+ if(swRegistration?.waiting){browserNavigator().serviceWorker.addEventListener('controllerchange',()=>location.reload(),{once:true});swRegistration.waiting.postMessage({type:'ACTIVATE_UPDATE'});}
  else if(browserNavigator().onLine!==false){await swRegistration?.update();toast('Checked for updates. Reopen Settings if an update is ready.');}
  else toast('Connect to the internet to check for updates.');
 }

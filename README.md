@@ -17,6 +17,7 @@ node tests/overtime.cjs
 node tests/instructions.cjs
 node tests/order.cjs
 node tests/kettlebells.cjs
+node tests/public-app.cjs
 ```
 
 These exercise the real app logic in a Node VM and the actual service-worker handlers with browser API doubles. They are not a substitute for physical-device acceptance tests.
@@ -130,3 +131,11 @@ Changing only the rotation order through Setup preserves custom circuits and dai
 Equipment now says Kettlebells. Setup and Settings let users select one or 2+ available kettlebells; exercises requiring two are shown only for the latter. Fourteen double-kettlebell choices cover presses, rows, squats, lunges, hinges, step-ups, carries/marches, curls and calf work. One-kettlebell movements remain available. Total external load means both bells added together; one simultaneous bilateral movement is one rep. Old “1x Kettlebell” profiles and saved choices are accepted and normalized without changing historical results or saved weights. Existing users default to one until they choose 2+.
 
 The quads/legs slot also offers step-ups, lateral step-ups, controlled step-downs, wall sits, seated band/cable leg extensions and short-range reverse Nordics. Step-ups require a suitable Step / Platform; band/cable extensions require their anchor/strap/seat. Wall sits log seconds. These patterns share a primary quad focus but differ in hip contribution and stimulus; the picker explains that distinction. Excluding “squat” or “lunge” no longer accidentally excludes all entries merely because their internal group ID is squat.
+
+## Public-app defaults and compatibility
+
+PUBLIC_APP_REVIEW.md documents the scan and corrections. Bodyweight is always available, with explicit quantities for kettlebells and dumbbells. Existing dumbbell profiles retain a two-dumbbell assumption until changed. Known paired exercises require two; single-dumbbell options still work with one. Exclusions are user choices, not preselected restrictions.
+
+Settings supports kg/lb display and input. Stored weightKg values remain canonical; unchanged rounded displays do not change the original stored number. Decimal commas are accepted. Repeat-set uses canonical loads directly. Old schemas retain their saved schedules rather than being forced into a five-session Push/Pull/Lower plan. Fixed weekdays expose individual assignments and preserve unchanged custom circuits. Automatic preset generation respects each slot's movement role before matching the reference challenge, with easier default choices where possible; manual swaps still show the whole compatible group.
+
+Weekly goals replace daily streak pressure in the main progress/result UI. A waiting offline update has an Install update action outside active sessions; active sessions keep it deferred. About & data explains browserlocal data, backups and hosting context. There are still no accounts, analytics SDKs, ads or automatic cross-device sync.

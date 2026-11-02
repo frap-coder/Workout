@@ -38,6 +38,7 @@ jobs:
           node tests/instructions.cjs
           node tests/order.cjs
           node tests/kettlebells.cjs
+          node tests/public-app.cjs
       - name: Install browser test tools
         run: |
           npm install --prefix "$RUNNER_TEMP/workout-browser" --no-package-lock --no-save playwright@1.58.2

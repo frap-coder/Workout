@@ -1,12 +1,17 @@
 'use strict';
 let calendarOpen=false,calendarOffset=0;
-function ensureScheduleMode(){const p=profile();if(p.onboardingComplete===false&&!hasActive()&&tab!=='Setup'){setupDraft=draftForProfile();tab='Setup';}if(p.mode==='rotation'||p.mode==='fixed')return;if(p.setup?.mode==='fixed'){p.mode='fixed';persist();return;}if(p.session&&!p.session.finished)return;
- p.previousCalendarPlan={schedule:clone(p.schedule),setup:clone(p.setup||null)};
- p.schedule=['Push','Pull','Lower'].map(type=>clone(p.schedule.find(d=>d.type===type)||(type==='Lower'?p.schedule.find(d=>d.type==='Legs'):null)||{type,custom:null}));
- p.schedule[2].type='Lower';p.mode='rotation';p.weeklyTarget=5;
- const previous=p.history.at(-1)?.type,last=['Push','Pull','Lower'].indexOf(previous==='Legs'?'Lower':previous);p.rotationIndex=last>=0?(last+1)%3:0;
- p.workoutOverrides=null;p.setup={...(p.setup||{}),mode:'rotation'};day=p.rotationIndex;persist();
+function ensureScheduleMode(){
+ const p=profile();
+ if(p.mode!=='rotation'&&p.mode!=='fixed'){
+  const savedMode=p.session&&!p.session.finished?p.session.mode:p.setup?.mode;
+  p.mode=savedMode==='fixed'||savedMode==='rotation'?savedMode:p.schedule.length===7?'fixed':'rotation';
+  if(p.mode==='rotation')p.rotationIndex=(p.rotationIndex||0)%p.schedule.length;
+  p.weeklyTarget??=p.mode==='fixed'?p.schedule.filter(d=>d.type!=='Rest').length:3;
+  persist();
+ }
+ if(p.onboardingComplete===false&&!hasActive()&&tab!=='Setup'){setupDraft=draftForProfile();tab='Setup';}
 }
+
 function viewedMonth(){const now=new Date();return new Date(now.getFullYear(),now.getMonth()+calendarOffset,1,12);}
 function monthData(){const date=viewedMonth(),year=date.getFullYear(),month=date.getMonth(),offset=(date.getDay()+6)%7,total=new Date(year,month+1,0).getDate();const sessions=profile().history.filter(h=>{const d=new Date(h.finishedAt);return d.getFullYear()===year&&d.getMonth()===month;});return {date,year,month,offset,total,sessions};}
 function monthCalendar(){const {date,year,month,offset,total,sessions}=monthData(),title=date.toLocaleDateString('en-GB',{month:'long',year:'numeric'});return `<section class="calendar-panel"><button class="calendar-toggle" data-calendar="toggle" aria-expanded="${calendarOpen}" aria-controls="month-view"><span><strong>${uiIcon('calendar')}${title}</strong><small>${sessions.length} completed ${sessions.length===1?'workout':'workouts'}</small></span><span>${calendarOpen?'Hide month −':'View month +'}</span></button>${calendarOpen?`<div id="month-view"><div class="calendar-navigation"><button data-calendar="previous" aria-label="Previous month">Previous</button><button data-calendar="today">This month</button><button data-calendar="next" aria-label="Next month">Next</button></div><div class="month-grid">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<span class="month-weekday">${d}</span>`).join('')}${Array(offset).fill('<span aria-hidden="true"></span>').join('')}${Array.from({length:total},(_,i)=>{const value=localDate(new Date(year,month,i+1,12)),history=sessions.filter(h=>h.date===value),today=value===localDate();return `<button class="month-date ${history.length?'trained':''} ${today?'today':''}" data-calendar="date" data-date="${value}" ${history.length?'':'disabled'} ${today?'aria-current="date"':''} aria-label="${value}: ${history.length} completed workouts"><span>${i+1}</span><small>${history.length?`${history.length} ✓`:''}</small></button>`;}).join('')}</div><p class="small muted calendar-help">Select a completed workout to view its reps. ${isRotation()?'Dates do not change the workout sequence.':'Your weekday assignments are shown above.'}</p></div>`:''}</section>`;}

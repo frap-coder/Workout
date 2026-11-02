@@ -2814,7 +2814,7 @@ function reviewedMovement(m){
 // Kettlebells are a general material; quantity is a separate preference.
 function normalizeEquipment(items){return [...new Set(items.map(e=>e==='1x Kettlebell'?'Kettlebells':e))];}
 function requiredKettlebells(m){if(!m)return 0;const known=(m.id&&MOVES[m.id])||Object.values(MOVES).find(x=>x.name===m.name);return Math.max(m.kettlebellCount||0,known?.kettlebellCount||0,normalizeEquipment(m.equipment||[]).includes('Kettlebells')?1:0);}
-function equipmentCaption(m){return normalizeEquipment(m.equipment||[]).map(e=>e==='Kettlebells'&&requiredKettlebells(m)>1?'Kettlebells (2 required)':e).join(' + ');}
+function equipmentCaption(m){return normalizeEquipment(m.equipment||[]).map(e=>e==='Dumbbells'&&requiredDumbbells(m)>1?'Dumbbells (2 required)':e==='Kettlebells'&&requiredKettlebells(m)>1?'Kettlebells (2 required)':e).join(' + ');}
 EQUIPMENT.push('Step / Platform');
 const ADDITIONAL_EQUIPMENT_MOVES=[
  {
@@ -3239,3 +3239,13 @@ const ADDITIONAL_EQUIPMENT_MOVES=[
  }
 ];
 for(const m of ADDITIONAL_EQUIPMENT_MOVES)MOVES[m.id]=m;
+
+// Material quantity is explicit for public users with a single dumbbell too.
+const SINGLE_DUMBBELL_IDS=new Set(['triceps','dbextension','dbrow','dbsquat','snatch','hipthrust','dbbridge','dbtri','concentration','dbcalf','lib-single-arm-dumbbell-floor-press','lib-half-kneeling-dumbbell-press','lib-single-arm-dumbbell-overhead-extension','lib-single-arm-dumbbell-kickback','lib-dumbbell-cross-body-triceps-extension','lib-dumbbell-pullover-on-floor','lib-dumbbell-suitcase-march','lib-dumbbell-sumo-squat','lib-dumbbell-single-leg-glute-bridge','lib-dumbbell-frog-pump','lib-dumbbell-single-leg-calf-raise','lib-single-leg-seated-dumbbell-calf-raise','lib-dumbbell-bent-knee-calf-raise','lib-dumbbell-split-stance-calf-raise','db-wallsit']);
+for(const m of Object.values(MOVES))if(m.equipment.includes('Dumbbells'))m.dumbbellCount=SINGLE_DUMBBELL_IDS.has(m.id)?1:2;
+function requiredDumbbells(m){if(!m)return 0;const known=(m.id&&MOVES[m.id])||Object.values(MOVES).find(x=>x.name===m.name);return Math.max(m.dumbbellCount||0,known?.dumbbellCount||0,(m.equipment||[]).includes('Dumbbells')?1:0);}
+const EXCLUSION_SUGGESTIONS=['Jump','Overhead Press','Lunge'];
+
+function sameEquipmentSelection(a,b){return JSON.stringify(normalizeEquipment([...a,'Bodyweight']).sort())===JSON.stringify(normalizeEquipment([...b,'Bodyweight']).sort());}
+
+for(const m of Object.values(MOVES))m.loadDependent=m.equipment.some(e=>['Dumbbells','Kettlebells','Sandbag','Resistance Bands','Barbell','Pulley'].includes(e));
