@@ -45,6 +45,7 @@ Run on current Android Chrome, including a smaller screen, and at least one addi
 - [ ] Swap during a running session; verify timer, previous rep entries and Echo invalidation.
 - [ ] No schematic people or pose images appear in exercise details.
 - [ ] Install the offline update after a session ends and verify the expanded library is available offline.
+- [ ] Verify side planks log seconds per side, anchored band work respects the Band Anchor filter and single-sided targets show combined counting hints.
 
 ## Compact experience acceptance
 
@@ -68,4 +69,4 @@ Run on current Android Chrome, including a smaller screen, and at least one addi
 - [ ] Export running overtime; restore days later and verify a paused snapshot at export time.
 - [ ] Upgrade a version-3 saved session/backup and verify history, overrides and active circuit survive.
 - [ ] Read the Push/Pull/Lower/Full Body instructions: goal, one set then next exercise, rest, safe load, both-side counting and explicit save are understandable without coaching.
-- [ ] Trainer review and physical-device acceptance remain required before broader launch (LAUNCH_PLAN.md).
+- [ ] If possible, try a full session on actual phones and ask an experienced user to check unclear instructions; these are practical checks, not formal launch gates.

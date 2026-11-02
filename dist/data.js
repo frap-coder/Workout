@@ -2326,8 +2326,487 @@ const NAMED_LEVELS={'Wall Push-ups':1,'Incline Push-ups':2,'Eccentric Push-ups':
 for(const m of Object.values(MOVES)){
  const body=m.equipment.every(e=>e==='Bodyweight'||e==='Stable Bench / Support');
  m.challenge=NAMED_LEVELS[m.name]??LEVEL_OVERRIDES[m.id]??PATTERN_LEVELS[m.pattern]??({shoulder:2,triceps:2,biceps:2,core:2,full:4}[m.group])??2;
- if(body&&m.group==='squat'&&m.pattern==='squat'&&!NAMED_LEVELS[m.name])m.challenge=2;
+ if(body&&m.group==='squat'&&m.pattern==='squat'&&!NAMED_LEVELS[m.name]&&!Object.prototype.hasOwnProperty.call(LEVEL_OVERRIDES,m.id))m.challenge=2;
  m.loadDependent=!body;
 }
 
 if(!TYPES.includes('Full Body'))TYPES.splice(TYPES.length-1,0,'Full Body');
+
+// Instruction cross-check: stable IDs preserve saved workouts and history.
+const INSTRUCTION_REVIEW={
+ "dbpress": {
+  "description": "Lie on your back with knees bent and feet flat. Hold dumbbells above your chest, wrists over elbows. Lower until upper arms gently touch the floor, then press up without bouncing."
+ },
+ "kbpress": {
+  "description": "Lie on your back with knees bent. Hold one kettlebell with your wrist stacked over your elbow. Lower the upper arm to the floor, press up, then complete the same reps on the other side."
+ },
+ "bandpush": {
+  "challenge": 4,
+  "description": "Use flat-sided dumbbells that cannot roll as handles. Pass a long resistance band across your upper back, below your neck, and trap each end firmly under your hands. Keep a straight body line and use a comfortable depth. Choose regular push-ups if the handles or band cannot be held securely."
+ },
+ "barohp": {
+  "description": "Begin with a manageable bar at shoulder height, hands just wider than shoulders. Brace, press the bar overhead and lower to your shoulders without leaning back. Use a rack to get into position if needed; the rack is not assumed to be available."
+ },
+ "closepush": {
+  "description": "Start in a high plank with hands near shoulder width, elbows close to your sides. Lower your chest and press up with a straight body line. For the knee-supported version, choose Kneeling Close-Grip Push-ups."
+ },
+ "bandrow": {
+  "description": "Sit with knees softly bent and a long band around the arches of both feet, away from your toes. Hold the ends, sit tall and pull your elbows toward your lower ribs. Keep the band seated securely; do not lean back to pull."
+ },
+ "high": {
+  "description": "Use one light kettlebell. Hinge back, then drive through your hips to guide the bell close to your torso. Let the elbow bend without forcing it high, then control the return into the hinge. Complete both sides. This is a hip-powered high pull, not a strict row."
+ },
+ "dbhigh": {
+  "description": "Hold two light dumbbells in front of your thighs. Use a small hip drive to guide the weights close to your torso, bending elbows only through a comfortable range. Lower with control. This is a hip-powered high pull, not a strict row."
+ },
+ "face": {
+  "challenge": 2,
+  "description": "Use a secure face-height band anchor. Stand tall with light tension, pull your hands toward your forehead and let elbows open comfortably. Return slowly without leaning backward."
+ },
+ "lib-cable-face-pull": {
+  "challenge": 2
+ },
+ "lib-alternating-dumbbell-floor-press": {
+  "reps": "8–12 / side",
+  "description": "Lie on your back with knees bent. Hold both weights above your chest, keep one arm up while lowering and pressing the other, then alternate. One arm press is one rep; complete the target on each arm."
+ },
+ "lib-cable-front-raise": {
+  "reps": "10–15 / side",
+  "description": "Face away from a low pulley holding one handle by your side. Raise that hand forward to shoulder height with a softly bent elbow. Lower slowly, then complete the same reps on the other side."
+ },
+ "lib-cable-external-rotation": {
+  "reps": "10–15 / side",
+  "description": "Stand side-on to an elbow-height pulley. Hold the handle with the far hand, elbow bent to 90 degrees and tucked against your side. Rotate that forearm outward without moving the elbow; lower and repeat on the other side."
+ },
+ "lib-single-arm-dumbbell-kickback": {
+  "libraryAlias": "dbtri",
+  "reps": "12 / side",
+  "description": "Hinge forward and keep your upper arm beside your torso. Straighten the elbow with a light dumbbell without swinging your shoulder. Lower slowly and complete both sides."
+ },
+ "lib-band-triceps-kickback": {
+  "description": "Use a secure low band anchor in front. Hinge forward, draw both upper arms alongside your torso and keep them still while straightening your elbows. Bend the elbows slowly to return."
+ },
+ "lib-barbell-reverse-curl": {
+  "equipment": [
+   "Barbell"
+  ]
+ },
+ "lib-barbell-drag-curl": {
+  "equipment": [
+   "Barbell"
+  ]
+ },
+ "lib-barbell-lying-triceps-extension": {
+  "equipment": [
+   "Barbell"
+  ],
+  "description": "Lie on the floor with a light bar held above your chest. Keep upper arms steady while bending the elbows to lower the bar just behind your head, then extend. Use a load you can position and set down under control."
+ },
+ "lib-cross-body-hammer-curl": {
+  "reps": "10–12 / side",
+  "description": "Stand with a dumbbell in each hand, palms inward. Curl one weight toward the opposite shoulder without swinging, lower and alternate. Complete the target on both arms."
+ },
+ "lib-side-plank": {
+  "reps": "20–30 sec / side",
+  "description": "Lie on your side with your elbow below your shoulder and legs straight. Lift your hips so your body forms a straight line. Hold while breathing, then repeat on the other side. Log the combined seconds."
+ },
+ "lib-kneeling-side-plank": {
+  "reps": "20–30 sec / side",
+  "description": "Support yourself on your forearm and bent bottom knee, elbow below shoulder. Lift your hips and hold while breathing. Repeat on the other side and log the combined seconds."
+ },
+ "lib-heel-taps": {
+  "reps": "10–15 / side",
+  "description": "Lie on your back with knees bent and feet flat. Lift your shoulder blades slightly and reach one hand toward the heel on the same side. Alternate sides; count each reach as one rep."
+ },
+ "lib-dead-bug-heel-slide": {
+  "reps": "8–12 / side",
+  "description": "Lie on your back with knees bent and feet flat. Brace gently, slide one heel away and return it without arching your lower back. Alternate legs; each completed slide out and back is one rep."
+ },
+ "lib-standing-band-wood-chop": {
+  "reps": "8–12 / side",
+  "description": "Stand side-on to a secure high band anchor. Hold the band with both hands and draw it diagonally toward the opposite hip, turning your feet and hips with your trunk. Return slowly, then face the other way for the other side."
+ },
+ "lib-kettlebell-suitcase-march": {
+  "reps": "10 steps / load side",
+  "description": "Hold the kettlebell beside one hip and march slowly without leaning. Each knee lift is one step. Do 10 steps holding it on the left, then 10 holding it on the right; log 20 steps in total."
+ },
+ "lib-dumbbell-suitcase-march": {
+  "reps": "10 steps / load side",
+  "description": "Hold one dumbbell beside one hip and march with your torso upright. Each knee lift is one step. Do 10 steps with the weight on the left, then 10 on the right; log 20 steps in total."
+ },
+ "swing": {
+  "description": "Start with the kettlebell slightly in front of you. Hinge to hike it between your legs, then stand sharply by extending your hips so the bell floats up to about chest height. Keep arms relaxed and let the bell return into the hinge; do not turn it into a squat or overhead lift."
+ },
+ "lunge": {
+  "description": "Stand tall, step one foot backward and bend both knees through a comfortable range. Push through the front foot to return. Alternate legs, keeping the front knee in line with the toes. Do the target on each leg and log both together."
+ },
+ "lib-seated-band-hamstring-curl": {
+  "reps": "10–15 / side",
+  "description": "Sit on a stable seat facing a secure low band anchor. Attach the band to one ankle with an ankle strap. Start with that leg partly extended, draw the heel back under the seat, then return slowly. Complete both sides."
+ },
+ "lib-hamstring-walkouts": {
+  "reps": "6–10 reps",
+  "description": "Begin in a low glute bridge. Take small alternating heel steps away from your hips, then back toward them, keeping your pelvis controlled. One complete walk out and back is one rep."
+ },
+ "hipthrust": {
+  "challenge": 3
+ },
+ "lib-kettlebell-single-leg-glute-bridge": {
+  "reps": "8–12 / side",
+  "description": "Lie on your back with one foot planted. Hold a padded light kettlebell securely over your hips. Lift without twisting or arching, lower, and complete the same reps on the other leg."
+ },
+ "lib-band-donkey-kick": {
+  "description": "Place a loop band around your thighs just above your knees. From hands and knees, keep one knee bent and move that thigh backward and slightly upward, without arching your back. Return with control and complete both sides."
+ },
+ "sidelift": {
+  "challenge": 3
+ },
+ "lib-side-lying-hip-circles": {
+  "reps": "6 / direction / side",
+  "description": "Lie on your side with hips stacked. Lift the top leg slightly and make six small controlled circles each way. Repeat on the other side. One complete circle is one rep; log 24 circles in total."
+ },
+ "lib-dumbbell-single-leg-calf-raise": {
+  "challenge": 4
+ },
+ "lib-kettlebell-single-leg-calf-raise": {
+  "challenge": 4
+ },
+ "lib-standing-cross-body-knee-drive": {
+  "challenge": 2
+ },
+ "lib-band-standing-calf-raise": {
+  "description": "Stand securely on a long band under the balls of both feet and hold its ends by your sides with gentle tension. Raise your heels slowly and lower under control. If balancing with the band is awkward, choose a supported bodyweight calf raise."
+ },
+ "lib-step-jacks": {
+  "reps": "20 alternating reps",
+  "description": "Step one foot sideways while raising your arms, then return to the starting position. Alternate sides without jumping. One step out and back is one rep; log the total across both sides."
+ },
+ "lib-jumping-jacks": {
+  "description": "Start with feet together and arms by your sides. Jump feet apart as arms rise, then return. Land softly with knees aligned; one out-and-back cycle is one rep. Choose Step Jacks for no jumping."
+ },
+ "lib-skater-steps": {
+  "reps": "20 alternating reps",
+  "description": "Step sideways and lightly tap the other foot behind without jumping. Keep your knee aligned with the stepping foot. One sideways step and tap is one rep; count both directions together."
+ },
+ "lib-monster-walk": {
+  "reps": "20 alternating steps",
+  "description": "Place a loop band above your knees, soften your knees and take short diagonal forward steps without letting your knees cave inward. Count each step as one rep; log the total across both feet."
+ },
+ "lib-diagonal-backward-band-walk": {
+  "reps": "20 alternating steps",
+  "description": "Place a loop band above your knees and soften your knees. Take small diagonal backward steps in a clear space, keeping tension in the band. Each step is one rep; count both feet together."
+ },
+ "lib-bear-crawl-steps": {
+  "reps": "10–20 alternating steps",
+  "description": "Begin on hands and knees, then lift knees just off the floor. Move one hand and the opposite foot forward together, then the other pair. Each paired movement is one step; count the total steps."
+ },
+ "clean": {
+  "description": "Use a light kettlebell and a clean you already know. Hinge, drive through your hips and guide the bell close around the hand into the rack at your shoulder rather than flipping it onto your wrist. Pause, brace and press overhead. Lower to the rack, then reset. One clean followed by one press is one rep; complete both sides."
+ },
+ "snatch": {
+  "description": "Use a light dumbbell and a snatch you already know. Hinge with the weight between your legs, drive through your hips and guide it close before punching the hand overhead. Finish with the arm stable, then lower under control and reset. One lift overhead is one rep; complete both sides."
+ },
+ "lib-dumbbell-squat-to-front-raise": {
+  "description": "Use light dumbbells. Squat through a comfortable range, stand fully, then lift the weights in front to shoulder height and lower them. One squat followed by one raise is one rep."
+ },
+ "lib-dumbbell-tate-press": {
+  "description": "Lie on the floor holding light dumbbells above your chest with palms toward your feet. Bend the elbows outward so the weights move toward your upper chest, then straighten the elbows. Keep the movement controlled and avoid turning it into a shoulder press."
+ }
+};
+for(const [id,changes] of Object.entries(INSTRUCTION_REVIEW))Object.assign(MOVES[id],changes);
+
+EQUIPMENT.push('Band Anchor','Ankle Strap');
+for(const m of Object.values(MOVES)){
+ if(m.equipment.includes('Resistance Bands')&&/anchor/i.test(m.description)&&!m.equipment.includes('Band Anchor'))m.equipment.push('Band Anchor');
+ if(/ankle strap/i.test(m.description)&&!m.equipment.includes('Ankle Strap'))m.equipment.push('Ankle Strap');
+}
+// Hip-powered high pulls remain available, but the normal Pull slot starts with back control.
+PRESETS.Pull[2]=['face','lib-cable-face-pull','prone','pronet','reverseangel'];
+
+Object.assign(MOVES.dbcalf,{description:'Hold one or two dumbbells by your sides. If you need a hand on a wall for balance, use just one dumbbell and keep the other hand free. Rise onto the balls of your feet, pause and lower slowly.'});
+Object.assign(MOVES.tempo,{description:'Begin in a high plank with a straight body line. Lower for three seconds, then press up with control. Choose a knee-supported or incline variation from the library if you need less challenge.'});
+Object.assign(MOVES.pike,{description:'Start with hands on the floor and hips raised in an inverted V. Bend your elbows and lower your head toward the floor slightly in front of your hands, without resting weight on your head. Press back up with control.'});
+Object.assign(MOVES.twist,{description:'Sit with feet planted and hold the kettlebell close with both hands. Lean back slightly only if you can keep your torso controlled. Rotate gently left and right; each turn to one side is one rep. Complete the target on each side and log the combined total.'});
+Object.assign(MOVES['lib-band-resisted-march'],{reps:'20 alternating steps',description:'Place a light loop band over the midfoot of both shoes and stand tall. Lift one knee, lower it, then alternate without leaning backward. Each knee lift is one step; log the total across both legs.'});
+
+// Refresh only unchanged built-in text in saved choices; preserve user-edited targets.
+const INSTRUCTION_BASELINES={
+ "dbpress": {
+  "description": "Lower with control until your upper arms touch the floor. Press up."
+ },
+ "kbpress": {
+  "description": "Keep your wrist stacked and ribs down. Complete both sides."
+ },
+ "bandpush": {
+  "description": "Use stable flat-sided handles and a secure band. Use only a comfortable depth."
+ },
+ "barohp": {
+  "description": "Brace your midsection and keep the bar path close."
+ },
+ "pike": {
+  "description": "Raise your hips and bend your elbows to lower your head between your hands."
+ },
+ "bandtri": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "closepush": {
+  "description": "Keep elbows close. Use your knees if needed."
+ },
+ "lat": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "bandrow": {
+  "description": "Secure the band at foot level and draw elbows back."
+ },
+ "high": {
+  "description": "Drive through your hips, keep the bell close and use a controlled range."
+ },
+ "dbhigh": {
+  "description": "Use a light load and keep the pull close to your body."
+ },
+ "face": {
+  "description": "Use a secure face-height anchor. Pull toward your forehead.",
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "twist": {
+  "description": "Keep feet grounded and rotate slowly through a comfortable range."
+ },
+ "swing": {
+  "description": "Drive from your hips, not your arms. Use a crisp hinge and a braced trunk."
+ },
+ "lunge": {
+  "description": "Step back, lower with control and push through your front foot."
+ },
+ "clean": {
+  "description": "Clean into a stable rack, pause, then press. Use a movement you already know."
+ },
+ "snatch": {
+  "description": "Drive through your hips and guide a light weight overhead with control."
+ },
+ "tempo": {
+  "description": "Lower for three seconds, then press up. Use knees if needed."
+ },
+ "dbcalf": {
+  "description": "Hold dumbbells by your sides and use support for balance as needed. Rise onto your toes and lower slowly."
+ },
+ "lib-alternating-dumbbell-floor-press": {
+  "reps": "10–15 reps",
+  "description": "Hold one weight above the chest while pressing the other. Alternate arms."
+ },
+ "lib-standing-band-chest-press": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-standing-band-chest-fly": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-cable-front-raise": {
+  "reps": "10–15 reps",
+  "description": "Face away from a low pulley. Raise the handle forward with a softly bent elbow."
+ },
+ "lib-cable-external-rotation": {
+  "reps": "10–15 reps",
+  "description": "Set the pulley at elbow height. Keep your elbow by your side as you rotate outward."
+ },
+ "lib-dumbbell-tate-press": {
+  "description": "Lie on the floor with light weights over your chest. Bend elbows outward and extend with control."
+ },
+ "lib-band-overhead-triceps-extension": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-single-arm-band-pushdown": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-band-triceps-kickback": {
+  "description": "Use a secure low anchor in front. Hinge and straighten elbows without moving upper arms.",
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-barbell-lying-triceps-extension": {
+  "description": "Lie on the floor with a light bar. Keep upper arms steady and lower the bar behind your head.",
+  "equipment": [
+   "Barbell",
+   "Squat Rack"
+  ]
+ },
+ "lib-straight-arm-band-pulldown": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-band-high-row": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-cross-body-hammer-curl": {
+  "reps": "10–15 reps",
+  "description": "Keep palm inward. Curl one weight toward the opposite shoulder without swinging."
+ },
+ "lib-barbell-reverse-curl": {
+  "equipment": [
+   "Barbell",
+   "Squat Rack"
+  ]
+ },
+ "lib-barbell-drag-curl": {
+  "equipment": [
+   "Barbell",
+   "Squat Rack"
+  ]
+ },
+ "lib-side-plank": {
+  "reps": "20–30 sec",
+  "description": "Stack your elbow under your shoulder. Lift your hips and breathe; repeat on both sides."
+ },
+ "lib-kneeling-side-plank": {
+  "reps": "20–30 sec",
+  "description": "Support on your forearm and bottom knee. Keep hips lifted; repeat on both sides."
+ },
+ "lib-heel-taps": {
+  "reps": "10–15 reps",
+  "description": "Lie on your back with knees bent. Lift shoulders gently and reach sideways toward each heel."
+ },
+ "lib-dead-bug-heel-slide": {
+  "reps": "10–15 reps",
+  "description": "Lie with knees bent. Slide one heel away while keeping your ribs and pelvis steady."
+ },
+ "lib-band-pallof-press": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-kettlebell-suitcase-march": {
+  "reps": "8–12 / side",
+  "description": "Hold the bell by one side and march slowly without leaning. Complete both sides."
+ },
+ "lib-dumbbell-suitcase-march": {
+  "reps": "8–12 / side",
+  "description": "Hold one weight by your side. March with hips level, then switch sides."
+ },
+ "lib-standing-band-wood-chop": {
+  "reps": "10–15 reps",
+  "description": "Use a rated high anchor. Rotate gently through hips and trunk without wrenching your back.",
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-band-pull-through": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-standing-band-hamstring-curl": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-seated-band-hamstring-curl": {
+  "reps": "10–15 reps",
+  "description": "Sit on a stable seat facing a secure low anchor. Use an ankle strap and draw your heel back.",
+  "equipment": [
+   "Resistance Bands",
+   "Stable Bench / Support"
+  ]
+ },
+ "lib-hamstring-walkouts": {
+  "reps": "10–15 reps",
+  "description": "Start in a low bridge. Take small heel steps out and back while keeping hips controlled."
+ },
+ "lib-kettlebell-single-leg-glute-bridge": {
+  "reps": "10–15 reps",
+  "description": "Hold a padded light bell securely across hips. Lift with one planted foot, then switch."
+ },
+ "lib-band-donkey-kick": {
+  "description": "Secure a loop band appropriately. From hands and knees extend one hip without twisting. Switch sides."
+ },
+ "lib-standing-band-kickback": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-cable-glute-kickback": {
+  "equipment": [
+   "Pulley"
+  ]
+ },
+ "lib-standing-cable-hip-abduction": {
+  "equipment": [
+   "Pulley"
+  ]
+ },
+ "lib-monster-walk": {
+  "reps": "10–15 reps",
+  "description": "Use a loop above knees. Take short diagonal forward steps while keeping knees aligned."
+ },
+ "lib-diagonal-backward-band-walk": {
+  "reps": "10–15 reps",
+  "description": "Use a loop above knees. Take small diagonal backward steps in a clear space."
+ },
+ "lib-standing-cable-hip-adduction": {
+  "equipment": [
+   "Pulley"
+  ]
+ },
+ "lib-standing-band-hip-adduction": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-side-lying-hip-circles": {
+  "reps": "10–15 reps",
+  "description": "Keep hips stacked and make small slow circles with the top leg. Repeat both directions and sides."
+ },
+ "lib-standing-band-hip-flexion": {
+  "equipment": [
+   "Resistance Bands"
+  ]
+ },
+ "lib-band-standing-calf-raise": {
+  "description": "Stand securely on the band, holding ends by your sides. Raise heels with control."
+ },
+ "lib-step-jacks": {
+  "reps": "8–12 / side",
+  "description": "Step one foot sideways while raising arms, then return. Alternate sides without jumping."
+ },
+ "lib-jumping-jacks": {
+  "description": "Land softly with knees aligned. Use step jacks for a lower-impact option."
+ },
+ "lib-skater-steps": {
+  "reps": "10–15 reps",
+  "description": "Step sideways and lightly tap the other foot behind. Keep landings and knee alignment controlled."
+ },
+ "lib-bear-crawl-steps": {
+  "reps": "10–15 reps",
+  "description": "Keep knees hovering near the floor. Move opposite hand and foot in small controlled steps."
+ },
+ "lib-band-resisted-march": {
+  "reps": "10–15 reps",
+  "description": "Use a light loop over your feet and march slowly without leaning. Keep the band secure."
+ },
+ "lib-dumbbell-squat-to-front-raise": {
+  "description": "Use light weights. Stand from a squat, then raise weights to shoulder height."
+ }
+};
+function reviewedMovement(m){
+ if(!m)return m;const known=(m.id&&MOVES[m.id])||Object.values(MOVES).find(x=>x.name===m.name);const old=known&&INSTRUCTION_BASELINES[known.id];
+ if(!old)return m;let copy=null;
+ for(const [field,value] of Object.entries(old))if(JSON.stringify(m[field])===JSON.stringify(value)){
+  copy??={...m};copy[field]=Array.isArray(known[field])?[...known[field]]:known[field];
+ }
+ return copy||m;
+}

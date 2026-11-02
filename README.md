@@ -14,6 +14,7 @@ node tests/offline-runtime.cjs
 node tests/library.cjs
 node tests/experience.cjs
 node tests/overtime.cjs
+node tests/instructions.cjs
 ```
 
 These exercise the real app logic in a Node VM and the actual service-worker handlers with browser API doubles. They are not a substitute for physical-device acceptance tests.
@@ -59,13 +60,13 @@ A browser cannot promise an alarm when it is closed or suspended or the device i
 
 ## Expanded exercise library — 30 October 2026
 
-The library contains 284 distinct selectable exercises, grouped by primary training role:
+The library contains 283 distinct selectable exercises, grouped by primary training role:
 
 | Group | Exercises |
 | --- | ---: |
 | Chest | 25 |
 | Shoulders | 24 |
-| Triceps | 23 |
+| Triceps | 22 |
 | Back | 26 |
 | Biceps & forearms | 24 |
 | Core | 23 |
@@ -96,7 +97,7 @@ Exercise levels run from 1 to 5 and describe reference challenge within a primar
 
 Last weights are retained per exercise. Repeat last set copies the last logged entry for that exercise and unit, restores its recorded load, and adds an undoable entry. Logging buttons remain +1/+5/+10 for quick adjustments. Reps and timed holds remain separate. Swaps retain earlier entries and the timer while invalidating Echo comparisons. Backup access is available in the footer, Settings, and a reminder after training when no recent export exists. Advertising is not included.
 
-Run all five automated suites before publication. Full-device browser acceptance remains a separate check; the restricted development environment could not complete the Chromium run. Check compact layout at 360px/390px widths, first-use setup, dialog scrolling and keyboard focus, and real-device timer/audio/offline behavior.
+Run all six automated suites before publication. Full-device browser acceptance remains a separate check; the restricted development environment could not complete the Chromium run. Check compact layout at 360px/390px widths, first-use setup, dialog scrolling and keyboard focus, and real-device timer/audio/offline behavior.
 
 ## Overtime and workout guidance — 2 November 2026
 
@@ -107,3 +108,11 @@ History and the calendar show target duration plus overtime. Training-time total
 “How this workout works” is available before and during training. It explains the selected routine’s goal, one-set-per-exercise circuit, rest guidance, manageable loading, actual selected movements, per-side counting, hold seconds and overtime completion. Opening instructions does not pause the timer.
 
 Automated release tests now include overtime, once-only chime, running/paused reload, snapshot-time backup restoration, manual save, durations and instructions. The GitHub-hosted Chromium flow exercises overtime in a real browser, alongside the existing mobile/desktop checks. See LAUNCH_PLAN.md for the product analysis and proposed launch gates; those recommendations do not add ads, trackers or external outreach.
+
+## Instruction cross-check — 2 November 2026
+
+All 284 previous selectable library entries were reviewed for understandable setup and movement, matching rep units and side counts, required equipment, reference-level consistency and fit within the circuit. A duplicate kickback is now a library alias, leaving 283 selectable entries. Benchmarks and a mandatory trainer sign-off are not launch requirements; LAUNCH_PLAN.md now contains a smaller practical plan.
+
+Side-plank targets explicitly say seconds per side, and the logger recognizes them as seconds. Single-arm/leg targets, directional circles, step counts, suitcase marches and compound-movement cycles are clarified. The exercise card, form guide, picker and workout guide display counting hints. Barbell curls and a light lying triceps extension no longer require a squat rack. Band anchors and ankle straps are selectable accessories and filter exercises requiring them; loop/long-band type remains described in the execution text. The normal Pull accessory slot starts with controlled back work rather than a hip-powered high pull. Reference ratings that contradicted their own variants were corrected. Historical records and saved custom prescriptions are not rewritten.
+
+See INSTRUCTION_REVIEW.md for concrete findings. The review is an editorial and consistency cross-check of a fitness app, not a claimed certification or measurement of personal effort.
