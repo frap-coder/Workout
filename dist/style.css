@@ -31,3 +31,5 @@
 .counting-help{font-size:11px;line-height:1.5;color:var(--mint);margin-top:6px}.guide-exercise-list .counting-help{font-size:12px}
 
 .workout-order{margin:18px 0}.workout-order h3{margin-bottom:6px}.workout-order ol{list-style:none;padding:0;margin:12px 0;display:grid;gap:8px}.workout-order li{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}.workout-order li strong{flex:1;font-size:14px}.order-position{font-size:13px;color:var(--muted)}.workout-order li>div{display:flex;gap:6px}.workout-order button{padding:8px 12px;min-width:44px;min-height:44px}.workout-order-dialog label{display:block;font-size:13px;color:var(--muted);margin-top:16px}.workout-order-dialog select{width:100%;margin:8px 0 12px}.plan-drawer>[data-action=edit-order]{margin-top:12px}.workout-order-dialog .picker-top h2{font-size:23px}
+
+.kettlebell-quantity{margin-top:20px}.kettlebell-quantity h3{margin-bottom:7px}.kettlebell-quantity .chips{margin-top:10px}.leg-slot-note{margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:10px}

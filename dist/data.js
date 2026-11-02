@@ -1,27 +1,27 @@
 'use strict';
-const EQUIPMENT=['Dumbbells','1x Kettlebell','Sandbag','Resistance Bands','Barbell','Bodyweight','Pulley','Ab Wheel'];
+const EQUIPMENT=['Dumbbells','Kettlebells','Sandbag','Resistance Bands','Barbell','Bodyweight','Pulley','Ab Wheel'];
 const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 const TYPES=['Push','Pull','Legs','Upper','Lower','Conditioning','Rest'];
 const MOVES={};
 function move(id,name,equipment,group,reps,description,tags=''){MOVES[id]={id,name,equipment,group,reps,description,tags:name+' '+tags};}
 move('dbpress','Dumbbell Floor Press',['Dumbbells'],'press','10–12 reps','Lower with control until your upper arms touch the floor. Press up.');
-move('kbpress','Single-Arm KB Floor Press',['1x Kettlebell'],'press','8–10 / side','Keep your wrist stacked and ribs down. Complete both sides.');
+move('kbpress','Single-Arm KB Floor Press',['Kettlebells'],'press','8–10 / side','Keep your wrist stacked and ribs down. Complete both sides.');
 move('pushup','Push-ups',['Bodyweight'],'press','8–15 reps','Keep a straight body line. Lower your chest and press away.');
 move('bandpush','Banded Deficit Push-ups',['Resistance Bands','Dumbbells'],'press','8–12 reps','Use stable flat-sided handles and a secure band. Use only a comfortable depth.');
 move('ohp','Dumbbell Overhead Press',['Dumbbells'],'shoulder','8–12 reps','Brace your trunk and press overhead without arching your back.');
 move('seated','Seated Dumbbell Press',['Dumbbells'],'shoulder','8–12 reps','Sit tall on a stable seat. Press upward with control.');
-move('kbohp','Single-Arm Overhead Press',['1x Kettlebell'],'shoulder','8 / side','Brace, press overhead, then lower slowly. Complete both sides.');
+move('kbohp','Single-Arm Overhead Press',['Kettlebells'],'shoulder','8 / side','Brace, press overhead, then lower slowly. Complete both sides.');
 move('barohp','Barbell Overhead Press',['Barbell'],'shoulder','8–10 reps','Brace your midsection and keep the bar path close.');
 move('pike','Pike Push-ups',['Bodyweight'],'shoulder','6–10 reps','Raise your hips and bend your elbows to lower your head between your hands.');
 move('lateral','Dumbbell Lateral Raises',['Dumbbells'],'shoulder','12–15 reps','Lift light weights to shoulder height with softly bent elbows.');
 move('pullapart','Banded Pull-Aparts',['Resistance Bands'],'back','12–15 reps','Keep arms at chest height. Pull the band apart without shrugging.');
 move('triceps','Overhead Triceps Extension + V-Ups',['Dumbbells'],'triceps','10 extensions + 8 V-ups','Use one dumbbell with both hands, then set it down for controlled V-ups.');
-move('kbtri','KB Triceps Extension',['1x Kettlebell'],'triceps','10–12 reps','Hold one kettlebell securely with both hands. Keep elbows pointed forward.');
+move('kbtri','KB Triceps Extension',['Kettlebells'],'triceps','10–12 reps','Hold one kettlebell securely with both hands. Keep elbows pointed forward.');
 move('pushdown','Triceps Pushdowns',['Pulley'],'triceps','12–15 reps','Keep elbows close to your sides; extend without swinging.');
 move('bandtri','Banded Triceps Pushdowns',['Resistance Bands'],'triceps','12–15 reps','Use a rated overhead anchor and extend your elbows.');
 move('closepush','Close-Grip Push-ups',['Bodyweight'],'triceps','6–12 reps','Keep elbows close. Use your knees if needed.');
 move('dbrow','Single-Arm Dumbbell Row',['Dumbbells'],'back','10 / side','Hinge at the hips, keep your back steady and row toward your hip.');
-move('kbrow','Single-Arm Kettlebell Row',['1x Kettlebell'],'back','10 / side','Keep hips square and draw your elbow toward your back pocket.');
+move('kbrow','Single-Arm Kettlebell Row',['Kettlebells'],'back','10 / side','Keep hips square and draw your elbow toward your back pocket.');
 move('sandrow','Sandbag Bent-Over Row',['Sandbag'],'back','10–12 reps','Hinge and brace. Pull the bag toward your lower ribs.');
 move('barrow','Barbell Row',['Barbell'],'back','10–12 reps','Maintain a steady hinge and row without jerking.');
 move('lat','Banded Lat Pulldowns',['Resistance Bands'],'back','12–15 reps','Use a rated overhead anchor. Pull your elbows toward your sides.');
@@ -29,21 +29,21 @@ move('bandrow','Resistance Band Seated Rows',['Resistance Bands'],'back','12–1
 move('pulleyrow','Cable Seated Rows',['Pulley'],'back','10–12 reps','Sit tall and row toward your lower ribs.');
 move('prone','Prone W Raises',['Bodyweight'],'back','12–15 reps','Lie face down. Lift bent arms into a W and gently squeeze your shoulder blades.');
 move('reverseangel','Reverse Snow Angels',['Bodyweight'],'back','10–12 reps','Lie face down and slowly sweep your arms overhead and back.');
-move('high','Kettlebell High Pull',['1x Kettlebell'],'back','10 / side','Drive through your hips, keep the bell close and use a controlled range.');
+move('high','Kettlebell High Pull',['Kettlebells'],'back','10 / side','Drive through your hips, keep the bell close and use a controlled range.');
 move('dbhigh','Dumbbell High Pull',['Dumbbells'],'back','10 reps','Use a light load and keep the pull close to your body.');
 move('face','Banded Face Pulls',['Resistance Bands'],'back','12–15 reps','Use a secure face-height anchor. Pull toward your forehead.');
 move('curl','Dumbbell Bicep Curls',['Dumbbells'],'biceps','10–12 reps','Keep your upper arms still and lower the weights slowly.');
 move('hammer','Hammer Curls',['Dumbbells'],'biceps','10–12 reps','Keep palms facing inward and avoid swinging.');
-move('kbcurl','Two-Hand Kettlebell Curls',['1x Kettlebell'],'biceps','10–12 reps','Hold the bell securely with both hands and curl with control.');
+move('kbcurl','Two-Hand Kettlebell Curls',['Kettlebells'],'biceps','10–12 reps','Hold the bell securely with both hands and curl with control.');
 move('barcurl','Barbell Bicep Curls',['Barbell'],'biceps','10–12 reps','Keep elbows by your sides and use a comfortable grip.');
 move('bandcurl','Resistance Band Curls',['Resistance Bands'],'biceps','12–15 reps','Stand securely on the band and curl with steady tension.');
 move('selfcurl','Self-Resisted Bicep Curls',['Bodyweight'],'biceps','10 / side','Use the opposite hand to provide gentle resistance through the curl.');
 move('wheel','Ab Wheel Rollouts',['Ab Wheel'],'core','6–10 reps','Start on your knees. Roll only as far as you can keep your trunk controlled.');
 move('vup','V-Ups',['Bodyweight'],'core','8–12 reps','Lift legs and upper body together. Bend your knees to make it easier.');
-move('twist','Kettlebell Russian Twists',['1x Kettlebell'],'core','10 / side','Keep feet grounded and rotate slowly through a comfortable range.');
+move('twist','Kettlebell Russian Twists',['Kettlebells'],'core','10 / side','Keep feet grounded and rotate slowly through a comfortable range.');
 move('hollow','Hollow Hold',['Bodyweight'],'core','20–30 sec','Keep your lower back against the floor. Bend knees if needed.');
 move('plank','Forearm Plank',['Bodyweight'],'core','30 sec','Stack elbows below shoulders and keep breathing steadily.');
-move('goblet','Kettlebell Goblet Squat',['1x Kettlebell'],'squat','10–15 reps','Hold the bell at your chest. Sit between your hips and stand tall.');
+move('goblet','Kettlebell Goblet Squat',['Kettlebells'],'squat','10–15 reps','Hold the bell at your chest. Sit between your hips and stand tall.');
 move('dbsquat','Dumbbell Goblet Squat',['Dumbbells'],'squat','10–15 reps','Hold one dumbbell at your chest and squat through a comfortable range.');
 move('sandbag','Sandbag Hug Squat',['Sandbag'],'squat','10–15 reps','Hug the bag to your chest and keep your feet planted.');
 move('bandsquat','Resistance Band Front Squat',['Resistance Bands'],'squat','12–15 reps','Stand on the band, hold it at your shoulders and squat with control.');
@@ -51,15 +51,15 @@ move('squat','Bodyweight Squats',['Bodyweight'],'squat','15 reps','Keep heels pl
 move('rdl','Dumbbell Romanian Deadlift',['Dumbbells'],'hinge','10–12 reps','Soften knees and push hips back. Keep weights close to your legs.');
 move('barrdl','Barbell Romanian Deadlift',['Barbell'],'hinge','10–12 reps','Hinge from your hips and keep the bar close; stop before your back rounds.');
 move('sandrdl','Sandbag Romanian Deadlift',['Sandbag'],'hinge','10–12 reps','Hold the bag close and push your hips back with a braced trunk.');
-move('kbrdl','Kettlebell Romanian Deadlift',['1x Kettlebell'],'hinge','12 reps','Hold the bell with both hands and hinge at the hips.');
+move('kbrdl','Kettlebell Romanian Deadlift',['Kettlebells'],'hinge','12 reps','Hold the bell with both hands and hinge at the hips.');
 move('stiff','Dumbbell Stiff-Legged Deadlift',['Dumbbells'],'hinge','10 reps','Keep knees softly unlocked and hinge only as far as you can control.');
-move('swing','Kettlebell Swings',['1x Kettlebell'],'hinge','15 reps','Drive from your hips, not your arms. Use a crisp hinge and a braced trunk.');
+move('swing','Kettlebell Swings',['Kettlebells'],'hinge','15 reps','Drive from your hips, not your arms. Use a crisp hinge and a braced trunk.');
 move('lunge','Alternating Reverse Lunges',['Bodyweight'],'squat','8 / side','Step back, lower with control and push through your front foot.');
 move('good','Banded Good Mornings',['Resistance Bands'],'hinge','12–15 reps','Secure the band under your feet and across your upper back, away from your neck. Hinge slowly.');
 move('bridge','Glute Bridges',['Bodyweight'],'hinge','15 reps','Drive through your heels and lift hips without arching your back.');
 move('calf','Calf Raises + Hollow Hold',['Bodyweight'],'core','15 raises + 20 sec hold','Rise onto your toes with control, then move to the floor for the hold.');
 move('thruster','Dumbbell Thrusters',['Dumbbells'],'full','10 reps','Squat with weights at your shoulders, then stand and press overhead.');
-move('clean','Kettlebell Clean & Press',['1x Kettlebell'],'full','6 / side','Clean into a stable rack, pause, then press. Use a movement you already know.');
+move('clean','Kettlebell Clean & Press',['Kettlebells'],'full','6 / side','Clean into a stable rack, pause, then press. Use a movement you already know.');
 move('snatch','Single-Arm Dumbbell Snatch',['Dumbbells'],'full','6 / side','Drive through your hips and guide a light weight overhead with control.');
 move('bandpull','Banded High Pulls',['Resistance Bands'],'full','12 reps','Stand on the band securely and pull up through a comfortable range.');
 move('climber','Mountain Climbers',['Bodyweight'],'full','20 alternating reps','From a high plank, bring knees toward your chest with steady control.');
@@ -82,13 +82,13 @@ PRESETS['Full Body']=[['dbsquat','goblet','sandbag','bandsquat','squat'],['dbpre
 FOCUS['Full Body']='Legs, push, pull & core';
 // Keep legacy presets readable in saved history; offer the requested three-workout system.
 TYPES.splice(0,TYPES.length,'Push','Pull','Lower','Rest');
-move('halo','Kettlebell Halo',['1x Kettlebell'],'shoulder','6 / direction','Hold a light kettlebell by the horns with both hands. Slowly circle it around your head, keeping your ribs down and your neck still. Alternate directions. One complete circle counts as one rep.');
+move('halo','Kettlebell Halo',['Kettlebells'],'shoulder','6 / direction','Hold a light kettlebell by the horns with both hands. Slowly circle it around your head, keeping your ribs down and your neck still. Alternate directions. One complete circle counts as one rep.');
 PRESETS.Push[1].splice(1,0,'halo');
 
 // Lower: squat, hinge, hip extension, lateral hip work, then calves/core.
 move('hipthrust','Dumbbell Hip Thrust',['Dumbbells'],'glutes','12–15 reps','Rest your upper back on a stable, secured bench or sofa. Pad the dumbbell across your hips. Lift until your hips are level, without arching your back.');
 move('bwhipthrust','Bodyweight Hip Thrust',['Bodyweight'],'glutes','15 reps','Rest your upper back on a stable, secured bench or sofa. Keep feet planted and lift your hips with control. Use a floor bridge if no stable support is available.');
-move('kbbridge','Kettlebell Glute Bridge',['1x Kettlebell'],'glutes','12–15 reps','Lie on the floor. Hold a padded kettlebell securely across your hips and lift with control.');
+move('kbbridge','Kettlebell Glute Bridge',['Kettlebells'],'glutes','12–15 reps','Lie on the floor. Hold a padded kettlebell securely across your hips and lift with control.');
 move('dbbridge','Dumbbell Glute Bridge',['Dumbbells'],'glutes','12–15 reps','Hold a padded dumbbell securely across your hips. Lift from the floor and pause at the top.');
 move('sandbridge','Sandbag Glute Bridge',['Sandbag'],'glutes','12–15 reps','Place the sandbag across your hips and hold it steady. Lift from the floor without arching your back.');
 move('singlebridge','Single-Leg Glute Bridge',['Bodyweight'],'glutes','8–10 / side','Keep one foot planted and lift your hips without twisting. Finish both sides.');
@@ -129,7 +129,7 @@ move('birddog','Bird Dogs',['Bodyweight'],'core','10 / side','From hands and kne
 Object.assign(MOVES.triceps,{name:'Dumbbell Overhead Triceps Extension',reps:'10–12 reps',description:MOVES.dbextension.description,tags:'dumbbell overhead triceps extension'});
 Object.assign(MOVES.calf,{name:'Standing Calf Raises',group:'calves',reps:'15–20 reps',description:'Hold a wall for balance. Rise onto the balls of your feet, pause, then lower your heels slowly.',tags:'calf calves raises'});
 move('dbcalf','Dumbbell Calf Raises',['Dumbbells'],'calves','15–20 reps','Hold dumbbells by your sides and use support for balance as needed. Rise onto your toes and lower slowly.');
-move('kbcalf','Kettlebell Calf Raises',['1x Kettlebell'],'calves','15–20 reps','Hold the kettlebell by your side and use your free hand for balance. Rise and lower with control.');
+move('kbcalf','Kettlebell Calf Raises',['Kettlebells'],'calves','15–20 reps','Hold the kettlebell by your side and use your free hand for balance. Rise and lower with control.');
 move('singlecalf','Single-Leg Calf Raises',['Bodyweight'],'calves','10 / side','Hold a wall for balance. Lift one foot, then raise and lower the heel of your standing foot.');
 move('seatedcalf','Seated Calf Raises',['Bodyweight'],'calves','15–20 reps','Sit on a stable seat with knees bent and feet flat. Lift both heels, pause and lower.');
 move('dbseatedcalf','Seated Dumbbell Calf Raises',['Dumbbells'],'calves','15–20 reps','Sit with knees bent. Rest padded dumbbells just above your knees, hold them still and raise your heels.');
@@ -1231,7 +1231,7 @@ const EXPANDED_MOVES=[
   "id": "lib-kettlebell-suitcase-march",
   "name": "Kettlebell Suitcase March",
   "equipment": [
-   "1x Kettlebell"
+   "Kettlebells"
   ],
   "group": "core",
   "reps": "8–12 / side",
@@ -1327,7 +1327,7 @@ const EXPANDED_MOVES=[
   "id": "lib-kettlebell-reverse-lunge",
   "name": "Kettlebell Reverse Lunge",
   "equipment": [
-   "1x Kettlebell"
+   "Kettlebells"
   ],
   "group": "squat",
   "reps": "8–12 / side",
@@ -1363,7 +1363,7 @@ const EXPANDED_MOVES=[
   "id": "lib-kettlebell-split-squat",
   "name": "Kettlebell Split Squat",
   "equipment": [
-   "1x Kettlebell"
+   "Kettlebells"
   ],
   "group": "squat",
   "reps": "8–12 / side",
@@ -1387,7 +1387,7 @@ const EXPANDED_MOVES=[
   "id": "lib-kettlebell-sumo-squat",
   "name": "Kettlebell Sumo Squat",
   "equipment": [
-   "1x Kettlebell"
+   "Kettlebells"
   ],
   "group": "squat",
   "reps": "10–15 reps",
@@ -1423,7 +1423,7 @@ const EXPANDED_MOVES=[
   "id": "lib-tempo-goblet-squat",
   "name": "Tempo Goblet Squat",
   "equipment": [
-   "1x Kettlebell"
+   "Kettlebells"
   ],
   "group": "squat",
   "reps": "10–15 reps",
@@ -1447,7 +1447,7 @@ const EXPANDED_MOVES=[
   "id": "lib-kettlebell-kickstand-romanian-deadlift",
   "name": "Kettlebell Kickstand Romanian Deadlift",
   "equipment": [
-   "1x Kettlebell"
+   "Kettlebells"
   ],
   "group": "hinge",
   "reps": "8–12 / side",
@@ -1459,7 +1459,7 @@ const EXPANDED_MOVES=[
   "id": "lib-single-leg-kettlebell-romanian-deadlift",
   "name": "Single-Leg Kettlebell Romanian Deadlift",
   "equipment": [
-   "1x Kettlebell"
+   "Kettlebells"
   ],
   "group": "hinge",
   "reps": "8–12 / side",
@@ -1507,7 +1507,7 @@ const EXPANDED_MOVES=[
   "id": "lib-kettlebell-deadlift",
   "name": "Kettlebell Deadlift",
   "equipment": [
-   "1x Kettlebell"
+   "Kettlebells"
   ],
   "group": "hinge",
   "reps": "10–15 reps",
@@ -1629,7 +1629,7 @@ const EXPANDED_MOVES=[
   "id": "lib-kettlebell-single-leg-glute-bridge",
   "name": "Kettlebell Single-Leg Glute Bridge",
   "equipment": [
-   "1x Kettlebell"
+   "Kettlebells"
   ],
   "group": "glutes",
   "reps": "10–15 reps",
@@ -1957,7 +1957,7 @@ const EXPANDED_MOVES=[
   "id": "lib-kettlebell-single-leg-calf-raise",
   "name": "Kettlebell Single-Leg Calf Raise",
   "equipment": [
-   "1x Kettlebell"
+   "Kettlebells"
   ],
   "group": "calves",
   "reps": "8–12 / side",
@@ -1993,7 +1993,7 @@ const EXPANDED_MOVES=[
   "id": "lib-seated-kettlebell-calf-raise",
   "name": "Seated Kettlebell Calf Raise",
   "equipment": [
-   "1x Kettlebell",
+   "Kettlebells",
    "Stable Bench / Support"
   ],
   "group": "calves",
@@ -2057,7 +2057,7 @@ const EXPANDED_MOVES=[
   "id": "lib-kettlebell-bent-knee-calf-raise",
   "name": "Kettlebell Bent-Knee Calf Raise",
   "equipment": [
-   "1x Kettlebell"
+   "Kettlebells"
   ],
   "group": "calves",
   "reps": "10–15 reps",
@@ -2261,7 +2261,7 @@ const EXPANDED_MOVES=[
   "id": "lib-kettlebell-goblet-march",
   "name": "Kettlebell Goblet March",
   "equipment": [
-   "1x Kettlebell"
+   "Kettlebells"
   ],
   "group": "full",
   "reps": "8–12 / side",
@@ -2803,10 +2803,439 @@ const INSTRUCTION_BASELINES={
  }
 };
 function reviewedMovement(m){
- if(!m)return m;const known=(m.id&&MOVES[m.id])||Object.values(MOVES).find(x=>x.name===m.name);const old=known&&INSTRUCTION_BASELINES[known.id];
+ if(!m)return m;const eq=normalizeEquipment(m.equipment||[]);if(JSON.stringify(eq)!==JSON.stringify(m.equipment))m={...m,equipment:eq};const known=(m.id&&MOVES[m.id])||Object.values(MOVES).find(x=>x.name===m.name);const old=known&&INSTRUCTION_BASELINES[known.id];
  if(!old)return m;let copy=null;
  for(const [field,value] of Object.entries(old))if(JSON.stringify(m[field])===JSON.stringify(value)){
   copy??={...m};copy[field]=Array.isArray(known[field])?[...known[field]]:known[field];
  }
  return copy||m;
 }
+
+// Kettlebells are a general material; quantity is a separate preference.
+function normalizeEquipment(items){return [...new Set(items.map(e=>e==='1x Kettlebell'?'Kettlebells':e))];}
+function requiredKettlebells(m){if(!m)return 0;const known=(m.id&&MOVES[m.id])||Object.values(MOVES).find(x=>x.name===m.name);return Math.max(m.kettlebellCount||0,known?.kettlebellCount||0,normalizeEquipment(m.equipment||[]).includes('Kettlebells')?1:0);}
+function equipmentCaption(m){return normalizeEquipment(m.equipment||[]).map(e=>e==='Kettlebells'&&requiredKettlebells(m)>1?'Kettlebells (2 required)':e).join(' + ');}
+EQUIPMENT.push('Step / Platform');
+const ADDITIONAL_EQUIPMENT_MOVES=[
+ {
+  "id": "doublekb-floorpress",
+  "name": "Double Kettlebell Floor Press",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "press",
+  "pattern": "horizontal press",
+  "challenge": 4,
+  "reps": "8–12 reps",
+  "description": "Lie on your back with knees bent and one kettlebell in each hand. Stack wrists above elbows, lower both upper arms gently to the floor and press up without bouncing. One press with both arms is one rep.",
+  "tags": "Double Kettlebell Floor Press press horizontal press",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "doublekb-ohp",
+  "name": "Double Kettlebell Overhead Press",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "shoulder",
+  "pattern": "overhead press",
+  "challenge": 4,
+  "reps": "6–10 reps",
+  "description": "Begin with two manageable kettlebells racked at your shoulders. Brace, press both overhead without leaning back, then lower to the rack. One simultaneous press is one rep.",
+  "tags": "Double Kettlebell Overhead Press shoulder overhead press",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "doublekb-alternatingpress",
+  "name": "Alternating Double Kettlebell Press",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "shoulder",
+  "pattern": "overhead press",
+  "challenge": 4,
+  "reps": "6–8 / side",
+  "description": "Rack one manageable kettlebell at each shoulder. Press one overhead while keeping the other racked, lower and alternate. Complete the target on both arms and log each arm press once.",
+  "tags": "Alternating Double Kettlebell Press shoulder overhead press",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "doublekb-row",
+  "name": "Double Kettlebell Bent-Over Row",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "back",
+  "pattern": "row",
+  "challenge": 3,
+  "reps": "8–12 reps",
+  "description": "Hold a kettlebell in each hand, hinge at the hips and brace your trunk. Row both bells toward your lower ribs without jerking, then lower. One row with both arms is one rep.",
+  "tags": "Double Kettlebell Bent-Over Row back row",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "doublekb-frontsquat",
+  "name": "Double Kettlebell Front Squat",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "squat",
+  "pattern": "squat",
+  "challenge": 4,
+  "reps": "8–12 reps",
+  "description": "Rack two manageable kettlebells at your shoulders with elbows close. Keep heels planted, squat through a controlled range and stand tall. One squat is one rep.",
+  "tags": "Double Kettlebell Front Squat squat squat",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "doublekb-reverselunge",
+  "name": "Double Kettlebell Reverse Lunge",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "squat",
+  "pattern": "lunge",
+  "challenge": 4,
+  "reps": "6–8 / side",
+  "description": "Hold one kettlebell by each side. Step one foot back, bend both knees through a comfortable range and return. Alternate legs and log each return to standing as one rep.",
+  "tags": "Double Kettlebell Reverse Lunge squat lunge",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "doublekb-rdl",
+  "name": "Double Kettlebell Romanian Deadlift",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "hinge",
+  "pattern": "hip hinge",
+  "challenge": 4,
+  "reps": "8–12 reps",
+  "description": "Hold two kettlebells in front of your thighs. Soften knees, push hips back and lower the bells close to your legs. Stand by extending your hips without leaning back.",
+  "tags": "Double Kettlebell Romanian Deadlift hinge hip hinge",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "doublekb-deadlift",
+  "name": "Double Kettlebell Deadlift",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "hinge",
+  "pattern": "hip hinge",
+  "challenge": 3,
+  "reps": "8–12 reps",
+  "description": "Set two kettlebells beside your feet. Hinge and bend knees enough to grip them, brace and stand with the weights close. Lower both bells under control before the next rep.",
+  "tags": "Double Kettlebell Deadlift hinge hip hinge",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "doublekb-farmermarch",
+  "name": "Double Kettlebell Farmer March",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "full",
+  "pattern": "loaded march",
+  "challenge": 3,
+  "reps": "20 alternating steps",
+  "description": "Hold a manageable kettlebell by each side. Stand tall and march without swaying. Each knee lift is one step; log the combined total across both legs.",
+  "tags": "Double Kettlebell Farmer March full loaded march",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "doublekb-rackmarch",
+  "name": "Double Kettlebell Front-Rack March",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "core",
+  "pattern": "anti-extension",
+  "challenge": 3,
+  "reps": "20 alternating steps",
+  "description": "Rack a manageable kettlebell at each shoulder. Keep ribs over hips and march slowly without leaning back. Each knee lift is one step; count both legs together.",
+  "tags": "Double Kettlebell Front-Rack March core anti-extension",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "doublekb-calf",
+  "name": "Double Kettlebell Calf Raise",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "calves",
+  "pattern": "calf raise",
+  "challenge": 3,
+  "reps": "12–15 reps",
+  "description": "Hold one light kettlebell by each side. Raise both heels, pause and lower with control. If you need a free hand for support, choose the single-kettlebell version instead.",
+  "tags": "Double Kettlebell Calf Raise calves calf raise",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "doublekb-thruster",
+  "name": "Double Kettlebell Thruster",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "full",
+  "pattern": "conditioning",
+  "challenge": 5,
+  "reps": "6–10 reps",
+  "description": "Begin with two light kettlebells in a secure front rack. Squat, stand and use that leg drive to press overhead. Lower to the rack before the next squat. One squat followed by one press is one rep.",
+  "tags": "Double Kettlebell Thruster full conditioning",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "doublekb-hammer",
+  "name": "Double Kettlebell Hammer Curl",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "biceps",
+  "pattern": "elbow flexion",
+  "challenge": 3,
+  "reps": "8–12 reps",
+  "description": "Hold one light kettlebell by its handle in each hand, palms inward. Keep upper arms by your sides, curl both with control and lower without swinging. One simultaneous curl is one rep.",
+  "tags": "Double Kettlebell Hammer Curl biceps elbow flexion",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "stepup",
+  "name": "Step-ups",
+  "equipment": [
+   "Bodyweight",
+   "Step / Platform"
+  ],
+  "group": "squat",
+  "pattern": "step-up",
+  "challenge": 2,
+  "reps": "8–12 / side",
+  "description": "Place one whole foot on a low, stable exercise step. Push through that foot to stand on the step, then step down with control. Finish the target leading with each leg. One ascent and controlled return is one rep; use a platform, not an unstable chair.",
+  "tags": "Step-ups squat step-up",
+  "loadDependent": false
+ },
+ {
+  "id": "db-stepup",
+  "name": "Dumbbell Step-ups",
+  "equipment": [
+   "Dumbbells",
+   "Step / Platform"
+  ],
+  "group": "squat",
+  "pattern": "step-up",
+  "challenge": 3,
+  "reps": "8–10 / side",
+  "description": "Hold weights by your sides and place one whole foot on a low, stable step. Stand through the leading leg without jumping, then step down slowly. Complete the target leading with each leg.",
+  "tags": "Dumbbell Step-ups squat step-up",
+  "loadDependent": true
+ },
+ {
+  "id": "kb-stepup",
+  "name": "Kettlebell Goblet Step-ups",
+  "equipment": [
+   "Kettlebells",
+   "Step / Platform"
+  ],
+  "group": "squat",
+  "pattern": "step-up",
+  "challenge": 3,
+  "reps": "8–10 / side",
+  "description": "Hold one kettlebell at your chest. Step onto a low, stable platform with the whole leading foot, stand and lower with control. Complete the target on each leading leg.",
+  "tags": "Kettlebell Goblet Step-ups squat step-up",
+  "loadDependent": true
+ },
+ {
+  "id": "doublekb-stepup",
+  "name": "Double Kettlebell Step-ups",
+  "equipment": [
+   "Kettlebells",
+   "Step / Platform"
+  ],
+  "group": "squat",
+  "pattern": "step-up",
+  "challenge": 4,
+  "reps": "6–8 / side",
+  "description": "Hold one manageable kettlebell by each side. Step onto a low, stable platform without jumping, stand and lower slowly. Complete both leading legs and count each ascent and return as one rep.",
+  "tags": "Double Kettlebell Step-ups squat step-up",
+  "loadDependent": true,
+  "kettlebellCount": 2
+ },
+ {
+  "id": "lateral-stepup",
+  "name": "Lateral Step-ups",
+  "equipment": [
+   "Bodyweight",
+   "Step / Platform"
+  ],
+  "group": "squat",
+  "pattern": "step-up",
+  "challenge": 2,
+  "reps": "8–12 / side",
+  "description": "Stand beside a low, stable step. Place the nearer foot fully on it, push through that leg to stand, then lower slowly. Turn around to work the other side. One ascent and return is one rep.",
+  "tags": "Lateral Step-ups squat step-up",
+  "loadDependent": false
+ },
+ {
+  "id": "db-lateral-stepup",
+  "name": "Dumbbell Lateral Step-ups",
+  "equipment": [
+   "Dumbbells",
+   "Step / Platform"
+  ],
+  "group": "squat",
+  "pattern": "step-up",
+  "challenge": 3,
+  "reps": "8–10 / side",
+  "description": "Hold light dumbbells by your sides and stand beside a low, stable platform. Step up through the nearer leg, then lower slowly. Complete the target on both sides without bouncing off the floor.",
+  "tags": "Dumbbell Lateral Step-ups squat step-up",
+  "loadDependent": true
+ },
+ {
+  "id": "stepdown",
+  "name": "Controlled Step-downs",
+  "equipment": [
+   "Bodyweight",
+   "Step / Platform"
+  ],
+  "group": "squat",
+  "pattern": "step-down",
+  "challenge": 3,
+  "reps": "6–10 / side",
+  "description": "Stand on a low, stable step. Keep one foot planted on it and bend that knee slowly until the opposite heel lightly touches the floor. Push through the standing leg to return. Complete both sides.",
+  "tags": "Controlled Step-downs squat step-down",
+  "loadDependent": false
+ },
+ {
+  "id": "db-stepdown",
+  "name": "Dumbbell Controlled Step-downs",
+  "equipment": [
+   "Dumbbells",
+   "Step / Platform"
+  ],
+  "group": "squat",
+  "pattern": "step-down",
+  "challenge": 4,
+  "reps": "6–8 / side",
+  "description": "Hold light weights on a low, stable step. Keep one foot planted, lower the opposite heel toward the floor and return through the standing leg without dropping onto the other foot. Complete both sides.",
+  "tags": "Dumbbell Controlled Step-downs squat step-down",
+  "loadDependent": true
+ },
+ {
+  "id": "wallsit",
+  "name": "Wall Sit",
+  "equipment": [
+   "Bodyweight"
+  ],
+  "group": "squat",
+  "pattern": "isometric knee extension",
+  "challenge": 2,
+  "reps": "20–30 sec",
+  "description": "Slide your back down a sturdy wall with feet slightly forward. Hold a manageable knee bend, keep feet flat and breathe steadily. Stand when done. Log seconds held, not reps.",
+  "tags": "Wall Sit squat isometric knee extension",
+  "loadDependent": false
+ },
+ {
+  "id": "db-wallsit",
+  "name": "Dumbbell Wall Sit",
+  "equipment": [
+   "Dumbbells"
+  ],
+  "group": "squat",
+  "pattern": "isometric knee extension",
+  "challenge": 3,
+  "reps": "20–30 sec",
+  "description": "Hold one light dumbbell close to your chest with both hands. Lean your back against a sturdy wall and hold a comfortable knee bend with feet flat. Log seconds held; put the weight down under control before standing if needed.",
+  "tags": "Dumbbell Wall Sit squat isometric knee extension",
+  "loadDependent": true
+ },
+ {
+  "id": "kb-wallsit",
+  "name": "Kettlebell Wall Sit",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "squat",
+  "pattern": "isometric knee extension",
+  "challenge": 3,
+  "reps": "20–30 sec",
+  "description": "Hold one light kettlebell at your chest. With your back against a sturdy wall, hold a manageable knee bend and breathe. Log the seconds you hold, not reps.",
+  "tags": "Kettlebell Wall Sit squat isometric knee extension",
+  "loadDependent": true
+ },
+ {
+  "id": "band-legextension",
+  "name": "Seated Band Leg Extension",
+  "equipment": [
+   "Resistance Bands",
+   "Band Anchor",
+   "Ankle Strap",
+   "Stable Bench / Support"
+  ],
+  "group": "squat",
+  "pattern": "knee extension",
+  "challenge": 2,
+  "reps": "10–15 / side",
+  "description": "Sit on a stable seat with a band attached to a secure low anchor behind you and an ankle strap on one leg. Keeping your thigh supported, straighten that knee through a comfortable range, then bend it slowly. Complete both sides. This isolates the quads more than a squat.",
+  "tags": "Seated Band Leg Extension squat knee extension",
+  "loadDependent": true
+ },
+ {
+  "id": "cable-legextension",
+  "name": "Seated Cable Leg Extension",
+  "equipment": [
+   "Pulley",
+   "Ankle Strap",
+   "Stable Bench / Support"
+  ],
+  "group": "squat",
+  "pattern": "knee extension",
+  "challenge": 2,
+  "reps": "10–15 / side",
+  "description": "Sit on a stable seat in front of a low pulley behind you, with an ankle strap on one leg. Keep the thigh supported as you straighten the knee, then return slowly. Complete both sides. This is quad isolation rather than a whole-leg squat movement.",
+  "tags": "Seated Cable Leg Extension squat knee extension",
+  "loadDependent": true
+ },
+ {
+  "id": "reverse-nordic",
+  "name": "Short-Range Reverse Nordic",
+  "equipment": [
+   "Bodyweight"
+  ],
+  "group": "squat",
+  "pattern": "knee extension",
+  "challenge": 4,
+  "reps": "6–8 reps",
+  "description": "Kneel tall with knees about hip-width apart and toes relaxed or tucked comfortably. Keep hips extended and torso in line with thighs, lean back a small controlled distance from the knees, then return. Do not fold at your hips; start with a short range.",
+  "tags": "Short-Range Reverse Nordic squat knee extension",
+  "loadDependent": false
+ },
+ {
+  "id": "sitstand",
+  "name": "Sit-to-Stand",
+  "equipment": [
+   "Bodyweight",
+   "Stable Bench / Support"
+  ],
+  "group": "squat",
+  "pattern": "squat",
+  "challenge": 1,
+  "reps": "10–15 reps",
+  "description": "Sit near the front of a sturdy seat with feet planted. Lean forward slightly, push through your feet to stand fully, then sit down with control. One stand and return is one rep.",
+  "tags": "Sit-to-Stand squat squat",
+  "loadDependent": false
+ }
+];
+for(const m of ADDITIONAL_EQUIPMENT_MOVES)MOVES[m.id]=m;

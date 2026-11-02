@@ -1,0 +1,19 @@
+const assert=require('node:assert/strict');const {harness}=require('./release.cjs');
+(async()=>{
+ const h=harness();await h.run('bootReady');const {run}=h;
+ assert(run('EQUIPMENT.includes("Kettlebells")'));assert(!run('EQUIPMENT.includes("1x Kettlebell")'));
+ run('profile().onboardingComplete=true;tab="Workout";profile().equipment=["Kettlebells","Bodyweight"];profile().kettlebellCount=1;profile().bans=[]');
+ assert(run('allowed(MOVES.kbpress)'));assert(!run('allowed(MOVES["doublekb-floorpress"])'));run('profile().kettlebellCount=2');assert(run('allowed(MOVES["doublekb-floorpress"])'));assert(run('allowed(MOVES.kbpress)'));assert(run('equipmentCaption(MOVES["doublekb-floorpress"]).includes("2 required")'));
+ assert.equal(run('Object.values(MOVES).filter(m=>m.kettlebellCount===2).length'),14);
+ run('openSetup();setupDraft.step=2');assert(run('equipmentStep().includes("2+ kettlebells")'));assert(!run('equipmentStep().includes("1x Kettlebell")'));run('setupDraft.kettlebellCount=1');assert.equal(run('plannedProfile().kettlebellCount'),1);run('setupDraft.kettlebellCount=2;applySetup()');assert.equal(run('profile().kettlebellCount'),2);
+ const reloaded=harness({'daily-reps-engine-v2':run('JSON.stringify(state)')});await reloaded.run('bootReady');assert.equal(reloaded.run('profile().kettlebellCount'),2);
+ const old=JSON.parse(run('JSON.stringify(state)'));old.profiles[0].equipment=['1x Kettlebell','Bodyweight'];delete old.profiles[0].kettlebellCount;old.profiles[0].loads={'move:Single-Arm KB Floor Press':16};const legacy=harness({'daily-reps-engine-v2':JSON.stringify(old)});await legacy.run('bootReady');assert.equal(legacy.run('profile().equipment.join()'),'Kettlebells,Bodyweight');assert.equal(legacy.run('profile().kettlebellCount'),1);assert.equal(legacy.run('profile().loads["move:Single-Arm KB Floor Press"]'),16);assert(legacy.run('allowed({...MOVES.kbpress,equipment:["1x Kettlebell"]})'));
+ run('profile().schedule=["Push","Pull","Lower"].map(type=>({type,custom:null}));profile().rotationIndex=2;day=2;profile().equipment=EQUIPMENT.slice();profile().kettlebellCount=2');
+ const ids=run('alternativesFor(currentCircuit()[0],0).map(m=>m.id)');for(const id of ['stepup','lateral-stepup','stepdown','wallsit','band-legextension','cable-legextension','reverse-nordic','doublekb-frontsquat'])assert(ids.includes(id),id);
+ run('profile().bans=["squat","lunge"]');assert(run('[currentCircuit()[0].main,...alternativesFor(currentCircuit()[0],0)].some(m=>m?.id==="stepup")'));assert(run('alternativesFor(currentCircuit()[0],0).some(m=>m.id==="wallsit")'));assert(run('alternativesFor(currentCircuit()[0],0).some(m=>m.id==="band-legextension")'));
+ run('profile().bans=[];profile().equipment=["Bodyweight"]');assert(!run('allowed(MOVES.stepup)'));assert(run('allowed(MOVES.wallsit)'));run('profile().equipment.push("Step / Platform")');assert(run('allowed(MOVES.stepup)'));assert(!run('allowed(MOVES["cable-legextension"])'));
+ run('profile().equipment=EQUIPMENT.slice();const choices=alternativesFor(currentCircuit()[0],0);swapExercise(0,choices.findIndex(m=>m.id==="wallsit"));start();addReps(0,10)');assert.equal(run('countTotal(repEntries(activeSession()),"sec")'),10);assert.equal(run('countTotal(repEntries(activeSession()))'),0);assert(run('validateState(state)'));
+ assert.equal(run('new Set(Object.values(MOVES).filter(m=>!m.libraryAlias).map(m=>m.name)).size'),run('Object.values(MOVES).filter(m=>!m.libraryAlias).length'));
+ assert(run('Object.values(MOVES).every(m=>m.equipment.every(e=>EQUIPMENT.includes(e)))'));
+ console.log('PASS: generic kettlebell label; quantity-aware doubles; setup/save/reload; old equipment migration; leg alternatives beyond squats/lunges; exclusions; platform/strap filters; wall-sit seconds; unique complete library.');
+})().catch(e=>{console.error(e);process.exit(1)});

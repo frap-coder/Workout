@@ -78,3 +78,12 @@ Run on current Android Chrome, including a smaller screen, and at least one addi
 - [ ] Custom circuits, weights and temporary exercise choices stay with the correct workout.
 - [ ] Active sessions and overtime block reordering without resetting any data.
 - [ ] Setup preview follows the chosen sequence, including fixed weekdays.
+
+## Kettlebells and leg variety
+
+- [ ] Setup shows Kettlebells, with 1 / 2+ quantity choices. The selection survives save/reload and backup restore.
+- [ ] A one-kettlebell profile cannot select a double-kettlebell exercise; 2+ unlocks it and displays “2 required”.
+- [ ] Old 1x Kettlebell selections still work; historical results and weights remain unchanged.
+- [ ] Step-ups require a Step / Platform; cable/band leg extensions require the proper accessories.
+- [ ] Wall sits log hold seconds and never add to rep totals.
+- [ ] Excluding squat and lunge still permits step-ups, wall sits and knee extensions with compatible equipment.

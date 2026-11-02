@@ -16,6 +16,7 @@ node tests/experience.cjs
 node tests/overtime.cjs
 node tests/instructions.cjs
 node tests/order.cjs
+node tests/kettlebells.cjs
 ```
 
 These exercise the real app logic in a Node VM and the actual service-worker handlers with browser API doubles. They are not a substitute for physical-device acceptance tests.
@@ -61,22 +62,22 @@ A browser cannot promise an alarm when it is closed or suspended or the device i
 
 ## Expanded exercise library — 30 October 2026
 
-The library contains 283 distinct selectable exercises, grouped by primary training role:
+The library contains 311 distinct selectable exercises, grouped by primary training role:
 
 | Group | Exercises |
 | --- | ---: |
-| Chest | 25 |
-| Shoulders | 24 |
+| Chest | 26 |
+| Shoulders | 26 |
 | Triceps | 22 |
-| Back | 26 |
-| Biceps & forearms | 24 |
-| Core | 23 |
-| Quads & legs | 24 |
-| Hamstrings & posterior chain | 24 |
+| Back | 27 |
+| Biceps & forearms | 25 |
+| Core | 24 |
+| Quads & legs | 41 |
+| Hamstrings & posterior chain | 26 |
 | Glutes | 24 |
 | Hip abductors & adductors | 23 |
-| Calves | 23 |
-| Full body (legacy workouts) | 21 |
+| Calves | 24 |
+| Full body (legacy workouts) | 23 |
 
 Groups describe primary training roles, not isolated muscles. Exercises often train secondary muscles. Hip control drills and shoulder control drills differ from loaded strength work; the pattern labels make those differences explicit.
 
@@ -123,3 +124,9 @@ See INSTRUCTION_REVIEW.md for concrete findings. The review is an editorial and 
 For a Push/Pull/Lower rotation, open Workout schedule → Change workout order. Use Up/Down arrows to reorder the three workouts, select Next workout, then Save order. Cancelling leaves the current sequence untouched. Existing custom circuits, per-exercise loads, history and daily exercise overrides follow the corresponding workout. Setup → Schedule also supports the arrows, including during first-time setup. Full Body has no three-part order to change. Order changes are blocked during an unfinished session, including overtime.
 
 Changing only the rotation order through Setup preserves custom circuits and daily overrides; applying a broader plan change retains the existing rebuild behavior. On fixed weekdays, the setup order determines the sequence assigned to selected days when new assignments are generated.
+
+## General kettlebells and more leg patterns
+
+Equipment now says Kettlebells. Setup and Settings let users select one or 2+ available kettlebells; exercises requiring two are shown only for the latter. Fourteen double-kettlebell choices cover presses, rows, squats, lunges, hinges, step-ups, carries/marches, curls and calf work. One-kettlebell movements remain available. Total external load means both bells added together; one simultaneous bilateral movement is one rep. Old “1x Kettlebell” profiles and saved choices are accepted and normalized without changing historical results or saved weights. Existing users default to one until they choose 2+.
+
+The quads/legs slot also offers step-ups, lateral step-ups, controlled step-downs, wall sits, seated band/cable leg extensions and short-range reverse Nordics. Step-ups require a suitable Step / Platform; band/cable extensions require their anchor/strap/seat. Wall sits log seconds. These patterns share a primary quad focus but differ in hip contribution and stimulus; the picker explains that distinction. Excluding “squat” or “lunge” no longer accidentally excludes all entries merely because their internal group ID is squat.
