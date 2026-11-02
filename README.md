@@ -18,6 +18,7 @@ node tests/instructions.cjs
 node tests/order.cjs
 node tests/kettlebells.cjs
 node tests/public-app.cjs
+node tests/ui-polish.cjs
 ```
 
 These exercise the real app logic in a Node VM and the actual service-worker handlers with browser API doubles. They are not a substitute for physical-device acceptance tests.
@@ -139,3 +140,9 @@ PUBLIC_APP_REVIEW.md documents the scan and corrections. Bodyweight is always av
 Settings supports kg/lb display and input. Stored weightKg values remain canonical; unchanged rounded displays do not change the original stored number. Decimal commas are accepted. Repeat-set uses canonical loads directly. Old schemas retain their saved schedules rather than being forced into a five-session Push/Pull/Lower plan. Fixed weekdays expose individual assignments and preserve unchanged custom circuits. Automatic preset generation respects each slot's movement role before matching the reference challenge, with easier default choices where possible; manual swaps still show the whole compatible group.
 
 Weekly goals replace daily streak pressure in the main progress/result UI. A waiting offline update has an Install update action outside active sessions; active sessions keep it deferred. About & data explains browserlocal data, backups and hosting context. There are still no accounts, analytics SDKs, ads or automatic cross-device sync.
+
+## Mobile UI polish
+
+Workout results group each exact exercise name once, with separate load/unit rows and combined per-exercise rep/hold totals. Repeated entries for the same load and unit are combined for display; original logs and history stay unchanged. Unknown external load remains distinct from zero load. No set counts are invented from individual +1/+5/+10 logging actions.
+
+The small-screen header reserves space for the profile name and select chevron, with a compact Setup control at narrow widths and a full-name tooltip. Equipment tiles use local minimal SVG icons rather than letter abbreviations. Mobile main content and sticky Setup actions reserve room above the bottom navigation, including safe-area insets. The large repeated backup reminder has been removed from Workout/Progress; the existing footer action and the full Settings backup section remain available.

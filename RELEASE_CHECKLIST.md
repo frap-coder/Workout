@@ -97,3 +97,12 @@ Run on current Android Chrome, including a smaller screen, and at least one addi
 - [ ] Import a legacy week without a mode: preserve its days, routines, history and session.
 - [ ] Verify a waiting update shows Install update outside a workout and remains deferred during a session.
 - [ ] About & data accurately explains local storage and backups; no fake contact details are shown.
+
+## UI polish
+
+- [ ] A saved workout with the same exercise at 16 kg and 20 kg shows one exercise heading and two load rows, with the correct combined total.
+- [ ] Holds, reps, unknown loads and zero external load remain distinct in grouped results.
+- [ ] At 320/360/390px, My profile fits before the chevron; long profile names do not overlap it.
+- [ ] Equipment tiles show meaningful SVG icons and retain names and selected states.
+- [ ] Scroll to Setup's final action: its button stays above the fixed bottom navigation, including on a phone with a home-indicator safe area.
+- [ ] Workout has one small backup/export action; the full backup tools remain in Settings.
