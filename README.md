@@ -1,6 +1,6 @@
 # Daily Reps — web release
 
-English, browser-local workout app. Five movements per training session, exactly 20 minutes, rolling Push/Pull/Lower or fixed weekdays. No accounts, analytics, advertising SDKs, paid features or mobile wrapper.
+English, browser-local workout app. Five movements per training session, a 20-minute target with optional overtime, rolling Push/Pull/Lower or fixed weekdays. No accounts, analytics, advertising SDKs, paid features or mobile wrapper.
 
 ## Run
 
@@ -13,6 +13,7 @@ node tests/release.cjs
 node tests/offline-runtime.cjs
 node tests/library.cjs
 node tests/experience.cjs
+node tests/overtime.cjs
 ```
 
 These exercise the real app logic in a Node VM and the actual service-worker handlers with browser API doubles. They are not a substitute for physical-device acceptance tests.
@@ -32,9 +33,9 @@ These exercise the real app logic in a Node VM and the actual service-worker han
 
 ## Data guarantees and limits
 
-The existing `daily-reps-engine-v2` storage key is retained; the payload has schema version 3. Valid legacy history and live circuits are preserved. Upcoming known compound movements are migrated to single movements. A downloaded backup contains all profiles, history, workout edits, preferences and any unfinished timer.
+The existing `daily-reps-engine-v2` storage key is retained; the payload has schema version 4. Valid legacy history and live circuits are preserved. Upcoming known compound movements are migrated to single movements. A downloaded backup contains all profiles, history, workout edits, preferences and any unfinished timer.
 
-Import validates the file and previews its profile/session counts before replacement. Imported running timers are paused using their saved deadline; an already-expired imported timer is discarded rather than counted as a completed workout. Unknown future backup versions and malformed files are rejected before replacement.
+Import validates the file and previews its profile/session counts before replacement. Imported running timers are paused using their saved deadline; a timer whose target had already elapsed at export is restored as paused overtime, with no automatic completion. Restore uses the export timestamp so days since downloading the backup are not counted as training. Unknown future backup versions and malformed files are rejected before replacement.
 
 LocalStorage is the immediate save; its previous valid value is retained as a safety copy. IndexedDB mirrors the latest snapshot in order. Startup checks the primary save, then the safety copy, then IndexedDB. These copies are on the same device and do not protect against clearing all browser storage. Export a downloaded JSON backup for that. Deletion clears the selected profile or all local training data, including safety copies, and updates the IndexedDB mirror.
 
@@ -48,7 +49,7 @@ Swap choices stay within the movement family. All matching alternatives are avai
 
 ## Timer, audio and offline
 
-The timer uses a real deadline and counts a completed session once. The original 1.7-second chime is scheduled with Web Audio when sound is unlocked. Pause, reset, mute and profile switching cancel the scheduled sound. Resuming schedules the new deadline. A visible completion and saved result still work when audio is unavailable. A refreshed running session offers an Enable finish sound button because browsers require a user gesture.
+The timer uses a real deadline. At the target it enters overtime and keeps logging available. Finish & save records a completed session once and advances the rotation. The original 1.7-second chime is scheduled with Web Audio when sound is unlocked. Pause, reset, mute and profile switching cancel the scheduled sound. Resuming schedules the new deadline. A visible completion and saved result still work when audio is unavailable. A refreshed running session offers an Enable finish sound button because browsers require a user gesture.
 
 Screen wake lock is enabled by default per profile and can be turned off. It is released on pause, finish, deletion and profile change, and reacquired for a visible running session where supported. Browsers/device policies can reject or release it.
 
@@ -95,4 +96,14 @@ Exercise levels run from 1 to 5 and describe reference challenge within a primar
 
 Last weights are retained per exercise. Repeat last set copies the last logged entry for that exercise and unit, restores its recorded load, and adds an undoable entry. Logging buttons remain +1/+5/+10 for quick adjustments. Reps and timed holds remain separate. Swaps retain earlier entries and the timer while invalidating Echo comparisons. Backup access is available in the footer, Settings, and a reminder after training when no recent export exists. Advertising is not included.
 
-Run all four automated suites before publication. Full-device browser acceptance remains a separate check; the restricted development environment could not complete the Chromium run. Check compact layout at 360px/390px widths, first-use setup, dialog scrolling and keyboard focus, and real-device timer/audio/offline behavior.
+Run all five automated suites before publication. Full-device browser acceptance remains a separate check; the restricted development environment could not complete the Chromium run. Check compact layout at 360px/390px widths, first-use setup, dialog scrolling and keyboard focus, and real-device timer/audio/offline behavior.
+
+## Overtime and workout guidance — 2 November 2026
+
+At twenty minutes the target chime sounds once and the clock changes to +MM:SS overtime. Reps, holds, Undo, load changes, repeat-set and swaps remain available. Pause freezes overtime; resuming and reloading preserve it. Finish & save is the explicit final action: it records the session once, includes late entries and actual unpaused duration, releases the wake lock and advances the rotation. Closing the page keeps an unfinished workout available for resumption. A suspended/closed browser still cannot guarantee a timely audible alert.
+
+History and the calendar show target duration plus overtime. Training-time totals include saved overtime. Echo compares entries logged during the first twenty minutes; overtime entries remain in session totals. Logging time is not necessarily the actual instant an exercise was performed. Existing version-3 backups migrate to schema 4 without changing completed history or discarding current overrides. Version-4 backups need this or a newer app; do not import them into an old release.
+
+“How this workout works” is available before and during training. It explains the selected routine’s goal, one-set-per-exercise circuit, rest guidance, manageable loading, actual selected movements, per-side counting, hold seconds and overtime completion. Opening instructions does not pause the timer.
+
+Automated release tests now include overtime, once-only chime, running/paused reload, snapshot-time backup restoration, manual save, durations and instructions. The GitHub-hosted Chromium flow exercises overtime in a real browser, alongside the existing mobile/desktop checks. See LAUNCH_PLAN.md for the product analysis and proposed launch gates; those recommendations do not add ads, trackers or external outreach.

@@ -57,3 +57,15 @@ Run on current Android Chrome, including a smaller screen, and at least one addi
 - [ ] Repeat last set restores the previous logged load and amount; Undo removes only that entry.
 - [ ] Refresh paused/running sessions and check retained reps, timer and audio re-enablement.
 - [ ] Export remains accessible from footer and Settings; reminders do not interrupt training.
+
+## Overtime and instruction acceptance
+
+- [ ] On iPhone/Safari and Android/Chrome, reach twenty minutes: one chime, +MM:SS, no forced result screen; reps remain available.
+- [ ] Log/undo/repeat sets, change load and swap during overtime; all entries remain in the final result.
+- [ ] Pause overtime, wait and resume: paused time does not accumulate. Reload running and paused states.
+- [ ] Finish & save records once, advances the sequence once and releases wake lock; reopening does not duplicate a result.
+- [ ] History/calendar show overtime and saved training-time totals include it.
+- [ ] Export running overtime; restore days later and verify a paused snapshot at export time.
+- [ ] Upgrade a version-3 saved session/backup and verify history, overrides and active circuit survive.
+- [ ] Read the Push/Pull/Lower/Full Body instructions: goal, one set then next exercise, rest, safe load, both-side counting and explicit save are understandable without coaching.
+- [ ] Trainer review and physical-device acceptance remain required before broader launch (LAUNCH_PLAN.md).

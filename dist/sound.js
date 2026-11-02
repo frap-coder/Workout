@@ -10,7 +10,7 @@ function createFinishTune(base){
 }
 function cancelFinishAudio(){if(scheduledFinish)for(const node of scheduledFinish.nodes)try{node.stop();node.disconnect();}catch{}scheduledFinish=null;}
 function syncFinishAudio(){
- cancelFinishAudio();const s=activeSession();if(!s?.running||s.finished||profile().preferences?.sound===false||audioCtx?.state!=='running')return;
+ cancelFinishAudio();const s=activeSession();if(!s?.running||s.finished||s.overtime||s.milestoneNotified||profile().preferences?.sound===false||audioCtx?.state!=='running')return;
  try{const base=audioCtx.currentTime+remaining(s)/1000;scheduledFinish={id:s.id,base,nodes:createFinishTune(base)};}catch{cancelFinishAudio();}
 }
 function playFinishTune(){

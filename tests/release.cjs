@@ -12,7 +12,7 @@ function harness(seed={},extras={}){
 if(require.main===module)(async()=>{
  const h=harness();await h.run('bootReady');const {run}=h;
  run('profile().equipment=EQUIPMENT.slice();delete profile().experience;profile().onboardingComplete=true;tab="Workout"');
- assert.equal(run('state.schemaVersion'),3);assert.equal(run('profile().mode'),'rotation');
+ assert.equal(run('state.schemaVersion'),4);assert.equal(run('profile().mode'),'rotation');
  for(let d=0;d<3;d++){
   run(`day=${d}`);assert.equal(run('currentCircuit().length'),5);assert(run('currentCircuit().every(r=>r.main&&!r.main.name.includes(" + "))'));
   for(let i=0;i<5;i++){assert(run(`alternativesFor(currentCircuit()[${i}],${i}).length`)>5,`default ${d}/${i}: all compatible choices`);assert(run(`alternativesFor(currentCircuit()[${i}],${i}).every(m=>allowed(m)&&moveGroup(m)===moveGroup(currentCircuit()[${i}].main))`));}
@@ -27,13 +27,13 @@ if(require.main===module)(async()=>{
  run('undoReps(0)');assert.equal(run('activeSession().repEntries[1].count'),0);assert.equal(run('activeSession().repEntries[0].count'),10);
  const before=run('currentCircuit()[0].main.name');run('swapExercise(0,0);addReps(0,5)');assert.notEqual(run('currentCircuit()[0].main.name'),before);assert.equal(run('countTotal(repEntries(activeSession()))'),15);
  const snapshot=JSON.parse(h.data['daily-reps-engine-v2']);const reloaded=harness({'daily-reps-engine-v2':JSON.stringify(snapshot)});await reloaded.run('bootReady');assert.equal(reloaded.run('countTotal(repEntries(activeSession()))'),15);assert.equal(reloaded.run('activeSession().circuit[0].main.name'),run('activeSession().circuit[0].main.name'));
- h.advance(1200001);run('tick();tick()');assert.equal(run('profile().history.length'),1);assert.equal(run('profile().rotationIndex'),1);assert.equal(run('profile().history[0].repEntries.find(e=>e.weightKg===24).count'),10);
+ h.advance(1200001);run('tick();tick()');assert.equal(run('profile().history.length'),0);assert(run('activeSession().overtime'));run('finish(activeSession())');assert.equal(run('profile().history.length'),1);assert.equal(run('profile().rotationIndex'),1);assert.equal(run('profile().history[0].repEntries.find(e=>e.weightKg===24).count'),10);
  const history=run('JSON.stringify(profile().history)');run('migrateState(state)');assert.equal(run('JSON.stringify(profile().history)'),history);
- run('day=1;start()');h.advance(10000);run('start()');assert(run('!activeSession().running'));assert.equal(run('remaining()'),1190000);assert.equal(run('nextWorkoutIndex()'),1);run('start()');h.advance(1190001);run('tick()');assert.equal(run('nextWorkoutIndex()'),2);
+ run('day=1;start()');h.advance(10000);run('start()');assert(run('!activeSession().running'));assert.equal(run('remaining()'),1190000);assert.equal(run('nextWorkoutIndex()'),1);run('start()');h.advance(1190001);run('tick()');assert.equal(run('nextWorkoutIndex()'),1);run('finish(activeSession())');assert.equal(run('nextWorkoutIndex()'),2);
  // Timed holds remain seconds; bodyweight and loaded reps stay separate.
  run("day=2;profile().schedule[2].custom=circuit().map((r,i)=>i===4?{main:clone(MOVES.plank),alt:null}:r);start();addReps(4,10);addReps(0,5)");assert.equal(run("countTotal(repEntries(activeSession()),'sec')"),10);assert.equal(run('countTotal(repEntries(activeSession()))'),5);
  const payload=run('JSON.stringify(backupPayload())');h.context.rawBackup=payload;assert.equal(run('decodeBackup(rawBackup).profiles[0].history.length'),2);
- for(const bad of ['{}','{"app":"daily-reps","formatVersion":9}',payload.replace('"schemaVersion":3','"schemaVersion":999'),'{"__proto__":{}}']){h.context.bad=bad;assert.throws(()=>run('decodeBackup(bad)'));}
+ for(const bad of ['{}','{"app":"daily-reps","formatVersion":9}',payload.replace('"schemaVersion":4','"schemaVersion":999'),'{"__proto__":{}}']){h.context.bad=bad;assert.throws(()=>run('decodeBackup(bad)'));}
  const restore=harness();await restore.run('bootReady');restore.context.rawBackup=payload;restore.run('pendingRestore=decodeBackup(rawBackup);restoreBackup()');assert.equal(restore.run('profile().history.length'),2);assert(!restore.run('activeSession().running'));
  let mirrored=null;const fakeDb={close(){},transaction(){const tx={objectStore:()=>({get(){const req={result:JSON.stringify(snapshot)};queueMicrotask(()=>req.onsuccess?.());return req;},put(raw){mirrored=raw;}})};queueMicrotask(()=>tx.oncomplete?.());return tx;}};
  const indexedDB={open(){const req={result:fakeDb};queueMicrotask(()=>req.onsuccess?.());return req;}};
@@ -49,7 +49,7 @@ if(require.main===module)(async()=>{
  // Every rendered page and guide is executable without unavailable browser APIs.
  run('profile().session=null;focusMode=false');for(const view of ['workout()','builder()','progress()','settings()','setupView()'])assert(run(view).length>100);
  for(const id of run('Object.keys(MOVES)')){h.context.moveId=id;assert(run('movementGuide(MOVES[moveId])').length>40);}
- console.log('PASS: 5-slot circuits; all compatible swaps; searchable text-only library; halo label; equipment exclusions; single-movement presets; load-aware logs/undo/Echo; timer deadlines; pause/resume; persisted reload; v3 migration; malformed-backup rejection; restore and deletion; wake-lock lifecycle; all views and guides.');
+ console.log('PASS: 5-slot circuits; all compatible swaps; searchable text-only library; halo label; equipment exclusions; single-movement presets; load-aware logs/undo/Echo; timer deadlines; pause/resume; persisted reload; v3/v4 migration; malformed-backup rejection; restore and deletion; wake-lock lifecycle; all views and guides.');
 })().catch(error=>{console.error(error);process.exit(1);});
 
 module.exports={harness};

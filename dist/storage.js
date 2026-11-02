@@ -1,10 +1,10 @@
 'use strict';
-const DATA_VERSION=3,RECOVERY_KEY='daily-reps-engine-recovery';
-let storageHealth='Checking storage…',storageRecovered=false,storageDb=null,storageQueue=Promise.resolve(),pendingRestore=null;
+const DATA_VERSION=4,RECOVERY_KEY='daily-reps-engine-recovery';
+let storageHealth='Checking storage…',storageRecovered=false,storageDb=null,storageQueue=Promise.resolve(),pendingRestore=null,pendingRestoreExportAt=null;
 function parseSafeJSON(raw){return JSON.parse(raw,(key,value)=>{if(['__proto__','prototype','constructor'].includes(key))throw Error('Unsafe backup field.');return value;});}
 function validMovement(m){return m&&typeof m.name==='string'&&m.name.length<=100&&typeof m.reps==='string'&&m.reps.length<=100&&Array.isArray(m.equipment)&&m.equipment.length<=12&&m.equipment.every(x=>typeof x==='string')&&(m.weightKg==null||(Number.isFinite(m.weightKg)&&m.weightKg>=0&&m.weightKg<=1000));}
 function validateEntries(entries){if(entries!=null&&(!Array.isArray(entries)||entries.some(e=>typeof e.name!=='string'||!['reps','sec'].includes(e.unit)||!Number.isFinite(e.count)||e.count<0||(e.weightKg!=null&&(!Number.isFinite(e.weightKg)||e.weightKg<0||e.weightKg>1000)))))throw Error('Invalid rep entries.');}
-function validateLogs(logs){if(logs!=null&&(!Array.isArray(logs)||logs.some(e=>typeof e.name!=='string'||!['reps','sec'].includes(e.unit)||!Number.isFinite(e.amount)||e.amount<0||!Number.isFinite(e.at)||e.at<0||e.at>1200000||!Number.isInteger(e.slot)||e.slot<0||e.slot>4||(e.weightKg!=null&&(!Number.isFinite(e.weightKg)||e.weightKg<0||e.weightKg>1000)))))throw Error('Invalid rep timeline.');}
+function validateLogs(logs){if(logs!=null&&(!Array.isArray(logs)||logs.some(e=>typeof e.name!=='string'||!['reps','sec'].includes(e.unit)||!Number.isFinite(e.amount)||e.amount<0||!Number.isFinite(e.at)||e.at<0||e.at>Number.MAX_SAFE_INTEGER||!Number.isInteger(e.slot)||e.slot<0||e.slot>4||(e.weightKg!=null&&(!Number.isFinite(e.weightKg)||e.weightKg<0||e.weightKg>1000)))))throw Error('Invalid rep timeline.');}
 function validateState(value){
  if(!value||!Array.isArray(value.profiles)||!value.profiles.length||value.profiles.length>100||typeof value.active!=='string')throw Error('Not a Daily Reps backup.');
  if(value.schemaVersion!=null&&(!Number.isInteger(value.schemaVersion)||value.schemaVersion<1))throw Error('Invalid backup version.');
@@ -24,10 +24,12 @@ function validateState(value){
    if(d.custom&&(!Array.isArray(d.custom)||d.custom.length!==5||d.custom.some(r=>!validMovement(r.main)||(r.alt&&!validMovement(r.alt)))))throw Error('A custom circuit must contain five valid movements.');
   }
   for(const h of p.history){validateLogs(h.repLog);
+   if(h.durationMs!=null&&(!Number.isFinite(h.durationMs)||h.durationMs<1200000||h.durationMs>Number.MAX_SAFE_INTEGER))throw Error('Invalid workout duration.');
+   if(h.overtimeMs!=null&&(!Number.isFinite(h.overtimeMs)||h.overtimeMs<0||h.overtimeMs>Number.MAX_SAFE_INTEGER))throw Error('Invalid overtime duration.');
    if(typeof h.id!=='string'||!Number.isFinite(h.finishedAt)||typeof h.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(h.date)||typeof h.type!=='string')throw Error('Invalid session history.');
    if(h.repEntries&&(!Array.isArray(h.repEntries)||h.repEntries.some(e=>typeof e.name!=='string'||!['reps','sec'].includes(e.unit)||!Number.isFinite(e.count)||e.count<0||(e.weightKg!=null&&(!Number.isFinite(e.weightKg)||e.weightKg<0||e.weightKg>1000)))))throw Error('Invalid rep history.');
   }
-  if(p.session){const s=p.session;if(typeof s.type!=='string')throw Error('Invalid active workout.');validateEntries(s.repEntries);validateLogs(s.repLog);if(s.activeSlot!=null&&(!Number.isInteger(s.activeSlot)||s.activeSlot<0||s.activeSlot>4))throw Error('Invalid active movement.');if(typeof s.id!=='string'||!Number.isInteger(s.day)||s.day<0||s.day>=p.schedule.length||!Array.isArray(s.circuit)||s.circuit.length!==5||s.circuit.some(r=>!validMovement(r.main))||!Number.isFinite(s.remaining)||s.remaining<0||s.remaining>1200000||(s.running&&!Number.isFinite(s.endAt)))throw Error('Invalid active session.');}
+  if(p.session){const s=p.session;if(s.overtime!=null&&typeof s.overtime!=='boolean')throw Error('Invalid overtime state.');if(s.milestoneNotified!=null&&typeof s.milestoneNotified!=='boolean')throw Error('Invalid milestone state.');if(s.overtimeMs!=null&&(!Number.isFinite(s.overtimeMs)||s.overtimeMs<0||s.overtimeMs>Number.MAX_SAFE_INTEGER))throw Error('Invalid overtime timer.');if(s.overtime&&s.remaining!==0)throw Error('Overtime must follow the 20-minute target.');if(typeof s.type!=='string')throw Error('Invalid active workout.');validateEntries(s.repEntries);validateLogs(s.repLog);if(s.activeSlot!=null&&(!Number.isInteger(s.activeSlot)||s.activeSlot<0||s.activeSlot>4))throw Error('Invalid active movement.');if(typeof s.id!=='string'||!Number.isInteger(s.day)||s.day<0||s.day>=p.schedule.length||!Array.isArray(s.circuit)||s.circuit.length!==5||s.circuit.some(r=>!validMovement(r.main))||!Number.isFinite(s.remaining)||s.remaining<0||s.remaining>1200000||(s.running&&!Number.isFinite(s.endAt)))throw Error('Invalid active session.');}
  }
  if(!ids.has(value.active))throw Error('Active profile is missing.');
  return value;
@@ -48,7 +50,7 @@ function migrateState(value){
     if(m.name==='Overhead Triceps Extension + V-Ups')r[key]=JSON.parse(JSON.stringify(MOVES.dbextension));
     if(m.name==='Calf Raises + Hollow Hold')r[key]=JSON.parse(JSON.stringify(MOVES.calf));
    }
-   if(value.schemaVersion!==DATA_VERSION)p.workoutOverrides=null;
+   if((value.schemaVersion||1)<3)p.workoutOverrides=null;
   }
  }
  value.schemaVersion=DATA_VERSION;return value;
@@ -88,7 +90,7 @@ function exportBackup(){
 function decodeBackup(raw){
  if(raw.length>25*1024*1024)throw Error('Backup is too large (25 MB maximum).');
  const file=parseSafeJSON(raw);if(file.app!=='daily-reps'||file.formatVersion!==1)throw Error('Choose a Daily Reps JSON backup.');
- return migrateState(validateState(file.state));
+ const next=migrateState(validateState(file.state));pendingRestoreExportAt=Date.parse(file.exportedAt);return next;
 }
 async function previewImport(file){
  if(!file||hasActive()){toast('Finish or reset your session before restoring.');return;}
@@ -99,7 +101,7 @@ async function previewImport(file){
 function restoreBackup(){
  if(!pendingRestore||hasActive())return;const next=pendingRestore;pendingRestore=null;
  // Imported timers are always paused. A backup must never silently run a timer.
- for(const p of next.profiles){const s=p.session;if(s&&!s.finished&&s.running){s.remaining=Math.max(0,Math.min(1200000,s.endAt-Date.now()));s.running=false;if(s.remaining===0)p.session=null;}}
+ for(const p of next.profiles){const s=p.session;if(s&&!s.finished&&s.running){const snapshotAt=Number.isFinite(pendingRestoreExportAt)?pendingRestoreExportAt:Date.now();const delta=snapshotAt-s.endAt;if(s.overtime||delta>=0){s.overtime=true;s.overtimeMs=Math.max(0,delta);s.remaining=0;s.milestoneNotified=true;}else{s.remaining=Math.min(1200000,-delta);}s.running=false;}}
  state=next;saveState(state);day=hasActive()?activeSession().day:defaultWorkoutIndex();tab='Workout';focusMode=hasActive();openAlts.clear();document.querySelector('#modal').close();render();syncSessionRuntime();toast('Backup restored. Any unfinished session is paused.');
 }
 function deleteLocalData(){

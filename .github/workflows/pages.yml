@@ -17,6 +17,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -33,11 +34,13 @@ jobs:
           node tests/offline-runtime.cjs
           node tests/library.cjs
           node tests/experience.cjs
+          node tests/overtime.cjs
       - name: Install browser test tools
         run: |
           npm install --prefix "$RUNNER_TEMP/workout-browser" --no-package-lock --no-save playwright@1.58.2
           "$RUNNER_TEMP/workout-browser/node_modules/.bin/playwright" install --with-deps chromium
       - name: Check mobile and desktop flows
+        timeout-minutes: 3
         run: NODE_PATH="$RUNNER_TEMP/workout-browser/node_modules" node tests/browser.cjs
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
