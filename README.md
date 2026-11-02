@@ -15,6 +15,7 @@ node tests/library.cjs
 node tests/experience.cjs
 node tests/overtime.cjs
 node tests/instructions.cjs
+node tests/order.cjs
 ```
 
 These exercise the real app logic in a Node VM and the actual service-worker handlers with browser API doubles. They are not a substitute for physical-device acceptance tests.
@@ -116,3 +117,9 @@ All 284 previous selectable library entries were reviewed for understandable set
 Side-plank targets explicitly say seconds per side, and the logger recognizes them as seconds. Single-arm/leg targets, directional circles, step counts, suitcase marches and compound-movement cycles are clarified. The exercise card, form guide, picker and workout guide display counting hints. Barbell curls and a light lying triceps extension no longer require a squat rack. Band anchors and ankle straps are selectable accessories and filter exercises requiring them; loop/long-band type remains described in the execution text. The normal Pull accessory slot starts with controlled back work rather than a hip-powered high pull. Reference ratings that contradicted their own variants were corrected. Historical records and saved custom prescriptions are not rewritten.
 
 See INSTRUCTION_REVIEW.md for concrete findings. The review is an editorial and consistency cross-check of a fitness app, not a claimed certification or measurement of personal effort.
+
+## Reorder workouts
+
+For a Push/Pull/Lower rotation, open Workout schedule → Change workout order. Use Up/Down arrows to reorder the three workouts, select Next workout, then Save order. Cancelling leaves the current sequence untouched. Existing custom circuits, per-exercise loads, history and daily exercise overrides follow the corresponding workout. Setup → Schedule also supports the arrows, including during first-time setup. Full Body has no three-part order to change. Order changes are blocked during an unfinished session, including overtime.
+
+Changing only the rotation order through Setup preserves custom circuits and daily overrides; applying a broader plan change retains the existing rebuild behavior. On fixed weekdays, the setup order determines the sequence assigned to selected days when new assignments are generated.

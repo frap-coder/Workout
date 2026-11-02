@@ -70,3 +70,11 @@ Run on current Android Chrome, including a smaller screen, and at least one addi
 - [ ] Upgrade a version-3 saved session/backup and verify history, overrides and active circuit survive.
 - [ ] Read the Push/Pull/Lower/Full Body instructions: goal, one set then next exercise, rest, safe load, both-side counting and explicit save are understandable without coaching.
 - [ ] If possible, try a full session on actual phones and ask an experienced user to check unclear instructions; these are practical checks, not formal launch gates.
+
+## Workout order
+
+- [ ] Reorder Push/Pull/Lower with the arrows on mobile and select the next workout.
+- [ ] Cancel leaves the saved sequence intact; Save and reload retain the new order and next workout.
+- [ ] Custom circuits, weights and temporary exercise choices stay with the correct workout.
+- [ ] Active sessions and overtime block reordering without resetting any data.
+- [ ] Setup preview follows the chosen sequence, including fixed weekdays.
