@@ -9,7 +9,7 @@ function finishSound(){return Object.hasOwn(FINISH_SOUNDS,profile().preferences?
 function finishVolume(){const value=profile().preferences?.finishVolume;return typeof value==='number'&&Number.isFinite(value)?Math.max(0,Math.min(1,value)):.8;}
 let finishTuneUntil=0,scheduledFinish=null;
 function createFinishTune(base){
- const nodes=[];
+ const nodes=[];if(finishVolume()===0)return nodes;
  FINISH_SOUNDS[finishSound()].notes.forEach(([frequency,offset,duration],i)=>{
   const oscillator=audioCtx.createOscillator(),gain=audioCtx.createGain();oscillator.type='sine';oscillator.frequency.value=frequency;oscillator.connect(gain);gain.connect(audioCtx.destination);
   const at=base+offset,volume=(i>=6?.07:.28)*finishVolume()/.8;gain.gain.setValueAtTime(0,at);gain.gain.linearRampToValueAtTime(volume,at+.015);gain.gain.exponentialRampToValueAtTime(.001,at+duration);oscillator.start(at);oscillator.stop(at+duration+.02);oscillator.onended=()=>{oscillator.disconnect();gain.disconnect();};nodes.push(oscillator);

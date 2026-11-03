@@ -183,7 +183,7 @@ function filterPicker(i){
  document.querySelector(`[data-search-count="${i}"]`).textContent=`${visible} options`;
  document.querySelector(`[data-search-empty="${i}"]`).hidden=visible>0;
 }
-document.addEventListener('input',e=>{if(e.target.dataset.exerciseSearch!==undefined)filterPicker(e.target.dataset.exerciseSearch);});
+document.addEventListener('input',e=>{if(e.target.id==='finish-volume')document.getElementById('finish-volume-value').textContent=e.target.value+'%';if(e.target.dataset.exerciseSearch!==undefined)filterPicker(e.target.dataset.exerciseSearch);});
 document.addEventListener('change',e=>{if(e.target.id==='finish-sound'||e.target.id==='finish-volume'){const p=profile();p.preferences??={};if(e.target.id==='finish-sound')p.preferences.finishSound=e.target.value;else p.preferences.finishVolume=Math.max(0,Math.min(1,Number(e.target.value)/100));persist();syncFinishAudio();render();return;}if(e.target.dataset.levelFilter!==undefined)filterPicker(e.target.dataset.levelFilter);});
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-action]');if(!b||b.disabled)return;const a=b.dataset.action,i=Number(b.dataset.i);
@@ -242,4 +242,3 @@ function showAboutApp(){modal(`<h2>About Daily Reps</h2><p>20-minute circuits wi
 document.addEventListener('click',e=>{const b=e.target.closest('[data-action="about-app"]');if(b&&!b.disabled)showAboutApp();});
 document.addEventListener('change',e=>{if(e.target.id==='finish-sound'||e.target.id==='finish-volume'){const p=profile();p.preferences??={};if(e.target.id==='finish-sound')p.preferences.finishSound=e.target.value;else p.preferences.finishVolume=Math.max(0,Math.min(1,Number(e.target.value)/100));persist();syncFinishAudio();render();return;}if(e.target.id==='weight-unit'&&['kg','lb'].includes(e.target.value)){profile().preferences??={};profile().preferences.weightUnit=e.target.value;persist();render();}});
 
-document.addEventListener('input',e=>{if(e.target.id==='finish-volume')document.getElementById('finish-volume-value').textContent=e.target.value+'%';});
