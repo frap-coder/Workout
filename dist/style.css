@@ -48,3 +48,6 @@ select.profile{appearance:none;-webkit-appearance:none;padding:9px 30px 9px 10px
  .setup-actions{position:sticky;bottom:calc(var(--bottom-nav-space) + 10px);z-index:15;background:var(--panel);padding:12px 0 0;box-shadow:0 -10px 14px var(--panel)}.onboarding .setup-content{padding-bottom:24px}.equipment-grid{padding-bottom:10px}.equipment-icon{width:38px;height:38px}
 }
 @media(max-width:380px){header{grid-template-columns:32px minmax(0,1fr) 40px 108px;gap:6px;padding:10px 12px}.logo{width:32px;height:32px;font-size:19px}.brand{font-size:15px}.brand small{display:none}.setup-button{padding:8px;justify-content:center}.setup-button .ui-icon{display:inline-block;width:18px;height:18px}.setup-button>span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}}
+
+/* Keep the fixed mobile navigation flush with the viewport edge. */
+@media(max-width:720px){.shell>nav{margin:0;background:#142239;bottom:0;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px))}}
