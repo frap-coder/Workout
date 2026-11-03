@@ -106,3 +106,10 @@ Run on current Android Chrome, including a smaller screen, and at least one addi
 - [ ] Equipment tiles show meaningful SVG icons and retain names and selected states.
 - [ ] Scroll to Setup's final action: its button stays above the fixed bottom navigation, including on a phone with a home-indicator safe area.
 - [ ] Workout has one small backup/export action; the full backup tools remain in Settings.
+
+## Curated expansion
+
+- [ ] Setup: expand More equipment and enable a pull-up bar or machine; verify related movements appear only with their equipment.
+- [ ] Full Body: search integrated exercises such as thrusters and farmer carries.
+- [ ] Log a farmer carry in seconds; check suitcase carries count both sides' seconds.
+- [ ] Confirm a retired exercise stays readable in existing routines/backups but is absent from new suggestions.

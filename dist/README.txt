@@ -62,30 +62,30 @@ After the first successful online load, the service worker caches the applicatio
 
 A browser cannot promise an alarm when it is closed or suspended or the device is locked. Native scheduled notifications and a bundled finish sound belong to the later Android app. No notification permissions are requested by this web release.
 
-## Expanded exercise library — 30 October 2026
+## Curated exercise library — 3 November 2026
 
-The library contains 311 distinct selectable exercises, grouped by primary training role:
+The library contains 335 distinct selectable exercises, grouped by primary training role:
 
 | Group | Exercises |
 | --- | ---: |
-| Chest | 26 |
-| Shoulders | 26 |
-| Triceps | 22 |
-| Back | 27 |
-| Biceps & forearms | 25 |
-| Core | 24 |
-| Quads & legs | 41 |
-| Hamstrings & posterior chain | 26 |
-| Glutes | 24 |
-| Hip abductors & adductors | 23 |
-| Calves | 24 |
-| Full body (legacy workouts) | 23 |
+| Chest | 29 |
+| Shoulders | 27 |
+| Triceps | 24 |
+| Back | 32 |
+| Biceps & forearms | 26 |
+| Core | 30 |
+| Quads & legs | 46 |
+| Hamstrings & posterior chain | 32 |
+| Glutes | 25 |
+| Hip abductors & adductors | 20 |
+| Calves | 20 |
+| Full body | 24 |
 
 Groups describe primary training roles, not isolated muscles. Exercises often train secondary muscles. Hip control drills and shoulder control drills differ from loaded strength work; the pattern labels make those differences explicit.
 
 Open “Form & choose exercise” on any workout card. Search by exercise name, equipment or movement pattern. Forward, reverse, walking, lateral and split-stance lunges are available in the quads/legs slot of Lower. The matching list shows exercises compatible with your enabled equipment and exclusions, excluding the current exercise and other occupied slots. The library has at least 20 exercises per group; fewer may match your filters. Add equipment in Settings only when it is actually available. Some moves need an anchored band, cable attachment, stable support or rack as described in the form cues. No diagram figures or generated people are shown.
 
-Choosing an exercise updates the current workout, including during a running session, without resetting the timer or losing recorded reps. During a session it disables Echo comparisons. Use “Save choices as my … routine” before starting or after finishing to retain those choices for future workouts. Builder groups its library by muscle groups belonging to the selected workout. Timed holds continue to use seconds rather than reps.
+Choosing an exercise updates the current workout, including during a running session, without resetting the timer or losing recorded reps. During a session it disables Echo comparisons. Use “Save choices as my … routine” before starting or after finishing to retain those choices for future workouts. The picker filters by the muscle groups belonging to the selected workout. Full Body permits every training group, including the previously hidden integrated movements. Timed holds continue to use seconds rather than reps.
 
 Run locally with `python -m http.server 8000 --directory dist` and open http://localhost:8000. Hosting should serve the contents of `dist/`; no build step is required. Changes to main run the release checks and publish dist/ automatically through GitHub Pages.
 
@@ -146,3 +146,9 @@ Weekly goals replace daily streak pressure in the main progress/result UI. A wai
 Workout results group each exact exercise name once, with separate load/unit rows and combined per-exercise rep/hold totals. Repeated entries for the same load and unit are combined for display; original logs and history stay unchanged. Unknown external load remains distinct from zero load. No set counts are invented from individual +1/+5/+10 logging actions.
 
 The small-screen header reserves space for the profile name and select chevron, with a compact Setup control at narrow widths and a full-name tooltip. Equipment tiles use local minimal SVG icons rather than letter abbreviations. Mobile main content and sticky Setup actions reserve room above the bottom navigation, including safe-area insets. The large repeated backup reminder has been removed from Workout/Progress; the existing footer action and the full Settings backup section remain available.
+
+## November 2026 audit follow-up
+
+Added 38 curated movements covering the missing benchmark exercises and specific gym variants, including both seated and lying machine leg curls and a short-lever Copenhagen plank. Each has explicit equipment and quantity requirements, reference level, rep/hold target and original execution cues. Extra gym equipment is collapsed in Setup. Carries use seconds (combined across sides when applicable), not fabricated rep counts.
+
+Retired 14 low-resistance or redundant options from new suggestions, presets and picker results; records remain in MOVES so old custom routines, sessions, backups and history remain readable. Essential beginner and no-equipment options remain. Full Body now exposes all muscle groups without changing the five-slot default circuit.

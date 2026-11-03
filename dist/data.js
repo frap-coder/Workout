@@ -2804,6 +2804,7 @@ const INSTRUCTION_BASELINES={
 };
 function reviewedMovement(m){
  if(!m)return m;const eq=normalizeEquipment(m.equipment||[]);if(JSON.stringify(eq)!==JSON.stringify(m.equipment))m={...m,equipment:eq};const known=(m.id&&MOVES[m.id])||Object.values(MOVES).find(x=>x.name===m.name);const old=known&&INSTRUCTION_BASELINES[known.id];
+ if(known?.retired&&!m.retired)m={...m,retired:true};
  if(!old)return m;let copy=null;
  for(const [field,value] of Object.entries(old))if(JSON.stringify(m[field])===JSON.stringify(value)){
   copy??={...m};copy[field]=Array.isArray(known[field])?[...known[field]]:known[field];
@@ -3249,3 +3250,543 @@ const EXCLUSION_SUGGESTIONS=['Jump','Overhead Press','Lunge'];
 function sameEquipmentSelection(a,b){return JSON.stringify(normalizeEquipment([...a,'Bodyweight']).sort())===JSON.stringify(normalizeEquipment([...b,'Bodyweight']).sort());}
 
 for(const m of Object.values(MOVES))m.loadDependent=m.equipment.some(e=>['Dumbbells','Kettlebells','Sandbag','Resistance Bands','Barbell','Pulley'].includes(e));
+
+// Curated expansion after the November 2026 exercise audit. Legacy records remain readable.
+const EXTENDED_GYM_EQUIPMENT=["Adjustable Bench", "Pull-up Bar", "Dip Bars", "Secure Low Row Bar", "Landmine Attachment", "T-Bar Row Handle", "Preacher Bench", "Leg Press Machine", "Leg Extension Machine", "Trap Bar", "Lying Leg Curl Machine", "Seated Leg Curl Machine", "Calf Raise Machine", "Sliders / Smooth Floor", "Nordic Foot Anchor"];
+EQUIPMENT.push(...EXTENDED_GYM_EQUIPMENT);
+const CURATED_MOVEMENTS=[
+ {
+  "id": "new-incline-db-press",
+  "name": "Incline Dumbbell Press",
+  "equipment": [
+   "Dumbbells",
+   "Adjustable Bench"
+  ],
+  "group": "press",
+  "pattern": "incline press",
+  "challenge": 3,
+  "reps": "8–12 reps",
+  "description": "Set a secured adjustable bench to a modest incline (about 15–30 degrees). Sit with dumbbells on your thighs and position them above your upper chest as you lie back. Plant your feet, lower with wrists above elbows, then press up without bouncing. Use weights you can safely position and put down.",
+  "tags": "Incline Dumbbell Press press incline press",
+  "dumbbellCount": 2
+ },
+ {
+  "id": "new-incline-bb-press",
+  "name": "Incline Barbell Bench Press",
+  "equipment": [
+   "Barbell",
+   "Adjustable Bench",
+   "Squat Rack"
+  ],
+  "group": "press",
+  "pattern": "incline press",
+  "challenge": 4,
+  "reps": "8–12 reps",
+  "description": "Secure an incline bench inside a rack with safety arms set to catch the bar below your controlled range. Unrack above your upper chest, lower without bouncing and press up. Keep your feet planted and use a spotter where appropriate.",
+  "tags": "Incline Barbell Bench Press press incline press"
+ },
+ {
+  "id": "new-db-bench-fly",
+  "name": "Dumbbell Bench Fly",
+  "equipment": [
+   "Dumbbells",
+   "Stable Bench / Support"
+  ],
+  "group": "press",
+  "pattern": "chest fly",
+  "challenge": 3,
+  "reps": "10–15 reps",
+  "description": "Lie on a firm exercise bench with feet planted and light dumbbells above your chest. Keep elbows softly bent as you open your arms, stopping at a comfortable chest stretch. Bring the weights back above your chest without changing the elbow bend or bouncing.",
+  "tags": "Dumbbell Bench Fly press chest fly",
+  "dumbbellCount": 2
+ },
+ {
+  "id": "new-dip",
+  "name": "Parallel-Bar Dips",
+  "equipment": [
+   "Dip Bars"
+  ],
+  "group": "triceps",
+  "pattern": "dip",
+  "challenge": 4,
+  "reps": "6–10 reps",
+  "description": "Use stable parallel bars. Support your weight with arms straight, bend your elbows to lower through a comfortable range, then press back up. Keep shoulders controlled and avoid dropping into the bottom. Choose a supported push-up if you cannot perform controlled reps.",
+  "tags": "Parallel-Bar Dips triceps dip"
+ },
+ {
+  "id": "new-landmine-press",
+  "name": "Single-Arm Landmine Press",
+  "equipment": [
+   "Barbell",
+   "Landmine Attachment"
+  ],
+  "group": "shoulder",
+  "pattern": "angled press",
+  "challenge": 3,
+  "reps": "8–12 / side",
+  "description": "Fix one end of the bar securely in a purpose-built landmine attachment. Stand in a split stance facing the free end and hold it near one shoulder. Brace and press forward and upward along the bar’s arc, then lower slowly. Complete both sides; do not wedge a loose bar into a wall.",
+  "tags": "Single-Arm Landmine Press shoulder angled press"
+ },
+ {
+  "id": "new-pullup",
+  "name": "Pull-ups",
+  "equipment": [
+   "Bodyweight",
+   "Pull-up Bar"
+  ],
+  "group": "back",
+  "pattern": "vertical pull",
+  "challenge": 4,
+  "reps": "5–10 reps",
+  "description": "Use a secure pull-up bar with an overhand grip just outside shoulder width. Start from a controlled hang, draw elbows down and pull until your chin clears the bar without craning your neck. Lower under control. Avoid kipping or swinging; choose pulldowns if a controlled rep is not yet available.",
+  "tags": "Pull-ups back vertical pull"
+ },
+ {
+  "id": "new-chinup",
+  "name": "Chin-ups",
+  "equipment": [
+   "Bodyweight",
+   "Pull-up Bar"
+  ],
+  "group": "back",
+  "pattern": "vertical pull",
+  "challenge": 4,
+  "reps": "5–10 reps",
+  "description": "Grip a secure bar with palms facing you at a comfortable width. From a controlled hang, pull your elbows down until your chin clears the bar, then lower slowly. Keep your torso controlled without swinging or forcing your neck forward.",
+  "tags": "Chin-ups back vertical pull"
+ },
+ {
+  "id": "new-inverted-row",
+  "name": "Inverted Rows",
+  "equipment": [
+   "Bodyweight",
+   "Secure Low Row Bar"
+  ],
+  "group": "back",
+  "pattern": "row",
+  "challenge": 3,
+  "reps": "8–12 reps",
+  "description": "Use a fixed low bar rated for bodyweight rows. Hold it overhand with heels on the floor and your body in a straight line. Pull your chest toward the bar, then lower slowly. Bend your knees for an easier angle. Do not use a loose bar resting on open rack hooks.",
+  "tags": "Inverted Rows back row"
+ },
+ {
+  "id": "new-chest-supported-row",
+  "name": "Chest-Supported Dumbbell Row",
+  "equipment": [
+   "Dumbbells",
+   "Adjustable Bench"
+  ],
+  "group": "back",
+  "pattern": "row",
+  "challenge": 3,
+  "reps": "8–12 reps",
+  "description": "Set a secured bench to an incline that lets the weights hang freely. Lie chest-down with feet planted. Row both dumbbells toward your lower ribs without lifting your chest from the pad, then lower under control.",
+  "tags": "Chest-Supported Dumbbell Row back row",
+  "dumbbellCount": 2
+ },
+ {
+  "id": "new-tbar-row",
+  "name": "T-Bar Row",
+  "equipment": [
+   "Barbell",
+   "Landmine Attachment",
+   "T-Bar Row Handle"
+  ],
+  "group": "back",
+  "pattern": "row",
+  "challenge": 3,
+  "reps": "8–12 reps",
+  "description": "Secure the bar in a landmine and attach a rated T-bar handle near the loaded end. Straddle the bar, hinge and brace. Row the handle toward your lower chest, then lower without rounding or jerking your torso.",
+  "tags": "T-Bar Row back row"
+ },
+ {
+  "id": "new-db-pullover",
+  "name": "Dumbbell Bench Pullover",
+  "equipment": [
+   "Dumbbells",
+   "Stable Bench / Support"
+  ],
+  "group": "back",
+  "pattern": "straight-arm pulldown",
+  "challenge": 3,
+  "reps": "10–12 reps",
+  "description": "Lie lengthwise on a firm exercise bench with head supported and feet planted. Hold one light dumbbell securely above your chest with both hands. Keep elbows softly bent and ribs controlled as you lower it behind your head, then bring it back above your chest. Stop before your back arches.",
+  "tags": "Dumbbell Bench Pullover back straight-arm pulldown",
+  "dumbbellCount": 1
+ },
+ {
+  "id": "new-incline-curl",
+  "name": "Incline Dumbbell Curl",
+  "equipment": [
+   "Dumbbells",
+   "Adjustable Bench"
+  ],
+  "group": "biceps",
+  "pattern": "elbow flexion",
+  "challenge": 3,
+  "reps": "10–12 reps",
+  "description": "Sit against a modestly inclined backrest with dumbbells hanging at your sides. Keep your upper arms still and curl without rolling the shoulders forward. Lower slowly through a comfortable elbow range; avoid forcing the arms backward.",
+  "tags": "Incline Dumbbell Curl biceps elbow flexion",
+  "dumbbellCount": 2
+ },
+ {
+  "id": "new-preacher-curl",
+  "name": "Single-Arm Dumbbell Preacher Curl",
+  "equipment": [
+   "Dumbbells",
+   "Preacher Bench"
+  ],
+  "group": "biceps",
+  "pattern": "elbow flexion",
+  "challenge": 3,
+  "reps": "10–12 / side",
+  "description": "Sit at a preacher bench with your upper arm fully supported on the pad and one light dumbbell in hand. Curl without lifting your upper arm, then lower slowly without forcing the elbow straight. Complete both sides.",
+  "tags": "Single-Arm Dumbbell Preacher Curl biceps elbow flexion",
+  "dumbbellCount": 1
+ },
+ {
+  "id": "new-close-bb-bench",
+  "name": "Close-Grip Barbell Bench Press",
+  "equipment": [
+   "Barbell",
+   "Stable Bench / Support",
+   "Squat Rack"
+  ],
+  "group": "triceps",
+  "pattern": "close-grip press",
+  "challenge": 4,
+  "reps": "8–12 reps",
+  "description": "Use a firm exercise bench and rack with correctly set safety arms. Grip near shoulder width, not with hands touching. Lower toward your lower chest with elbows comfortably close to your sides, then press without bouncing. Keep wrists above forearms.",
+  "tags": "Close-Grip Barbell Bench Press triceps close-grip press"
+ },
+ {
+  "id": "new-back-squat",
+  "name": "Barbell Back Squat",
+  "equipment": [
+   "Barbell",
+   "Squat Rack"
+  ],
+  "group": "squat",
+  "pattern": "squat",
+  "challenge": 4,
+  "reps": "8–12 reps",
+  "description": "Set rack hooks below shoulder height and safety arms just below your intended squat depth. Place the bar on your upper-back muscles, not your neck, unrack and brace. Squat with feet planted and knees tracking with toes, then stand without losing trunk position. Use a depth and load you control.",
+  "tags": "Barbell Back Squat squat squat"
+ },
+ {
+  "id": "new-front-squat",
+  "name": "Barbell Front Squat",
+  "equipment": [
+   "Barbell",
+   "Squat Rack"
+  ],
+  "group": "squat",
+  "pattern": "squat",
+  "challenge": 4,
+  "reps": "8–12 reps",
+  "description": "Set up inside a rack with safety arms. Rest the bar on the fronts of your shoulders with elbows raised and a comfortable supported grip. Unrack, brace and squat while keeping your chest and elbows up, then stand. Choose goblet squats if you cannot hold a stable front rack.",
+  "tags": "Barbell Front Squat squat squat"
+ },
+ {
+  "id": "new-bulgarian",
+  "name": "Bulgarian Split Squat",
+  "equipment": [
+   "Bodyweight",
+   "Stable Bench / Support"
+  ],
+  "group": "squat",
+  "pattern": "split squat",
+  "challenge": 4,
+  "reps": "8–12 / side",
+  "description": "Stand in front of a low, secured exercise bench and place the top of one foot on it behind you. Keep most weight over the front foot. Bend the front knee to lower with control, then stand through that leg. Use a manageable rear-foot height and complete both sides.",
+  "tags": "Bulgarian Split Squat squat split squat"
+ },
+ {
+  "id": "new-leg-press",
+  "name": "Leg Press",
+  "equipment": [
+   "Leg Press Machine"
+  ],
+  "group": "squat",
+  "pattern": "leg press",
+  "challenge": 3,
+  "reps": "10–15 reps",
+  "description": "Adjust the seat and safety stops on the machine. Place feet securely on the platform and release the safeties as instructed by the manufacturer. Bend your knees only while your pelvis stays against the pad, then press without snapping knees straight. Re-engage the safeties before leaving.",
+  "tags": "Leg Press squat leg press"
+ },
+ {
+  "id": "new-machine-leg-extension",
+  "name": "Machine Leg Extension",
+  "equipment": [
+   "Leg Extension Machine"
+  ],
+  "group": "squat",
+  "pattern": "knee extension",
+  "challenge": 2,
+  "reps": "10–15 reps",
+  "description": "Adjust the seat so your knees line up with the machine pivot and the roller rests above your ankles. Keep thighs on the seat, straighten your knees through a comfortable range, then lower slowly without kicking or swinging.",
+  "tags": "Machine Leg Extension squat knee extension"
+ },
+ {
+  "id": "new-deadlift",
+  "name": "Barbell Deadlift",
+  "equipment": [
+   "Barbell"
+  ],
+  "group": "hinge",
+  "pattern": "hip hinge",
+  "challenge": 4,
+  "reps": "6–10 reps",
+  "description": "Start with a loaded bar over your midfoot at standard plate height; use stable blocks if the plates are too small. Hinge and bend knees to grip just outside your legs. Brace, keep the bar close and push through the floor to stand. Finish tall without leaning back, then hinge and bend knees to set it down under control.",
+  "tags": "Barbell Deadlift hinge hip hinge"
+ },
+ {
+  "id": "new-sumo-deadlift",
+  "name": "Barbell Sumo Deadlift",
+  "equipment": [
+   "Barbell"
+  ],
+  "group": "hinge",
+  "pattern": "hip hinge",
+  "challenge": 4,
+  "reps": "6–10 reps",
+  "description": "Set the bar at standard plate height. Take a comfortable wide stance with toes turned out and grip inside your legs. Brace, keep knees tracking with toes and stand with the bar close. Lower under control; do not force a wider stance than your hips allow.",
+  "tags": "Barbell Sumo Deadlift hinge hip hinge"
+ },
+ {
+  "id": "new-trap-deadlift",
+  "name": "Trap-Bar Deadlift",
+  "equipment": [
+   "Trap Bar"
+  ],
+  "group": "hinge",
+  "pattern": "hip hinge",
+  "challenge": 3,
+  "reps": "6–10 reps",
+  "description": "Stand centered inside a loaded trap bar on a level floor. Hinge and bend knees to grip the handles, brace and stand with even pressure through both feet. Lower under control. Use the raised handles if needed and do not jerk the bar from the floor.",
+  "tags": "Trap-Bar Deadlift hinge hip hinge"
+ },
+ {
+  "id": "new-bb-good-morning",
+  "name": "Barbell Good Morning",
+  "equipment": [
+   "Barbell",
+   "Squat Rack"
+  ],
+  "group": "hinge",
+  "pattern": "hip hinge",
+  "challenge": 4,
+  "reps": "8–12 reps",
+  "description": "Unrack a light bar across your upper-back muscles inside a rack with safety arms. Keep knees softly bent, brace and push your hips backward while the torso tips forward. Stop while your spine stays controlled, then extend your hips to stand. Begin lighter than a squat.",
+  "tags": "Barbell Good Morning hinge hip hinge"
+ },
+ {
+  "id": "new-bb-hip-thrust",
+  "name": "Barbell Hip Thrust",
+  "equipment": [
+   "Barbell",
+   "Stable Bench / Support"
+  ],
+  "group": "glutes",
+  "pattern": "hip extension",
+  "challenge": 3,
+  "reps": "10–15 reps",
+  "description": "Secure a firm exercise bench so it cannot slide. Rest your upper back on the edge and position a padded bar across your hips using a load you can position and remove safely. Plant your feet and lift until your torso and thighs align, then lower. Keep ribs down and avoid arching your back.",
+  "tags": "Barbell Hip Thrust glutes hip extension"
+ },
+ {
+  "id": "new-lying-leg-curl",
+  "name": "Lying Machine Leg Curl",
+  "equipment": [
+   "Lying Leg Curl Machine"
+  ],
+  "group": "hinge",
+  "pattern": "knee flexion",
+  "challenge": 2,
+  "reps": "10–15 reps",
+  "description": "Adjust the machine so knees line up with its pivot and the roller sits above your heels. Lie against the pad, bend your knees to curl the roller upward, then lower slowly. Keep hips against the pad and avoid lifting your pelvis.",
+  "tags": "Lying Machine Leg Curl hinge knee flexion"
+ },
+ {
+  "id": "new-seated-leg-curl",
+  "name": "Seated Machine Leg Curl",
+  "equipment": [
+   "Seated Leg Curl Machine"
+  ],
+  "group": "hinge",
+  "pattern": "knee flexion",
+  "challenge": 2,
+  "reps": "10–15 reps",
+  "description": "Align your knees with the machine pivot, place the lower roller above your heels and secure the thigh pad. Draw your heels back under the seat by bending your knees, then extend slowly. Keep your back and thighs supported.",
+  "tags": "Seated Machine Leg Curl hinge knee flexion"
+ },
+ {
+  "id": "new-slider-curl",
+  "name": "Sliding Hamstring Curl",
+  "equipment": [
+   "Bodyweight",
+   "Sliders / Smooth Floor"
+  ],
+  "group": "hinge",
+  "pattern": "knee flexion",
+  "challenge": 3,
+  "reps": "6–10 reps",
+  "description": "Lie on your back with heels on exercise sliders or towels on a suitable smooth floor. Lift into a low bridge. Slide your heels away only as far as you can keep hips controlled, then draw them back. Start with short slides; one out-and-back movement is one rep.",
+  "tags": "Sliding Hamstring Curl hinge knee flexion"
+ },
+ {
+  "id": "new-nordic",
+  "name": "Nordic Hamstring Curl",
+  "equipment": [
+   "Bodyweight",
+   "Nordic Foot Anchor"
+  ],
+  "group": "hinge",
+  "pattern": "knee flexion",
+  "challenge": 5,
+  "reps": "3–6 reps",
+  "description": "Kneel on a padded surface with ankles held by a purpose-built, securely fixed Nordic anchor. Keep hips extended and torso aligned with thighs. Lower forward slowly from the knees, catch yourself with your hands and use your arms to help reset. Begin with a short, assisted range. This is a hamstring exercise, unlike the backward-leaning reverse Nordic.",
+  "tags": "Nordic Hamstring Curl hinge knee flexion"
+ },
+ {
+  "id": "new-machine-calf",
+  "name": "Standing Machine Calf Raise",
+  "equipment": [
+   "Calf Raise Machine"
+  ],
+  "group": "calves",
+  "pattern": "calf raise",
+  "challenge": 2,
+  "reps": "12–20 reps",
+  "description": "Adjust the machine pads and safety stops for your height. Place the balls of your feet securely on its platform, keeping knees softly unlocked. Raise your heels, pause, then lower through a comfortable ankle range without bouncing. Use the handles for balance.",
+  "tags": "Standing Machine Calf Raise calves calf raise"
+ },
+ {
+  "id": "new-bicycle",
+  "name": "Bicycle Crunch",
+  "equipment": [
+   "Bodyweight"
+  ],
+  "group": "core",
+  "pattern": "trunk flexion",
+  "challenge": 3,
+  "reps": "10 / side",
+  "description": "Lie on your back with hands lightly supporting your head and knees bent above your hips. Lift your shoulder blades and rotate one shoulder toward the opposite knee as the other leg extends. Alternate slowly without pulling your neck. Each turn to one side is one rep; log both sides together.",
+  "tags": "Bicycle Crunch core trunk flexion"
+ },
+ {
+  "id": "new-hanging-knee",
+  "name": "Hanging Knee Raises",
+  "equipment": [
+   "Bodyweight",
+   "Pull-up Bar"
+  ],
+  "group": "core",
+  "pattern": "trunk flexion",
+  "challenge": 4,
+  "reps": "8–12 reps",
+  "description": "Hang from a secure bar with shoulders controlled. Bend your knees and curl them toward your chest with a small pelvic tilt, then lower slowly. Avoid swinging or just kicking your thighs upward. Choose reverse crunches if grip or hanging control limits you.",
+  "tags": "Hanging Knee Raises core trunk flexion"
+ },
+ {
+  "id": "new-hanging-leg",
+  "name": "Hanging Leg Raises",
+  "equipment": [
+   "Bodyweight",
+   "Pull-up Bar"
+  ],
+  "group": "core",
+  "pattern": "trunk flexion",
+  "challenge": 5,
+  "reps": "6–10 reps",
+  "description": "Hang from a secure bar with shoulders controlled. Raise your legs in front through a range you control, adding a gentle pelvic curl rather than swinging. Lower slowly. Keep knees softly bent if needed and choose knee raises for a shorter lever.",
+  "tags": "Hanging Leg Raises core trunk flexion"
+ },
+ {
+  "id": "new-cable-crunch",
+  "name": "Kneeling Cable Crunch",
+  "equipment": [
+   "Pulley"
+  ],
+  "group": "core",
+  "pattern": "trunk flexion",
+  "challenge": 3,
+  "reps": "10–15 reps",
+  "description": "Attach a rope to a high pulley. Kneel facing the stack and hold the rope beside your temples without pulling your neck. Curl your ribs toward your pelvis while keeping hips mostly still, then return slowly. Use a load that lets your trunk move rather than just sitting back.",
+  "tags": "Kneeling Cable Crunch core trunk flexion"
+ },
+ {
+  "id": "new-cable-woodchop",
+  "name": "Standing Cable Wood Chop",
+  "equipment": [
+   "Pulley"
+  ],
+  "group": "core",
+  "pattern": "trunk rotation",
+  "challenge": 3,
+  "reps": "10 / side",
+  "description": "Stand side-on to a high pulley with feet planted comfortably. Hold the handle with both hands and draw it diagonally toward the opposite hip, allowing your feet and hips to turn with your torso. Return slowly, then reverse your stance for the other side. Avoid twisting against fixed knees.",
+  "tags": "Standing Cable Wood Chop core trunk rotation"
+ },
+ {
+  "id": "new-farmer-carry",
+  "name": "Dumbbell Farmer Carry",
+  "equipment": [
+   "Dumbbells"
+  ],
+  "group": "full",
+  "pattern": "loaded carry",
+  "challenge": 3,
+  "reps": "20–30 sec",
+  "description": "Hold a manageable dumbbell by each side and stand tall. Walk in a clear, level space with short controlled steps, shoulders relaxed and torso steady. Set the weights down under control. Log walking seconds, not steps or meters.",
+  "tags": "Dumbbell Farmer Carry full loaded carry",
+  "dumbbellCount": 2
+ },
+ {
+  "id": "new-db-suitcase-carry",
+  "name": "Dumbbell Suitcase Carry",
+  "equipment": [
+   "Dumbbells"
+  ],
+  "group": "core",
+  "pattern": "anti-lateral flexion",
+  "challenge": 3,
+  "reps": "20–30 sec / side",
+  "description": "Hold one dumbbell beside your hip and walk in a clear, level space without leaning toward or away from it. Set it down under control and repeat holding it on the other side. Log the combined walking seconds for both sides.",
+  "tags": "Dumbbell Suitcase Carry core anti-lateral flexion",
+  "dumbbellCount": 1
+ },
+ {
+  "id": "new-turkish",
+  "name": "Kettlebell Turkish Get-Up",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "group": "full",
+  "pattern": "get-up",
+  "challenge": 5,
+  "reps": "2–3 / side",
+  "description": "Practice the full sequence without weight first and use a light bell only once it is familiar. Lie on your back with the working arm vertical and that knee bent. Roll onto the opposite forearm, press to the hand, lift hips and sweep the straight leg behind into a half-kneeling position. Straighten your torso and stand while keeping the bell stable overhead. Reverse the sequence to lie down. One rise and return is one rep; complete both sides. Learn the transitions before adding load.",
+  "tags": "Kettlebell Turkish Get-Up full get-up",
+  "kettlebellCount": 1
+ },
+ {
+  "id": "new-copenhagen",
+  "name": "Short-Lever Copenhagen Plank",
+  "equipment": [
+   "Bodyweight",
+   "Stable Bench / Support"
+  ],
+  "group": "hips",
+  "pattern": "hip adduction",
+  "challenge": 4,
+  "reps": "15–20 sec / side",
+  "description": "Lie beside a low, secured exercise bench with your top knee supported on it and your elbow below your shoulder. Lift hips into a side plank and bring the lower leg toward the supported leg. Hold with hips level, then lower. Repeat on the other side and log combined seconds. Keep the knee-supported short lever; do not begin with the ankle-supported version.",
+  "tags": "Short-Lever Copenhagen Plank hips hip adduction"
+ }
+];
+for(const m of CURATED_MOVEMENTS){m.loadDependent=m.equipment.some(e=>!["Bodyweight","Stable Bench / Support","Adjustable Bench","Pull-up Bar","Dip Bars","Secure Low Row Bar","Nordic Foot Anchor","Sliders / Smooth Floor"].includes(e));MOVES[m.id]=m;}
+const RETIRED_MOVEMENT_IDS=new Set(["lib-prone-hamstring-curl", "seatedcalf", "lib-single-leg-seated-calf-raise", "lib-standing-hip-adduction", "lib-seated-hip-internal-rotation", "hipcircle", "lib-side-lying-hip-circles", "lib-prone-w-to-y-raise", "lib-bodyweight-kickstand-hinge", "lib-dumbbell-wide-curl", "lib-split-stance-calf-raise", "lib-dumbbell-split-stance-calf-raise", "lib-dumbbell-squat-to-front-raise", "lib-band-standing-calf-raise"]);
+for(const id of RETIRED_MOVEMENT_IDS)MOVES[id].retired=true;
+const CURATED_CUE_UPDATES={"kbtri": "Hold one light kettlebell securely with both hands above your head. Keep upper arms steady as you bend your elbows to lower it behind your head, then straighten the elbows. Brace and avoid arching your back.", "lib-band-external-rotation": "Stand tall holding a light band between both hands, palms up and elbows bent to 90 degrees beside your ribs. Keep elbows still while rotating your forearms outward to stretch the band. Return slowly without shrugging or arching your back.", "bandpull": "Stand securely on the center of a long band with feet about hip-width apart and hold one end in each hand. Soften knees and use a small hip drive to guide your hands up close to your torso. Let elbows bend through a comfortable range, then lower with control. This is a hip-driven high pull, not a strict upright row.", "lib-dumbbell-floor-fly": "Lie on your back with feet planted and light dumbbells above your chest. Keep elbows softly bent as you open your arms until your upper arms gently touch the floor, then bring the weights back above your chest. Do not bounce or force a deeper stretch.", "lib-standing-band-chest-fly": "Use a rated chest-height band anchor behind you. Stand in a staggered stance with arms open and elbows softly bent. Bring your hands together in front of your chest, then open slowly through a comfortable range without shrugging or arching."};
+for(const [id,description]of Object.entries(CURATED_CUE_UPDATES)){INSTRUCTION_BASELINES[id]??={};INSTRUCTION_BASELINES[id].description=MOVES[id].description;MOVES[id].description=description;}

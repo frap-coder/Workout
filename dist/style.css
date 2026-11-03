@@ -55,3 +55,5 @@ select.profile{appearance:none;-webkit-appearance:none;padding:9px 30px 9px 10px
 @media(max-width:720px){header{grid-template-columns:36px minmax(0,1fr) auto}.shell>nav{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:380px){header{grid-template-columns:32px minmax(0,1fr) 40px}}
 #finish-volume{padding:0;accent-color:var(--blue);cursor:pointer}
+
+.extra-equipment{grid-column:1/-1;margin-top:8px}.extra-equipment>summary{cursor:pointer;padding:14px 0;color:var(--muted)}.extra-equipment>.equipment-grid{margin-top:12px}
