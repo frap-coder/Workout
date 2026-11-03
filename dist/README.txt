@@ -152,3 +152,7 @@ The small-screen header reserves space for the profile name and select chevron, 
 Added 38 curated movements covering the missing benchmark exercises and specific gym variants, including both seated and lying machine leg curls and a short-lever Copenhagen plank. Each has explicit equipment and quantity requirements, reference level, rep/hold target and original execution cues. Extra gym equipment is collapsed in Setup. Carries use seconds (combined across sides when applicable), not fabricated rep counts.
 
 Retired 14 low-resistance or redundant options from new suggestions, presets and picker results; records remain in MOVES so old custom routines, sessions, backups and history remain readable. Essential beginner and no-equipment options remain. Full Body now exposes all muscle groups without changing the five-slot default circuit.
+
+## Compact exercise picker
+
+The default picker shows a compact current-exercise summary, search, and short result rows with exercise name, muscle group, target, reference level and Choose. Filters, execution cues, equipment, counting guidance and comparison explanations use native collapsed disclosures. A filter badge reports active filters. Form & load and routine saving remain available.
