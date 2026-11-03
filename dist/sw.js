@@ -1,6 +1,6 @@
 'use strict';
-const CACHE='daily-reps-web-20261103-nav1';
-const CORE=["./", "./index.html", "./style.css?v=20261103-nav1", "./storage.js?v=20261103-nav1", "./data.js?v=20261103-nav1", "./app.js?v=20261103-nav1", "./sound.js?v=20261103-nav1", "./guides.js?v=20261103-nav1", "./platform.js?v=20261103-nav1", "./training.js?v=20261103-nav1", "./setup.js?v=20261103-nav1", "./calendar.js?v=20261103-nav1", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
+const CACHE='daily-reps-web-20261103-sounds1';
+const CORE=["./", "./index.html", "./style.css?v=20261103-sounds1", "./storage.js?v=20261103-sounds1", "./data.js?v=20261103-sounds1", "./app.js?v=20261103-sounds1", "./sound.js?v=20261103-sounds1", "./guides.js?v=20261103-sounds1", "./platform.js?v=20261103-sounds1", "./training.js?v=20261103-sounds1", "./setup.js?v=20261103-sounds1", "./calendar.js?v=20261103-sounds1", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
 const coreURLs=new Set(CORE.map(path=>new URL(path,self.location).href));
 async function checkedResponse(url){const response=await fetch(new Request(url,{cache:'reload',credentials:'same-origin'}));if(!response.ok||response.redirected)throw Error('Offline asset unavailable');const type=response.headers.get('content-type')||'';if(type.includes('text/html')){const html=await response.clone().text();if(!html.includes('data-reps-app="4"'))throw Error('Not the app shell');}return response;}
 self.addEventListener('install',event=>event.waitUntil((async()=>{const cache=await caches.open(CACHE);try{for(const path of CORE){const url=new URL(path,self.location).href;await cache.put(url,await checkedResponse(url));}}catch(error){await caches.delete(CACHE);throw error;}})()));
