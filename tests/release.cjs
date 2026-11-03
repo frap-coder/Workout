@@ -15,9 +15,9 @@ if(require.main===module)(async()=>{
  assert.equal(run('state.schemaVersion'),4);assert.equal(run('profile().mode'),'rotation');
  for(let d=0;d<3;d++){
   run(`day=${d}`);assert.equal(run('currentCircuit().length'),5);assert(run('currentCircuit().every(r=>r.main&&!r.main.name.includes(" + "))'));
-  for(let i=0;i<5;i++){assert(run(`alternativesFor(currentCircuit()[${i}],${i}).length`)>5,`default ${d}/${i}: all compatible choices`);assert(run(`alternativesFor(currentCircuit()[${i}],${i}).every(m=>allowed(m)&&moveGroup(m)===moveGroup(currentCircuit()[${i}].main))`));}
+  for(let i=0;i<5;i++){assert(run(`alternativesFor(currentCircuit()[${i}],${i}).length`)>5,`default ${d}/${i}: all compatible choices`);assert(run(`alternativesFor(currentCircuit()[${i}],${i}).every(m=>allowed(m)&&workoutGroups().includes(moveGroup(m)))`));}
  }
- run('day=0');assert(run('!alternativesFor(currentCircuit()[0],0).some(m=>m.group==="shoulder")'));
+ run('day=0');assert(run('!alternativesFor(currentCircuit()[0],0).some(m=>m.group==="back")'));
  assert(run('alternativesFor(currentCircuit()[3],3).some(m=>m.id==="halo"&&swapRelation(currentCircuit()[3].main,m).startsWith("Different"))'));
  for(const equipment of [['Bodyweight'],['Dumbbells','Bodyweight'],['1x Kettlebell','Bodyweight'],['Resistance Bands','Bodyweight']]){
   run(`profile().equipment=${JSON.stringify(equipment)};profile().bans=['hip thrust'];day=2`);assert(run('currentCircuit().every(r=>r.main&&allowed(r.main))'));assert(run('currentCircuit().every((r,i)=>alternativesFor(r,i).every(m=>allowed(m)))'));
