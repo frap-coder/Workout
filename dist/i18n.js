@@ -3,11 +3,11 @@
 const APP_LANGUAGES={en:'English',nl:'Nederlands',de:'Deutsch',es:'Español',fr:'Français',it:'Italiano'};
 const LANGUAGE_LOCALES={en:'en-GB',nl:'nl-NL',de:'de-DE',es:'es-ES',fr:'fr-FR',it:'it-IT'};
 const LANGUAGE_KEY='daily-reps-language';
-let rememberedLanguage='en';try{const saved=localStorage.getItem(LANGUAGE_KEY);if(APP_LANGUAGES[saved])rememberedLanguage=saved;}catch{}
+let rememberedLanguage='en';try{const saved=localStorage.getItem(LANGUAGE_KEY);if(Object.hasOwn(APP_LANGUAGES,saved))rememberedLanguage=saved;}catch{}
 const translatedNodes=new WeakMap(),translatedAttributes=new WeakMap(),searchSources=new WeakMap(),phraseMatchers={};
-function currentLanguage(){return APP_LANGUAGES[state.language]?state.language:rememberedLanguage;}
+function currentLanguage(){return Object.hasOwn(APP_LANGUAGES,state.language)?state.language:rememberedLanguage;}
 function languageLocale(){return LANGUAGE_LOCALES[currentLanguage()];}
-function languageChosen(){return Boolean(APP_LANGUAGES[state.language])||(()=>{try{return Boolean(APP_LANGUAGES[localStorage.getItem(LANGUAGE_KEY)]);}catch{return false;}})();}
+function languageChosen(){return Object.hasOwn(APP_LANGUAGES,state.language)||(()=>{try{return Object.hasOwn(APP_LANGUAGES,localStorage.getItem(LANGUAGE_KEY));}catch{return false;}})();}
 function translationPack(){return (globalThis.DAILY_REPS_TRANSLATIONS||{})[currentLanguage()]||{};}
 function translateText(value){
  const text=String(value??''),pack=translationPack();if(currentLanguage()==='en'||!text.trim())return text;
@@ -31,7 +31,7 @@ function translateDOM(root=document.body){
  document.title=translateText('Daily Reps — 20-minute workouts');
  const description=document.querySelector('meta[name="description"]');if(description)description.setAttribute('content',translateText('20-minute circuits with equipment filters, rep tracking and rolling or fixed schedules.'));
 }
-function chooseLanguage(code){if(!APP_LANGUAGES[code])return;rememberedLanguage=code;state.language=code;try{localStorage.setItem(LANGUAGE_KEY,code);}catch{}persist();translateDOM();}
+function chooseLanguage(code){if(!Object.hasOwn(APP_LANGUAGES,code))return;rememberedLanguage=code;state.language=code;try{localStorage.setItem(LANGUAGE_KEY,code);}catch{}persist();translateDOM();}
 function languageSelector(){return `<section class="section language-settings"><h2>Language</h2><label for="app-language">App language</label><select id="app-language" data-language-selector data-no-i18n>${Object.entries(APP_LANGUAGES).map(([code,label])=>`<option value="${code}" ${currentLanguage()===code?'selected':''}>${label}</option>`).join('')}</select></section>`;}
 function languageSetup(){return `<section class="onboarding language-setup"><div class="setup-heading"><span class="eyebrow">WELCOME TO DAILY REPS · 1 / 6</span><h1>Choose your language</h1><p class="muted">You can change this later in Settings.</p></div><section class="section"><div class="language-choices" role="group" aria-label="App language">${Object.entries(APP_LANGUAGES).map(([code,label])=>`<button data-action="choose-language" data-code="${code}" data-no-i18n aria-pressed="${currentLanguage()===code}" class="${currentLanguage()===code?'selected':''}">${label}</button>`).join('')}</div><button class="primary" data-action="language-continue">Continue</button></section></section>`;}
 document.addEventListener('change',e=>{if(e.target.matches?.('[data-language-selector]')){chooseLanguage(e.target.value);render();}});
@@ -42,3 +42,9 @@ if(typeof MutationObserver!=='undefined'&&document.body){
 }
 
 function movementSearchText(m){const fields=[m.name,MUSCLE_GROUPS[m.group]||'',m.pattern||''];return fields.concat(Object.values(globalThis.DAILY_REPS_TRANSLATIONS||{}).flatMap(pack=>fields.map(text=>pack[text]||text))).join(' ');}
+
+let exclusionIndex=null;
+function canonicalExclusion(value){
+ if(!exclusionIndex){exclusionIndex=new Map();const fields=[...new Set([...Object.values(MOVES).flatMap(m=>[m.name,m.pattern]),...Object.values(MUSCLE_GROUPS),...EXCLUSION_SUGGESTIONS].filter(Boolean))];for(const text of fields)exclusionIndex.set(norm(text),text);for(const pack of Object.values(globalThis.DAILY_REPS_TRANSLATIONS||{}))for(const text of fields){const key=norm(pack[text]||'');if(key&&!exclusionIndex.has(key))exclusionIndex.set(key,text);}}
+ return exclusionIndex.get(norm(value))||value;
+}

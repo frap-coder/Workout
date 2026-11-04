@@ -156,3 +156,9 @@ Retired 14 low-resistance or redundant options from new suggestions, presets and
 ## Compact exercise picker
 
 The default picker shows a compact current-exercise summary, search, and short result rows with exercise name, muscle group, target, reference level and Choose. Filters, execution cues, equipment, counting guidance and comparison explanations use native collapsed disclosures. A filter badge reports active filters. Form & load and routine saving remain available.
+
+## App languages
+
+English, Dutch, German, Spanish, French and Italian are available. Fresh setup starts with a language choice; Settings can change it later, including during a session. The choice persists locally and in exported backups. Exercise IDs, stored names, equipment values, loads and workout logs remain canonical when presentation language changes. Search supports local exercise names and accent-free input; exclusions resolve back to canonical movements. Dates use the selected locale.
+
+The build extracts English messages, generates static translation packs and applies the curated fitness/UI glossary in `scripts/locale-overrides.json`. There is no translation API call from the app. All packs are precached for offline use. Translations combine automated text translation with curated labels and common exercise names; they are not a claim of individual native-speaker review of every exercise cue. Tests cover message completeness and all six language flows, including mid-session switching and reloading.

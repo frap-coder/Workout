@@ -20,6 +20,7 @@ def request(text,lang):
 
 def build(lang):
  pack=all_packs.get(lang,{})
+ for key in ['__proto__','prototype','constructor']:pack.pop(key,None)
  pending=[s for s in messages if not pack.get(s) and s not in manual[lang]]
  # Each numbered line is independently aligned; never silently shift translations to the wrong exercise.
  batches=[];batch=[];length=0

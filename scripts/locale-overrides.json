@@ -141,7 +141,13 @@
     "RACK": "RACK",
     "kg": "kg",
     "lb": "lb",
-    "Echo": "Echo"
+    "Echo": "Echo",
+    "Push workout": "Duwtraining",
+    "Pull workout": "Trektraining",
+    "Lower workout": "Training van het onderlichaam",
+    "Full Body workout": "Training voor het hele lichaam",
+    "squat": "squat",
+    "lunge": "uitstappen"
   },
   "de": {
     "Workout": "Training",
@@ -285,7 +291,13 @@
     "RACK": "RACK",
     "kg": "kg",
     "lb": "lb",
-    "Echo": "Echo"
+    "Echo": "Echo",
+    "Push workout": "Training: Drücken",
+    "Pull workout": "Training: Ziehen",
+    "Lower workout": "Unterkörpertraining",
+    "Full Body workout": "Ganzkörpertraining",
+    "squat": "Kniebeuge",
+    "lunge": "Ausfallschritt"
   },
   "es": {
     "Workout": "Entrenamiento",
@@ -429,7 +441,13 @@
     "RACK": "RACK",
     "kg": "kg",
     "lb": "lb",
-    "Echo": "Echo"
+    "Echo": "Echo",
+    "Push workout": "Entrenamiento de empuje",
+    "Pull workout": "Entrenamiento de tracción",
+    "Lower workout": "Entrenamiento del tren inferior",
+    "Full Body workout": "Entrenamiento de cuerpo completo",
+    "squat": "sentadilla",
+    "lunge": "zancada"
   },
   "fr": {
     "Workout": "Entraînement",
@@ -573,7 +591,13 @@
     "RACK": "RACK",
     "kg": "kg",
     "lb": "lb",
-    "Echo": "Echo"
+    "Echo": "Echo",
+    "Push workout": "Séance de poussée",
+    "Pull workout": "Séance de tirage",
+    "Lower workout": "Entraînement du bas du corps",
+    "Full Body workout": "Entraînement complet",
+    "squat": "squat",
+    "lunge": "fente"
   },
   "it": {
     "Workout": "Allenamento",
@@ -717,6 +741,12 @@
     "RACK": "RACK",
     "kg": "kg",
     "lb": "lb",
-    "Echo": "Echo"
+    "Echo": "Echo",
+    "Push workout": "Allenamento di spinta",
+    "Pull workout": "Allenamento di tirata",
+    "Lower workout": "Allenamento della parte inferiore",
+    "Full Body workout": "Allenamento completo",
+    "squat": "squat",
+    "lunge": "affondo"
   }
 }
