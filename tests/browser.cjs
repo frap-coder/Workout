@@ -6,7 +6,7 @@ const types={'.html':'text/html','.js':'text/javascript','.css':'text/css','.web
  let browser;
  try{
   browser=await chromium.launch({headless:true,args:['--no-sandbox','--disable-dev-shm-usage']});const ctx=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const page=await ctx.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto('http://127.0.0.1:4173');await page.getByRole('heading',{name:'When will you train?'}).waitFor();
+  await page.goto('http://127.0.0.1:4173');await page.getByRole('heading',{name:'Choose your language',exact:true}).waitFor();await page.getByRole('button',{name:'Continue',exact:true}).click();await page.getByRole('heading',{name:'When will you train?'}).waitFor();
   await page.getByRole('button',{name:'Choose equipment',exact:true}).click();await page.getByRole('button',{name:'Choose exclusions',exact:true}).click();
   await page.locator('#setup-ban').fill('Jump');await page.getByRole('button',{name:'Add',exact:true}).click();await page.getByRole('button',{name:'Choose starting level',exact:true}).click();
   await page.getByRole('button',{name:'Preview my plan',exact:true}).click();await page.getByRole('button',{name:'Use plan & open first workout',exact:true}).click();

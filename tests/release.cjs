@@ -1,12 +1,12 @@
 const fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict'),path=require('path');
 const root=path.join(__dirname,'../dist');
 function harness(seed={},extras={}){
- const nodes=new Map(),data={...seed},events={};let now=Date.now();
+ const nodes=new Map(),data={'daily-reps-language':'en',...seed},events={};let now=Date.now();
  class Clock extends Date{constructor(...args){super(...(args.length?args:[now]));}static now(){return now;}}
  const node=()=>({innerHTML:'',textContent:'',style:{setProperty(){}},dataset:{},open:false,setAttribute(){},addEventListener(){},classList:{add(){},remove(){}},showModal(){this.open=true},close(){this.open=false}});
  const document={hidden:false,querySelector:s=>{if(!nodes.has(s))nodes.set(s,node());return nodes.get(s)},getElementById:s=>nodes.get('#'+s),addEventListener:(event,fn)=>(events[event]??=[]).push(fn),body:node()};
  const context={crypto:require('crypto').webcrypto,Date:Clock,console,setTimeout:()=>1,clearTimeout(){},setInterval(){},localStorage:{getItem:k=>data[k]||null,setItem:(k,v)=>data[k]=v,removeItem:k=>delete data[k]},document,window:{addEventListener(){}},navigator:{onLine:true},Blob,URL,location:{reload(){}},Promise,...extras};vm.createContext(context);
- for(const name of ['storage','data','app','sound','guides','platform','training','setup','calendar'])vm.runInContext(fs.readFileSync(path.join(root,name+'.js'),'utf8'),context,{filename:name+'.js'});
+ for(const name of ['storage','data','app','sound','guides','platform','training','setup','locales','i18n','calendar'])vm.runInContext(fs.readFileSync(path.join(root,name+'.js'),'utf8'),context,{filename:name+'.js'});
  const run=s=>vm.runInContext(s,context);return {context,run,data,nodes,events,advance:ms=>now+=ms};
 }
 if(require.main===module)(async()=>{

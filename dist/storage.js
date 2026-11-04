@@ -9,6 +9,7 @@ function validateState(value){
  if(!value||!Array.isArray(value.profiles)||!value.profiles.length||value.profiles.length>100||typeof value.active!=='string')throw Error('Not a Daily Reps backup.');
  if(value.schemaVersion!=null&&(!Number.isInteger(value.schemaVersion)||value.schemaVersion<1))throw Error('Invalid backup version.');
  if(value.schemaVersion>DATA_VERSION)throw Error('This backup needs a newer version of Daily Reps.');
+ if(value.language!=null&&!['en','nl','de','es','fr','it'].includes(value.language))throw Error('Invalid app language.');
  const ids=new Set();
  for(const p of value.profiles){
   if(typeof p.id!=='string'||ids.has(p.id)||typeof p.name!=='string'||p.name.length>100)throw Error('Invalid profile.');ids.add(p.id);

@@ -1,0 +1,9 @@
+const fs=require('fs'),path=require('path'),acorn=require('acorn');
+const messages=new Set();
+function add(s){s=s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").trim();if(!/[A-Za-z]{2}/.test(s)||s.length>5000||s.includes('https://')||/[{}=<>]/.test(s))return;if(/^[a-z0-9_-]+$/.test(s)&&s.length>30)return;messages.add(s);}
+function fragment(s){for(const match of s.matchAll(/(?:aria-label|placeholder|title|alt)=["']([^"']+)["']/g))add(match[1]);s=s.replace(/<[^>]*>/g,'\n');for(let piece of s.split(/\n/)){piece=piece.replace(/^[^>]*>/,'').replace(/<[^<]*$/,'');add(piece);}}
+function visit(n){if(!n||typeof n!=='object')return;if(n.type==='Literal'&&typeof n.value==='string')fragment(n.value);if(n.type==='TemplateElement')fragment(n.value.cooked||n.value.raw);for(const [k,v]of Object.entries(n)){if(k==='value'&&n.type==='TemplateElement')continue;if(Array.isArray(v))v.forEach(visit);else if(v&&typeof v==='object')visit(v);}}
+for(const f of fs.readdirSync('dist').filter(f=>f.endsWith('.js')&&!['locales.js','sw.js'].includes(f))){visit(acorn.parse(fs.readFileSync(path.join('dist',f),'utf8'),{ecmaVersion:'latest',sourceType:'script'}));}
+// Short dynamic fragments that only occur next to interpolated values.
+['20-minute circuits with rep tracking.','reps','sec','seconds','sessions','session','options','workout','workouts','minutes','min','per side','total','remaining','active','side','direction','days','steps','on','off','No weight set','20-minute workouts','Daily Reps — 20-minute workouts'].forEach(add);
+fs.writeFileSync('scripts/messages.en.json',JSON.stringify([...messages].sort(),null,2)+'\n');console.log('Extracted',messages.size,'source messages');
