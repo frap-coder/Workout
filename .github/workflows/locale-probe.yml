@@ -1,0 +1,19 @@
+name: Check translation generation
+on:
+  push:
+    paths: ['.github/workflows/locale-probe.yml']
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - run: |
+          python - <<'PY'
+          import urllib.request,urllib.parse,json
+          for q in ['Start workout\nChoose your language\nKeep your back steady.', '<p>Start workout</p><p>Choose your language</p>']:
+           u='https://translate.googleapis.com/translate_a/single?'+urllib.parse.urlencode(dict(client='gtx',sl='en',tl='nl',dt='t',q=q))
+           try:
+            d=json.load(urllib.request.urlopen(u,timeout=20))
+            print(repr(''.join(x[0] for x in d[0] if x[0])))
+           except Exception as e:print(type(e).__name__,str(e))
+          PY
