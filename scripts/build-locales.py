@@ -20,7 +20,7 @@ def request(text,lang):
 
 def build(lang):
  pack=all_packs.get(lang,{})
- pending=[s for s in messages if s not in pack and s not in manual[lang]]
+ pending=[s for s in messages if not pack.get(s) and s not in manual[lang]]
  # Each numbered line is independently aligned; never silently shift translations to the wrong exercise.
  batches=[];batch=[];length=0
  for s in pending:
@@ -35,9 +35,14 @@ def build(lang):
   else:
    for s in batch:pack[s]=request(s,lang).strip();time.sleep(.1)
   print(lang,index+1,'/',len(batches),flush=True);time.sleep(.2)
- pack.update(manual[lang]);assert all(isinstance(pack.get(s),str) and pack[s] for s in messages)
+ pack.update(manual[lang])
+ for source in messages:
+  if not pack.get(source):
+   print('Retry empty translation',lang,repr(source),flush=True)
+   pack[source]=request(source,lang).strip() or source
+ assert all(isinstance(pack.get(s),str) and pack[s] for s in messages)
  return lang,pack
-with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
  for lang,pack in executor.map(build,languages):all_packs[lang]=pack
 Path('dist/locales.js').write_text('// Static translations. Generated at build time; no online translation at runtime.\nglobalThis.DAILY_REPS_TRANSLATIONS='+json.dumps(all_packs,ensure_ascii=False,separators=(',',':'))+';\n')
 print('COMPLETE', {lang:len(pack) for lang,pack in all_packs.items()},flush=True)

@@ -18,7 +18,7 @@ function translateText(value){
 function translateDOM(root=document.body){
  if(!root||!document.createTreeWalker)return;
  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;
- while((n=walker.nextNode())){if(n.parentElement?.closest('script,style,textarea,[data-no-i18n]'))continue;const old=translatedNodes.get(n),source=old&&n.nodeValue===old.output?old.source:n.nodeValue,output=translateText(n.parentElement?.tagName==='BUTTON'&&source.trim()==='Back'?'Go back':source);translatedNodes.set(n,{source,output});if(n.nodeValue!==output)n.nodeValue=output;}
+ while((n=walker.nextNode())){if(n.parentElement?.closest('script,style,textarea,[data-no-i18n]'))continue;const old=translatedNodes.get(n),source=old&&n.nodeValue===old.output?old.source:n.nodeValue,output=translateText(currentLanguage()!=='en'&&n.parentElement?.tagName==='BUTTON'&&source.trim()==='Back'?'Go back':source);translatedNodes.set(n,{source,output});if(n.nodeValue!==output)n.nodeValue=output;}
  for(const el of root.querySelectorAll('[aria-label],[placeholder],[title],[alt],option,[data-search]')){
   if(el.closest('[data-no-i18n]'))continue;
   // A translated option must never change the value submitted by a form.
@@ -40,3 +40,5 @@ if(typeof MutationObserver!=='undefined'&&document.body){
  const observer=new MutationObserver(()=>{observer.disconnect();translateDOM();observer.observe(document.body,{childList:true,subtree:true,characterData:true});});
  observer.observe(document.body,{childList:true,subtree:true,characterData:true});
 }
+
+function movementSearchText(m){const fields=[m.name,MUSCLE_GROUPS[m.group]||'',m.pattern||''];return fields.concat(Object.values(globalThis.DAILY_REPS_TRANSLATIONS||{}).flatMap(pack=>fields.map(text=>pack[text]||text))).join(' ');}
