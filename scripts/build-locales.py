@@ -3,6 +3,10 @@ import concurrent.futures,hashlib,html,json,os,re,time,urllib.parse,urllib.reque
 from pathlib import Path
 messages=json.loads(Path('scripts/messages.en.json').read_text());languages=['nl','de','es','fr','it'];all_packs={}
 manual=json.loads(Path('scripts/locale-overrides.json').read_text())
+# In Dutch, use recognised gym names unless an explicit editorial translation exists.
+terms=json.loads(Path('scripts/fitness-terms.en.json').read_text())
+for label in terms['names']+terms['equipment']:
+ manual['nl'].setdefault(label,label)
 try:
  old=Path('dist/locales.js').read_text();all_packs=json.loads(old.split('globalThis.DAILY_REPS_TRANSLATIONS=',1)[1].strip().rstrip(';'))
 except Exception:pass

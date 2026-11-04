@@ -7,3 +7,5 @@ for(const f of fs.readdirSync('dist').filter(f=>f.endsWith('.js')&&!['locales.js
 // Short dynamic fragments that only occur next to interpolated values.
 ['20-minute circuits with rep tracking.','reps','sec','seconds','sessions','session','options','workout','workouts','minutes','min','per side','total','remaining','active','side','direction','days','steps','on','off','No weight set','20-minute workouts','Daily Reps — 20-minute workouts'].forEach(add);
 fs.writeFileSync('scripts/messages.en.json',JSON.stringify([...messages].sort(),null,2)+'\n');console.log('Extracted',messages.size,'source messages');
+
+const vm=require('vm'),catalog=vm.createContext({});vm.runInContext(fs.readFileSync('dist/data.js','utf8'),catalog);fs.writeFileSync('scripts/fitness-terms.en.json',vm.runInContext('JSON.stringify({names:[...new Set(Object.values(MOVES).map(m=>m.name))],equipment:EQUIPMENT},null,2)',catalog)+'\n');
