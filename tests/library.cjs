@@ -35,8 +35,8 @@ const {harness}=require('./release.cjs');
  assert(!run('movementGuide(MOVES.lunge)').includes('<svg'));
  // Search AND-matches terms, hides non-matches and reports an empty state.
  const nodes=[{dataset:{search:'dumbbell walking lunges quads legs'},hidden:false},{dataset:{search:'kettlebell goblet squat'},hidden:false}];
- const count={},empty={},search={value:''},filter={value:'all'};context.document.querySelectorAll=()=>nodes;context.document.querySelector=sel=>sel.startsWith('#search')?search:sel.includes('level-filter')?filter:sel.includes('count')?count:empty;
- const input=events.input[events.input.length-1];search.value='db lunges';input({target:{dataset:{exerciseSearch:'0'},value:'db lunges'}});assert.equal(nodes[0].hidden,false);assert.equal(nodes[1].hidden,true);assert.equal(count.textContent,'1 options');
+ const count={},empty={},search={value:''},filter={value:'all'};context.document.querySelectorAll=sel=>sel==='[data-exercise-family]'?[]:nodes;context.document.querySelector=sel=>sel.startsWith('#search')?search:sel.includes('level-filter')?filter:sel.includes('count')?count:empty;
+ const input=events.input.find(fn=>fn.toString().includes("exerciseSearch"));search.value='db lunges';input({target:{dataset:{exerciseSearch:'0'},value:'db lunges'}});assert.equal(nodes[0].hidden,false);assert.equal(nodes[1].hidden,true);assert.equal(count.textContent,'1 options');
  search.value='nothing matches';input({target:{dataset:{exerciseSearch:'0'},value:'nothing matches'}});assert.equal(empty.hidden,false);
  console.log('PASS: >=20 unique exercises per group; complete untruncated choices; lunges; equipment and bans; workout-specific builder; saved routine; text-only coaching; search and empty state.');console.log(counts);
 })().catch(e=>{console.error(e);process.exit(1)});

@@ -3790,3 +3790,66 @@ const RETIRED_MOVEMENT_IDS=new Set(["lib-prone-hamstring-curl", "seatedcalf", "l
 for(const id of RETIRED_MOVEMENT_IDS)MOVES[id].retired=true;
 const CURATED_CUE_UPDATES={"kbtri": "Hold one light kettlebell securely with both hands above your head. Keep upper arms steady as you bend your elbows to lower it behind your head, then straighten the elbows. Brace and avoid arching your back.", "lib-band-external-rotation": "Stand tall holding a light band between both hands, palms up and elbows bent to 90 degrees beside your ribs. Keep elbows still while rotating your forearms outward to stretch the band. Return slowly without shrugging or arching your back.", "bandpull": "Stand securely on the center of a long band with feet about hip-width apart and hold one end in each hand. Soften knees and use a small hip drive to guide your hands up close to your torso. Let elbows bend through a comfortable range, then lower with control. This is a hip-driven high pull, not a strict upright row.", "lib-dumbbell-floor-fly": "Lie on your back with feet planted and light dumbbells above your chest. Keep elbows softly bent as you open your arms until your upper arms gently touch the floor, then bring the weights back above your chest. Do not bounce or force a deeper stretch.", "lib-standing-band-chest-fly": "Use a rated chest-height band anchor behind you. Stand in a staggered stance with arms open and elbows softly bent. Bring your hands together in front of your chest, then open slowly through a comfortable range without shrugging or arching."};
 for(const [id,description]of Object.entries(CURATED_CUE_UPDATES)){INSTRUCTION_BASELINES[id]??={};INSTRUCTION_BASELINES[id].description=MOVES[id].description;MOVES[id].description=description;}
+
+// Carries are optional core/grip accessories in every workout, not only Full Body.
+MOVES['new-farmer-carry'].group='core';
+MOVES['new-farmer-carry'].searchAliases='farmer farmers carry walk loaded walk';
+MOVES['new-db-suitcase-carry'].searchAliases='suitcase carry walk single arm farmer';
+MOVES['kb-farmer-carry']={id:'kb-farmer-carry',name:'Kettlebell Farmer Carry',equipment:['Kettlebells'],kettlebellCount:2,group:'core',pattern:'loaded carry',challenge:3,loadDependent:true,reps:'20–30 sec',description:'Hold one kettlebell by each side. Walk through a clear, level space with a steady torso, then set both bells down under control. Log seconds walked, not reps.',searchAliases:'farmer farmers carry walk loaded walk'};
+MOVES['kb-suitcase-carry']={id:'kb-suitcase-carry',name:'Kettlebell Suitcase Carry',equipment:['Kettlebells'],kettlebellCount:1,group:'core',pattern:'anti-lateral flexion',challenge:3,loadDependent:true,reps:'20–30 sec / side',description:'Hold one kettlebell by your side and walk without leaning. Put it down under control and repeat on the other side. Log both sides’ walking seconds together.',searchAliases:'suitcase carry walk single arm farmer'};
+
+const TECHNICAL_KETTLEBELL_MOVES=[
+ {
+  "id": "kb-clean-jerk",
+  "name": "Kettlebell Clean & Jerk",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "kettlebellCount": 1,
+  "group": "full",
+  "pattern": "clean and jerk",
+  "challenge": 5,
+  "reps": "4\u20136 / side",
+  "description": "Use a light kettlebell and a technique you already know. Drive from your hips and guide the bell close into the rack at your shoulder. Bend your knees slightly, drive upward with your legs, then bend your knees again to receive the bell overhead with a straight, stable arm. Stand fully, lower to the rack and reset. One clean plus one jerk and controlled return is one rep. Complete both sides. The second knee bend distinguishes the jerk from a strict press."
+ },
+ {
+  "id": "doublekb-clean-jerk",
+  "name": "Double Kettlebell Clean & Jerk",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "kettlebellCount": 2,
+  "group": "full",
+  "pattern": "clean and jerk",
+  "challenge": 5,
+  "reps": "3\u20135 reps",
+  "description": "Use two light kettlebells and a double-clean and jerk you already know. Clean both bells close into the front rack. Dip through the knees, drive with the legs and dip again to receive both weights overhead with stable straight arms. Stand fully, lower to the rack and reset. One simultaneous clean, jerk and controlled return is one rep."
+ },
+ {
+  "id": "kb-snatch",
+  "name": "Kettlebell Snatch",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "kettlebellCount": 1,
+  "group": "full",
+  "pattern": "snatch",
+  "challenge": 5,
+  "reps": "4\u20136 / side",
+  "description": "Use a light kettlebell and a snatch technique you already know. Hike the bell between your legs, extend your hips and guide it close to your body. Insert the hand through the handle as the bell rises, finishing with a stable straight arm overhead without the bell slamming your wrist. Lower under control into the rack or a controlled backswing before the next rep. One overhead lift and controlled return is one rep; complete both sides."
+ },
+ {
+  "id": "doublekb-snatch",
+  "name": "Double Kettlebell Snatch",
+  "equipment": [
+   "Kettlebells"
+  ],
+  "kettlebellCount": 2,
+  "group": "full",
+  "pattern": "snatch",
+  "challenge": 5,
+  "reps": "3\u20135 reps",
+  "description": "Use two light kettlebells and a double-snatch technique you already know. From a controlled backswing, extend your hips and guide both bells close to the body. Insert your hands through the handles and finish with stable straight arms overhead. Lower both bells under control through the rack or a controlled backswing. One simultaneous lift and controlled return is one rep. Choose the single-bell version until you can control both weights."
+ }
+];
+for(const m of TECHNICAL_KETTLEBELL_MOVES){m.loadDependent=true;m.tags=m.name+" kettlebell clean jerk snatch olympic";MOVES[m.id]=m;}

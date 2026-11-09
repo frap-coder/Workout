@@ -12,7 +12,7 @@ function translationPack(){return (globalThis.DAILY_REPS_TRANSLATIONS||{})[curre
 function translateText(value){
  const text=String(value??''),pack=translationPack();if(currentLanguage()==='en'||!text.trim())return text;
  const trimmed=text.trim();if(Object.prototype.hasOwnProperty.call(pack,trimmed))return text.replace(trimmed,pack[trimmed]);
- const lang=currentLanguage();if(!phraseMatchers[lang]){const keys=Object.keys(pack).filter(k=>/[A-Za-z]/.test(k)&&k.length>1).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));phraseMatchers[lang]=new RegExp('(?<![\\p{L}\\p{N}_])(?:'+keys.join('|')+')(?![\\p{L}\\p{N}_])','gu');}
+ const lang=currentLanguage();if(!phraseMatchers[lang]){const keys=Object.keys(pack).filter(k=>/[A-Za-z]/.test(k)&&k.length>1).sort((a,b)=>b.length-a.length).map(k=>(/^[\p{L}\p{N}_]/u.test(k)?'(?<![\\p{L}\\p{N}_])':'')+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+(/[\p{L}\p{N}_]$/u.test(k)?'(?![\\p{L}\\p{N}_])':''));phraseMatchers[lang]=new RegExp(keys.join('|'),'gu');}
  return text.replace(phraseMatchers[lang],word=>pack[word]??word);
 }
 function translateDOM(root=document.body){

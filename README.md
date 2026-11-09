@@ -64,7 +64,7 @@ A browser cannot promise an alarm when it is closed or suspended or the device i
 
 ## Curated exercise library — 3 November 2026
 
-The library contains 335 distinct selectable exercises, grouped by primary training role:
+The library contains 341 distinct selectable exercises, grouped by primary training role:
 
 | Group | Exercises |
 | --- | ---: |
@@ -73,13 +73,13 @@ The library contains 335 distinct selectable exercises, grouped by primary train
 | Triceps | 24 |
 | Back | 32 |
 | Biceps & forearms | 26 |
-| Core | 30 |
+| Core | 33 |
 | Quads & legs | 46 |
 | Hamstrings & posterior chain | 32 |
 | Glutes | 25 |
 | Hip abductors & adductors | 20 |
 | Calves | 20 |
-| Full body | 24 |
+| Full body | 27 |
 
 Groups describe primary training roles, not isolated muscles. Exercises often train secondary muscles. Hip control drills and shoulder control drills differ from loaded strength work; the pattern labels make those differences explicit.
 
@@ -166,3 +166,11 @@ The build extracts English messages, generates static translation packs and appl
 ### Dutch fitness terminology
 
 Dutch exercise and specialist-equipment labels use recognised gym terminology, with explicit editorial translations where clearer. The build extracts a protected terminology list from the actual catalog; new Dutch exercise names keep their international name until an editorial override is provided. Edited Dutch cues use consistent informal wording and rep targets say “per kant”, not “zijkant”. Regression checks cover the reported literal-translation errors.
+
+### German, Spanish, French and Italian fitness wording
+
+All four languages use the protected exercise/equipment glossary. Basis-level labels, rotating-plan wording and side counts have explicit translations. Eight complex movement sequences have hand-edited translations in all four languages. The remaining exercise instructions are regenerated from English cues that spell out ambiguous fitness verbs (e.g. brace, hinge, unrack); a stored revision prevents repeating that generation on every build. These are terminology/semantic corrections, not a claim of native-speaker review of every sentence.
+
+## Exercise families and November 7 fixes
+
+Variants are grouped under collapsible exercise families; search and filters expand matching families without losing any choices. Clean & jerk and snatch have explicit single/double kettlebell entries and distinct families from clean & press. Carries are core/grip options across Push/Pull/Lower, with DB and KB equipment/quantity gates. Exclusions use explicit exercise IDs, categories or muscle groups, preserve previous text filters, and replace blocked movements in upcoming custom routines without changing history. The edited locale labels and Dutch movement cues avoid literal translations such as “kalf verhogen” and “bedieningsknop”.
