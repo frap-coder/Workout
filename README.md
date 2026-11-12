@@ -50,7 +50,7 @@ One movement and one counting unit per preset card. Timed holds use seconds and 
 
 Echo matches the circuit plus recorded loads. Changing an exercise or a load mid-session disables comparison for that session. Unknown load is still unknown: Echo is a rep-logging pace comparison, never a strength score.
 
-Swap choices stay within the movement family. All matching alternatives are available in a searchable, scrollable list, without a five-choice limit. Matching patterns are ranked first; other movements in the family are labelled as a different stimulus. Equipment filters, exclusions and duplicate avoidance apply to every choice. Halo remains a shoulder option, explicitly distinct from pressing.
+Swap choices can use any muscle group in the current workout. Up to three matching alternatives appear first, followed by the complete library, grouped by stable exercise-family IDs. Search and equipment filters narrow the list. Switching movement or muscle group is labelled separately from lighter/harder variants. Equipment filters, exclusions and duplicate avoidance apply to every choice. Halo remains a shoulder option, explicitly distinct from pressing.
 
 ## Timer, audio and offline
 
@@ -174,3 +174,15 @@ All four languages use the protected exercise/equipment glossary. Basis-level la
 ## Exercise families and November 7 fixes
 
 Variants are grouped under collapsible exercise families; search and filters expand matching families without losing any choices. Clean & jerk and snatch have explicit single/double kettlebell entries and distinct families from clean & press. Carries are core/grip options across Push/Pull/Lower, with DB and KB equipment/quantity gates. Exclusions use explicit exercise IDs, categories or muscle groups, preserve previous text filters, and replace blocked movements in upcoming custom routines without changing history. The edited locale labels and Dutch movement cues avoid literal translations such as “kalf verhogen” and “bedieningsknop”.
+
+## Training selection and shorter sessions
+
+Default circuits choose movements for each slot before considering the selected experience level. Simple loaded exercises remain available to beginners; working weight is chosen separately. Technical lifts are not beginner defaults. Main movements stay stable as experience increases. Saved custom choices and training history are retained. Without pulling equipment, the app explains the limitations of bodyweight back-control exercises.
+
+The workout displays its actual muscle-group distribution and a range of exercise reference levels. Technical difficulty is separate; reference levels do not estimate effort from kilograms.
+
+Stop & save confirms and stores a shorter workout with its actual active duration and logged sets. It advances the plan normally and is visibly marked as shortened in history. Shortened sessions do not become full-session Echo references. Pause time is excluded; backup/import preserves the shortened flag and duration.
+
+Full-message translation keys with named variables handle per-side counts, distribution, result counts and the new finish flow. Arithmetic examples are included in extraction and tested explicitly across all six languages. International exercise names may remain English by design.
+
+Exercise-family headings use standard English fitness terminology in all six UI languages. They are protected from automatic translation; muscle-group names, instructions, buttons and counts remain localized. The build also overrides old cached family translations, preventing headings such as Dutch “Kraakpanden”, “Goedemorgen” and “Kikkerpompen” from returning.

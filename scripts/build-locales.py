@@ -8,6 +8,10 @@ terms=json.loads(Path('scripts/fitness-terms.en.json').read_text())
 for lang in languages:
  for label in terms['names']+terms['equipment']:
   manual[lang].setdefault(label,label)
+# Family headings use established English fitness names in every app language.
+# Override cached machine translations explicitly; setdefault would retain mistakes.
+for lang in languages:
+ for label in terms.get('families',[]):manual[lang][label]=label
 controlled=json.loads(Path('scripts/controlled-cues.en.json').read_text())
 CUE_REVISION='fitness-cues-20261104-1'
 try:

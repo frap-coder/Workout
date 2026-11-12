@@ -29,8 +29,8 @@ function validateState(value){
    if(!['Push','Pull','Lower','Legs','Upper','Conditioning','Full Body','Rest'].includes(d.type))throw Error('Unknown workout type.');
    if(d.custom&&(!Array.isArray(d.custom)||d.custom.length!==5||d.custom.some(r=>!validMovement(r.main)||(r.alt&&!validMovement(r.alt)))))throw Error('A custom circuit must contain five valid movements.');
   }
-  for(const h of p.history){validateLogs(h.repLog);
-   if(h.durationMs!=null&&(!Number.isFinite(h.durationMs)||h.durationMs<1200000||h.durationMs>Number.MAX_SAFE_INTEGER))throw Error('Invalid workout duration.');
+  for(const h of p.history){validateLogs(h.repLog);if(h.shortened!=null&&typeof h.shortened!=='boolean')throw Error('Invalid shortened flag.');if(h.shortened===true&&(h.durationMs==null||h.durationMs>=1200000||(h.overtimeMs||0)!==0))throw Error('Invalid shortened duration.');
+   if(h.durationMs!=null&&(!Number.isFinite(h.durationMs)||h.durationMs<(h.shortened===true?0:1200000)||h.durationMs>Number.MAX_SAFE_INTEGER))throw Error('Invalid workout duration.');
    if(h.overtimeMs!=null&&(!Number.isFinite(h.overtimeMs)||h.overtimeMs<0||h.overtimeMs>Number.MAX_SAFE_INTEGER))throw Error('Invalid overtime duration.');
    if(typeof h.id!=='string'||!Number.isFinite(h.finishedAt)||typeof h.date!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(h.date)||typeof h.type!=='string')throw Error('Invalid session history.');
    if(h.repEntries&&(!Array.isArray(h.repEntries)||h.repEntries.some(e=>typeof e.name!=='string'||!['reps','sec'].includes(e.unit)||!Number.isFinite(e.count)||e.count<0||(e.weightKg!=null&&(!Number.isFinite(e.weightKg)||e.weightKg<0||e.weightKg>1000)))))throw Error('Invalid rep history.');

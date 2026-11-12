@@ -4,15 +4,21 @@ const APP_LANGUAGES={en:'English',nl:'Nederlands',de:'Deutsch',es:'Español',fr:
 const LANGUAGE_LOCALES={en:'en-GB',nl:'nl-NL',de:'de-DE',es:'es-ES',fr:'fr-FR',it:'it-IT'};
 const LANGUAGE_KEY='daily-reps-language';
 let rememberedLanguage='en';try{const saved=localStorage.getItem(LANGUAGE_KEY);if(Object.hasOwn(APP_LANGUAGES,saved))rememberedLanguage=saved;}catch{}
+const fitnessFamilyLabels=new Set(Object.values(MOVEMENT_FAMILIES).map(f=>f.label));
 const translatedNodes=new WeakMap(),translatedAttributes=new WeakMap(),searchSources=new WeakMap(),phraseMatchers={};
 function currentLanguage(){return Object.hasOwn(APP_LANGUAGES,state.language)?state.language:rememberedLanguage;}
 function languageLocale(){return LANGUAGE_LOCALES[currentLanguage()];}
 function languageChosen(){return Object.hasOwn(APP_LANGUAGES,state.language)||(()=>{try{return Object.hasOwn(APP_LANGUAGES,localStorage.getItem(LANGUAGE_KEY));}catch{return false;}})();}
 function translationPack(){return (globalThis.DAILY_REPS_TRANSLATIONS||{})[currentLanguage()]||{};}
+// Full-message keys preserve sentence meaning; variables are inserted after translation.
+function message(source,values={}){const template=currentLanguage()==='en'?source:translationPack()[source]||source;return template.replace(/\{([a-zA-Z]+)\}/g,(token,key)=>Object.hasOwn(values,key)?String(values[key]):token);}
+function targetCaption(m){return translateText(m?.reps||'');}
 function translateText(value){
  const text=String(value??''),pack=translationPack();if(currentLanguage()==='en'||!text.trim())return text;
- const trimmed=text.trim();if(Object.prototype.hasOwnProperty.call(pack,trimmed))return text.replace(trimmed,pack[trimmed]);
- const lang=currentLanguage();if(!phraseMatchers[lang]){const keys=Object.keys(pack).filter(k=>/[A-Za-z]/.test(k)&&k.length>1).sort((a,b)=>b.length-a.length).map(k=>(/^[\p{L}\p{N}_]/u.test(k)?'(?<![\\p{L}\\p{N}_])':'')+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+(/[\p{L}\p{N}_]$/u.test(k)?'(?![\\p{L}\\p{N}_])':''));phraseMatchers[lang]=new RegExp(keys.join('|'),'gu');}
+ const trimmed=text.trim();if(fitnessFamilyLabels.has(trimmed))return text;
+ const perSide=trimmed.match(/^(\d+(?:[–—-]\d+)?)\s*(sec)?\s*\/\s*side$/i);if(perSide)return text.replace(trimmed,message(perSide[2]?'{count} sec per side':'{count} per side',{count:perSide[1]}));
+ if(Object.prototype.hasOwnProperty.call(pack,trimmed))return text.replace(trimmed,pack[trimmed]);
+ const lang=currentLanguage();if(!phraseMatchers[lang]){const keys=Object.keys(pack).filter(k=>/[A-Za-z]/.test(k)&&k.length>1&&!fitnessFamilyLabels.has(k)).sort((a,b)=>b.length-a.length).map(k=>(/^[\p{L}\p{N}_]/u.test(k)?'(?<![\\p{L}\\p{N}_])':'')+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+(/[\p{L}\p{N}_]$/u.test(k)?'(?![\\p{L}\\p{N}_])':''));phraseMatchers[lang]=new RegExp(keys.join('|'),'gu');}
  return text.replace(phraseMatchers[lang],word=>pack[word]??word);
 }
 function translateDOM(root=document.body){
