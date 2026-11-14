@@ -8,6 +8,18 @@
 .muscle-label{display:block;color:var(--mint);font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;margin-bottom:6px}
 .movement-coaching{padding:18px;border:1px solid var(--line,#344059);border-radius:14px;margin-bottom:20px;background:rgba(255,255,255,.025)}
 .movement-coaching p{margin-top:10px;line-height:1.65}
+.quick-form-cue{font-size:13px;line-height:1.5;margin-top:8px;color:var(--text)}
+.exercise-instructions{margin:0 16px 14px;border:1px solid var(--line);border-radius:12px;min-width:0}
+.exercise-instructions>summary{cursor:pointer;padding:13px 14px;min-height:46px;color:var(--mint);font-weight:600;font-size:14px}
+.exercise-instructions .movement-coaching{border:0;margin:0;padding:0 14px 16px;background:none}
+.movement-coaching h4{font-size:14px;margin:18px 0 6px;color:var(--text)}
+.movement-coaching ol,.movement-coaching ul{padding-left:22px;margin:8px 0;list-style-position:outside}
+.movement-coaching li{margin:8px 0;line-height:1.6;font-size:14px}
+.demonstration-sources{margin-top:18px;border-top:1px solid var(--line);padding-top:12px}
+.demonstration-sources summary{cursor:pointer;min-height:44px;color:var(--mint)}
+.demonstration-sources a{display:block;margin:8px 0;padding:10px 0;overflow-wrap:anywhere;color:var(--mint)}
+.exercise-instructions summary:focus-visible,.demonstration-sources a:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+@media(max-width:400px){.training-clock{grid-template-columns:minmax(0,1fr) auto}.training-clock .timer-controls{grid-column:1/-1;grid-row:2;flex-wrap:wrap}.training-clock .session-rep-total{grid-column:2;grid-row:1}.training-clock #timer-status{grid-column:1/-1}.training-clock .timer-controls button{flex:1;white-space:nowrap}}
 .library-heading{margin:20px 0 16px}.library-heading p{margin-top:10px;line-height:1.6}
 .exercise-options{max-height:520px;overflow-y:auto;overscroll-behavior:contain;padding-right:6px;margin:12px 0 18px;scrollbar-gutter:stable}
 .alternative-option{align-items:center}.alternative-option button{min-height:44px;flex-shrink:0}

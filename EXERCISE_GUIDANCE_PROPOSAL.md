@@ -1,6 +1,6 @@
 # Voorstel: oefeningen duidelijker uitleggen
 
-Dit is een voorstel; de uitleginterface en oefenteksten zijn hiermee nog niet gewijzigd.
+Status: de korte aanwijzing, telregel en uitklapbare oefenkaart zijn ingevoerd. Twintig veelgebruikte bewegingen hebben specifieke startposities, drie stappen, twee aandachtspunten en een eenvoudiger optie; passende dumbbell- en kettlebellvarianten delen de uitleg via exacte oefen-ID's. Andere oefeningen en eigen teksten behouden hun bestaande instructies. De kaarten bevatten op verzoek te openen links naar de officiële demonstratiebibliotheken van NHS en Mayo Clinic. De tekst is offline beschikbaar, externe demonstraties vereisen internet. Er zijn geen eigen videobestanden opgenomen en er is geen beoordeling door een trainer uitgevoerd.
 
 ## Eén herkenbare uitlegkaart per oefening
 

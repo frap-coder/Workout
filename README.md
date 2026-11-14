@@ -32,6 +32,8 @@ These exercise the real app logic in a Node VM and the actual service-worker han
 - `sound.js`: original finish chime and cancellable Web Audio scheduling.
 - `training.js`: one-movement training view and data/settings actions.
 - `guides.js`: text-only form cues and muscle-group context.
+
+During training, the active exercise shows a short execution cue and its counting rule. Open “How to do this exercise” for equipment, setup, steps, common mistakes, counting, weight progression and an easier option. Twenty common movements cover 30 exact exercise IDs, including matching dumbbell/kettlebell variants; other movements retain their existing specific descriptions. Custom coaching is preserved. Written guidance is included in the offline shell and all six app languages. Demonstration links open NHS or Mayo Clinic libraries only on request, require internet and may show different variants. The app does not embed or redistribute third-party videos or illustrations. These instructions have not been independently reviewed by a trainer.
 - `setup.js`: equipment/schedule setup, weekly goals and Echo.
 - `calendar.js`: history calendar, legacy schedule correction and asynchronous startup.
 - `sw.js`: versioned, same-origin offline application shell.
