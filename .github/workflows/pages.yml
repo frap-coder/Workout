@@ -58,6 +58,7 @@ jobs:
           node tests/exclusions-carries.cjs
           node tests/families.cjs
           node tests/smart-workouts.cjs
+          node tests/variation.cjs
       - name: Install browser test tools
         run: |
           npm install --prefix "$RUNNER_TEMP/workout-browser" --no-package-lock --no-save playwright@1.58.2

@@ -46,6 +46,10 @@ LocalStorage is the immediate save; its previous valid value is retained as a sa
 
 ## Counting and comparison
 
+Default routines vary after each saved workout of the same type. The selector prefers least recently used exercises within the appropriate movement families, equipment and starting-level filters. Previews and refreshes remain stable until another workout is saved. Active sessions and saved custom routines retain their choices. Limited equipment or exclusions can require repeated exercises; variety never overrides eligibility. Both full and shortened saved sessions contribute to rotation, including exercises with zero logged reps. History and backups already contain the information needed for selection; no new storage schema is required.
+
+Automatic variety means Echo may have no matching previous circuit. Save your preferred choices as a custom routine when repeatable comparisons are the priority.
+
 One movement and one counting unit per preset card. Timed holds use seconds and never contribute to rep totals. Count both sides together for unilateral movements. Load is optional and means total external kilograms (both dumbbells combined, a single weight as-is, 0 for no external load, blank for unknown/bands). Entries are separated by actual movement, unit and load, including changes during a workout. The exercise card displays the total across loads; the saved breakdown retains the individual loads.
 
 Echo matches the circuit plus recorded loads. Changing an exercise or a load mid-session disables comparison for that session. Unknown load is still unknown: Echo is a rep-logging pace comparison, never a strength score.

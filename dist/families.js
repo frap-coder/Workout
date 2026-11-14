@@ -7,6 +7,10 @@ function sameMovement(a,b){return !!a&&!!b&&moveGroup(a)===moveGroup(b)&&movemen
 function techniqueLevel(m){return MOVES[m?.id]?.skillLevel||Object.values(MOVES).find(x=>x.name===m?.name)?.skillLevel||2;}
 function plannedCircuit(d,p){
  const plan=p.schedule[d];if(!plan||plan.type==='Rest')return [];const used=new Set(),families=[];
+ // History makes the next selection different while previews/reloads stay stable.
+ // Only comparable workouts affect the rotation; saved custom routines keep priority.
+ const lastUsed=new Map();let occurrence=0;
+ for(const h of p.history||[])if(h.type===plan.type){occurrence++;for(const e of h.repEntries||[])lastUsed.set(e.name,occurrence);}
  return PRESETS[plan.type].map((ids,i)=>{
   const custom=plan.custom?.[i],group=moveGroup(custom?.main)||MOVES[ids[0]].group;
   if(!custom&&group==='core'&&p.experience==='beginner')ids=['deadbug','plank','birddog'];
@@ -16,10 +20,17 @@ function plannedCircuit(d,p){
   else{
    const exp=p.experience||'intermediate',cap=exp==='beginner'?2:exp==='intermediate'?3:5;
    const manageable=candidates.filter(m=>techniqueLevel(m)<=cap&&(m.loadDependent||exp!=='beginner'||m.challenge<=2));if(manageable.length)candidates=manageable;
+   // Keep the primary training function when available (e.g. a loaded row,
+   // rather than rotating to a back-control drill simply because it is unused).
+   const primary=movementFunction(base[0]);
+   if(candidates.some(m=>movementFunction(m)===primary)){preferred.clear();preferred.add(primary);}
    const target=exp==='beginner'?1:exp==='advanced'?4:3;
    candidates.sort((a,b)=>{
     const score=m=>Number(!preferred.has(movementFunction(m)))*1000+Number(families.includes(movementFunction(m)))*250+Number(!m.loadDependent)*35+(m.loadDependent?techniqueLevel(m)*2:Math.abs(m.challenge-target)*10)+(ids.includes(m.id)?ids.indexOf(m.id):40);
-    return score(a)-score(b);
+    return Number(!preferred.has(movementFunction(a)))-Number(!preferred.has(movementFunction(b)))
+     ||Number(families.includes(movementFunction(a)))-Number(families.includes(movementFunction(b)))
+     ||(lastUsed.get(a.name)||0)-(lastUsed.get(b.name)||0)
+     ||score(a)-score(b);
    });
   }
   const main=candidates[0];if(main){used.add(main.name);families.push(movementFunction(main));}
