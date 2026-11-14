@@ -21,6 +21,19 @@ const {chromium}=require('playwright'),http=require('http'),fs=require('fs'),pat
   await page.evaluate(()=>chooseLanguage('nl'));await panel.locator(':scope > summary').click();
   await page.getByText('Zo doe je deze oefening',{exact:true}).waitFor();assert(await panel.getByRole('heading',{name:'Uitvoering in drie stappen',exact:true}).isVisible());
   await page.setViewportSize({width:390,height:844});await page.screenshot({path:'/tmp/workout-exercise-guidance-nl.png',fullPage:true});
+  // Reproduce opening Floor Press from the alternatives list before choosing it.
+  await page.evaluate(()=>{activeSession().circuit[1].main=clone(MOVES.ohp);persist();render();openExercisePicker(0);});
+  await page.locator('#search-0').fill('floor press');
+  const floor=page.locator('[data-exercise-option]').filter({has:page.getByRole('heading',{name:'Dumbbell Floor Press',exact:true})});
+  await floor.locator('.option-details > summary').click();
+  await floor.getByRole('heading',{name:'Uitvoering in drie stappen',exact:true}).waitFor();
+  assert.equal(await floor.locator('ol > li').count(),3);
+  assert(await floor.getByRole('heading',{name:'Startpositie',exact:true}).isVisible());
+  await floor.locator('.option-details > summary').click();await floor.locator('.option-details > summary').click();
+  assert.equal(await floor.locator('.movement-coaching').count(),1);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  await page.screenshot({path:'/tmp/workout-floorpress-picker-nl.png',fullPage:true});
+  await page.locator('.picker-top button').click();
   await page.evaluate(async()=>{await navigator.serviceWorker.ready;});await page.waitForFunction(()=>!!navigator.serviceWorker.controller);
   await ctx.setOffline(true);await page.reload();await page.locator('.exercise-instructions > summary').click();
   assert(await page.getByRole('heading',{name:'Uitvoering in drie stappen',exact:true}).isVisible());assert.equal(await page.evaluate(()=>countTotal(repEntries(activeSession()))),5);
