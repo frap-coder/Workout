@@ -1180,7 +1180,11 @@
     "Stand from the squat and continue into an overhead press.": "Kom uit de squat omhoog en druk de gewichten aansluitend boven je hoofd.",
     "Stand up and use the leg drive to help press the weights overhead.": "Kom krachtig overeind en gebruik de kracht uit je benen om de gewichten boven je hoofd te drukken.",
     "Lower to shoulder level before beginning the next squat.": "Laat de gewichten terugzakken tot schouderhoogte voordat je aan de volgende squat begint.",
-    "Choose a weight or variation you can control for the suggested time. Stop before your grip or posture fails. When the full interval is comfortable, choose a small increase in weight or difficulty.": "Kies een gewicht of variant waarmee je de aangegeven tijd netjes kunt volhouden. Stop voordat je grip of houding verslechtert. Lukt het hele interval gemakkelijk? Verhoog het gewicht of de moeilijkheid dan een klein beetje."
+    "Choose a weight or variation you can control for the suggested time. Stop before your grip or posture fails. When the full interval is comfortable, choose a small increase in weight or difficulty.": "Kies een gewicht of variant waarmee je de aangegeven tijd netjes kunt volhouden. Stop voordat je grip of houding verslechtert. Lukt het hele interval gemakkelijk? Verhoog het gewicht of de moeilijkheid dan een klein beetje.",
+    "#muscle-filter": "#muscle-filter",
+    "hammer-curl": "hammer-curl",
+    "reverse-curl": "reverse-curl",
+    "supported-curl": "supported-curl"
   },
   "de": {
     "Workout": "Training",
@@ -1619,7 +1623,11 @@
     "Settle into the rack before using your legs to drive overhead.": "Stabilisieren Sie zuerst die Rack-Position an der Schulter, bevor Sie die Beine zum Antrieb über Kopf einsetzen.",
     "Clean the bell into a stable rack position at your shoulder.": "Bringen Sie die Kettlebell mit einem Clean in eine stabile Rack-Position an der Schulter.",
     "Practice a controlled swing and clean with a lighter bell first.": "Üben Sie zuerst einen kontrollierten Swing und Clean mit einer leichteren Kettlebell.",
-    "Practice the clean and the light overhead press separately.": "Üben Sie den Clean und den leichten Overhead Press zunächst getrennt."
+    "Practice the clean and the light overhead press separately.": "Üben Sie den Clean und den leichten Overhead Press zunächst getrennt.",
+    "#muscle-filter": "#muscle-filter",
+    "hammer-curl": "hammer-curl",
+    "reverse-curl": "reverse-curl",
+    "supported-curl": "supported-curl"
   },
   "es": {
     "Workout": "Entrenamiento",
@@ -2058,7 +2066,11 @@
     "Settle into the rack before using your legs to drive overhead.": "Estabiliza primero la posición de rack junto al hombro antes de usar las piernas para impulsar la pesa hacia arriba.",
     "Clean the bell into a stable rack position at your shoulder.": "Lleva la kettlebell con un clean a una posición de rack estable junto al hombro.",
     "Practice a controlled swing and clean with a lighter bell first.": "Practica primero un swing y un clean controlados con una kettlebell más ligera.",
-    "Practice the clean and the light overhead press separately.": "Practica primero el clean y el press por encima de la cabeza por separado con poco peso."
+    "Practice the clean and the light overhead press separately.": "Practica primero el clean y el press por encima de la cabeza por separado con poco peso.",
+    "#muscle-filter": "#muscle-filter",
+    "hammer-curl": "hammer-curl",
+    "reverse-curl": "reverse-curl",
+    "supported-curl": "supported-curl"
   },
   "fr": {
     "Workout": "Entraînement",
@@ -2497,7 +2509,11 @@
     "Settle into the rack before using your legs to drive overhead.": "Stabilisez la position de rack à l’épaule avant d’utiliser les jambes pour propulser la charge au-dessus de la tête.",
     "Clean the bell into a stable rack position at your shoulder.": "Amenez la kettlebell avec un clean dans une position de rack stable à l’épaule.",
     "Practice a controlled swing and clean with a lighter bell first.": "Pratiquez d’abord un swing et un clean contrôlés avec une kettlebell plus légère.",
-    "Practice the clean and the light overhead press separately.": "Pratiquez d’abord le clean et le développé au-dessus de la tête séparément avec une charge légère."
+    "Practice the clean and the light overhead press separately.": "Pratiquez d’abord le clean et le développé au-dessus de la tête séparément avec une charge légère.",
+    "#muscle-filter": "#muscle-filter",
+    "hammer-curl": "hammer-curl",
+    "reverse-curl": "reverse-curl",
+    "supported-curl": "supported-curl"
   },
   "it": {
     "Workout": "Allenamento",
@@ -2936,6 +2952,10 @@
     "Settle into the rack before using your legs to drive overhead.": "Stabilizza prima la posizione di rack alla spalla, poi usa la spinta delle gambe per portare il peso sopra la testa.",
     "Clean the bell into a stable rack position at your shoulder.": "Porta la kettlebell con un clean in una posizione di rack stabile alla spalla.",
     "Practice a controlled swing and clean with a lighter bell first.": "Esercitati prima con swing e clean controllati usando una kettlebell più leggera.",
-    "Practice the clean and the light overhead press separately.": "Esercitati prima con clean e press sopra la testa separatamente con un peso leggero."
+    "Practice the clean and the light overhead press separately.": "Esercitati prima con clean e press sopra la testa separatamente con un peso leggero.",
+    "#muscle-filter": "#muscle-filter",
+    "hammer-curl": "hammer-curl",
+    "reverse-curl": "reverse-curl",
+    "supported-curl": "supported-curl"
   }
 }

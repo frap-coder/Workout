@@ -21,7 +21,7 @@ const assert=require('node:assert/strict'),{harness}=require('./release.cjs');
  // Native details render closed; no external resource is loaded before user action.
  const html=run('exerciseInstructionPanel(MOVES.rdl)');
  assert(html.includes('<details class="exercise-instructions">'));assert(!html.includes(' open'));
- assert(!/<(?:iframe|video|img)\b/.test(html));assert(html.includes('rel="noopener noreferrer"'));
+ assert(!/<(?:iframe|video|img)\b/.test(html));assert(!html.includes('<a '));assert(!html.includes('demonstration-sources'));
  // All guide content participates in the existing offline localization packs.
  for(const lang of ['nl','de','es','fr','it']){
   h.context.lang=lang;run('chooseLanguage(lang)');

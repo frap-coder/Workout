@@ -30,6 +30,10 @@ function plannedCircuit(d,p){
    if(group==='core'&&coreFamily&&candidates.some(m=>movementFamily(m)[0]===coreFamily)){
     preferred.clear();preferred.add(coreFamily);
    }
+   if(group==='biceps'){
+    const armFamilies=['curl','hammer-curl','reverse-curl','supported-curl'].filter(f=>candidates.some(m=>movementFamily(m)[0]===f));
+    if(armFamilies.length){preferred.clear();preferred.add(armFamilies[occurrence%armFamilies.length]);}
+   }
    const target=exp==='beginner'?1:exp==='advanced'?4:3;
    candidates.sort((a,b)=>{
     const score=m=>Number(!preferred.has(movementFunction(m)))*1000+Number(families.includes(movementFunction(m)))*250+Number(!m.loadDependent)*35+(m.loadDependent?techniqueLevel(m)*2:Math.abs(m.challenge-target)*10)+(ids.includes(m.id)?ids.indexOf(m.id):40);

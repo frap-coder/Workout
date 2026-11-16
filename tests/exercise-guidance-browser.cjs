@@ -13,8 +13,7 @@ const {chromium}=require('playwright'),http=require('http'),fs=require('fs'),pat
   assert(await page.locator('.quick-form-cue').isVisible());
   await panel.locator(':scope > summary').focus();await page.keyboard.press('Space');
   assert(await panel.getByRole('heading',{name:'Starting position',exact:true}).isVisible());assert.equal(await panel.locator('ol > li').count(),3);
-  await panel.locator('.demonstration-sources > summary').click();
-  assert.equal(await panel.getByRole('link').count(),2);assert.deepEqual(external,[]);
+  assert.equal(await panel.getByRole('link').count(),0);assert.equal(await page.locator('.demonstration-sources').count(),0);assert.deepEqual(external,[]);
   for(const width of [320,390,1280]){await page.setViewportSize({width,height:844});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false,JSON.stringify(await page.evaluate(()=>({width:innerWidth,overflow:[...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+1).map(e=>({tag:e.tagName,cls:e.className,right:e.getBoundingClientRect().right,text:e.textContent.slice(0,60)})).slice(0,12)}))));}
   const before=await page.evaluate(()=>workoutElapsed(activeSession()));await page.waitForTimeout(150);assert(await page.evaluate(()=>workoutElapsed(activeSession()))>before);
   await page.getByRole('button',{name:'Add 5 reps',exact:true}).click();assert.equal(await page.evaluate(()=>countTotal(repEntries(activeSession()))),5);
@@ -45,6 +44,14 @@ const {chromium}=require('playwright'),http=require('http'),fs=require('fs'),pat
   await page.evaluate(async()=>{await navigator.serviceWorker.ready;});await page.waitForFunction(()=>!!navigator.serviceWorker.controller);
   await ctx.setOffline(true);await page.reload();await page.locator('.exercise-instructions > summary').click();
   assert(await page.getByRole('heading',{name:'Uitvoering in drie stappen',exact:true}).isVisible());assert.equal(await page.evaluate(()=>countTotal(repEntries(activeSession()))),5);
-  assert.deepEqual(errors,[]);console.log('PASS: native keyboard disclosure, three steps, mobile/desktop layout, running timer, rep logging, Dutch guidance, no unsolicited external requests and offline reload.');
+  await ctx.setOffline(false);
+  await page.evaluate(()=>{const p=profile();p.session=null;p.history=[];p.equipment=['Bodyweight','Dumbbells'];p.workoutOverrides=null;p.schedule=[{type:'Pull',custom:null}];p.rotationIndex=0;day=0;tab='Workout';render();openExercisePicker(3);});
+  assert.equal(await page.locator('#muscle-filter').inputValue(),'biceps');
+  for(const name of ['Hammer Curls','Dumbbell Reverse Curls','Dumbbell Zottman Curl'])assert(await page.locator('[data-action="picker-swap"][data-name="'+name+'"]').isVisible(),name);
+  assert.equal(await page.locator('[data-exercise-option][data-group="back"]:visible').count(),0);
+  await page.locator('[data-action="picker-swap"][data-name="Hammer Curls"]').click();
+  assert.equal(await page.evaluate(()=>currentCircuit()[3].main.id),'hammer');
+  assert.equal(await page.locator('.demonstration-sources').count(),0);
+  assert.deepEqual(errors,[]);console.log('PASS: keyboard disclosure, responsive written guidance, running timer, rep logging, Dutch guidance, offline reload, visible biceps alternatives and hammer-curl selection; external examples absent.');
  }finally{await browser?.close();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exit(1)});
