@@ -70,7 +70,7 @@ A browser cannot promise an alarm when it is closed or suspended or the device i
 
 ## Curated exercise library — 3 November 2026
 
-The library contains 331 distinct selectable exercises, grouped by primary training role:
+The library contains 339 distinct selectable exercises, grouped by primary training role:
 
 | Group | Exercises |
 | --- | ---: |
@@ -78,7 +78,7 @@ The library contains 331 distinct selectable exercises, grouped by primary train
 | Shoulders | 26 |
 | Triceps | 24 |
 | Back | 31 |
-| Biceps & forearms | 25 |
+| Biceps & forearms | 33 |
 | Core | 33 |
 | Quads & legs | 44 |
 | Hamstrings & posterior chain | 28 |
@@ -202,3 +202,7 @@ Default core slots rotate after saved workouts of the same type: regular core wo
 ## Arm variation and written guidance
 
 Default biceps slots rotate through compatible regular curls, hammer curls, reverse curls and supported curls. Only families that match the available equipment, skill and exclusions enter the rotation. Saved custom routines keep their choices. Opening a biceps slot initially filters the picker to biceps/forearms and expands matching families; the muscle-group filter still allows the rest of the workout groups. Existing hammer, reverse, Zottman, concentration, band and cable variants remain in the catalog. No triceps work has been added to Pull by this change. External demonstration/example links have been removed from all instruction cards.
+
+## Direct forearm exercises and Dutch timer status
+
+Eight direct forearm choices are available in the biceps/forearms group on Pull: dumbbell and band wrist flexion/extension, dumbbell pronation/supination, and dumbbell/kettlebell grip holds. Forearms can rest on the thighs; specialist benches are not required. Search `onderarm` to find them. They are manual alternatives, preserving the existing automatic biceps-family rotation. Grip holds log seconds per side, while the other exercises log repetitions per side. Dutch timer statuses explicitly say `Extra tijd · timer loopt` and `Extra tijd · gepauzeerd`; running means the timer is active.

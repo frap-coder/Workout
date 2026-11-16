@@ -355,7 +355,15 @@
     "Kettlebell Clean & Jerk",
     "Double Kettlebell Clean & Jerk",
     "Kettlebell Snatch",
-    "Double Kettlebell Snatch"
+    "Double Kettlebell Snatch",
+    "Dumbbell Wrist Curl",
+    "Dumbbell Wrist Extension",
+    "Band Wrist Curl",
+    "Band Wrist Extension",
+    "Dumbbell Forearm Pronation",
+    "Dumbbell Forearm Supination",
+    "Dumbbell Grip Hold",
+    "Kettlebell Grip Hold"
   ],
   "equipment": [
     "Dumbbells",
@@ -478,6 +486,10 @@
     "Farmer’s carries",
     "Suitcase carries",
     "Kettlebell Turkish Get-Up",
-    "Clean & jerk"
+    "Clean & jerk",
+    "Wrist curls",
+    "Wrist extensions",
+    "Forearm rotations",
+    "Grip holds"
   ]
 }

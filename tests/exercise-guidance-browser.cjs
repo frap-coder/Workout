@@ -52,6 +52,17 @@ const {chromium}=require('playwright'),http=require('http'),fs=require('fs'),pat
   await page.locator('[data-action="picker-swap"][data-name="Hammer Curls"]').click();
   assert.equal(await page.evaluate(()=>currentCircuit()[3].main.id),'hammer');
   assert.equal(await page.locator('.demonstration-sources').count(),0);
+  await page.locator('.picker-top button').click();
+  await page.evaluate(()=>openExercisePicker(3));await page.locator('#search-3').fill('onderarm');
+  assert(await page.locator('[data-action="picker-swap"][data-name="Dumbbell Wrist Curl"]').isVisible());
+  assert(await page.locator('[data-action="picker-swap"][data-name="Dumbbell Forearm Pronation"]').isVisible());
+  await page.locator('[data-action="picker-swap"][data-name="Dumbbell Wrist Curl"]').click();
+  await page.locator('.picker-top button').click();
+  await page.locator('#start-btn').click();
+  await page.evaluate(()=>{activeSession().endAt=Date.now()-113000;tick();});
+  await page.waitForFunction(()=>document.querySelector('#timer-status')?.textContent==='Extra tijd · timer loopt');
+  await page.locator('[data-action="active-move"][data-i="3"]').click();
+  await page.screenshot({path:'/tmp/workout-forearms-overtime-nl.png',fullPage:true});
   assert.deepEqual(errors,[]);console.log('PASS: keyboard disclosure, responsive written guidance, running timer, rep logging, Dutch guidance, offline reload, visible biceps alternatives and hammer-curl selection; external examples absent.');
  }finally{await browser?.close();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exit(1)});
