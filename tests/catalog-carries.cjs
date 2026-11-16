@@ -30,5 +30,6 @@ const assert=require('node:assert/strict'),{harness}=require('./release.cjs');
  for(const id of ['new-farmer-carry','kb-farmer-carry','kb-suitcase-carry','snatch','kb-snatch','doublekb-snatch','clean','kb-clean-jerk','doublekb-clean-jerk','thruster','doublekb-thruster','swing']){
   h.context.id=id;assert(run('!!exerciseGuideData(MOVES[id])'),id);
  }
+ assert(run('movementGuide(MOVES["new-farmer-carry"]).includes("suggested time")'));assert(!run('movementGuide(MOVES["new-farmer-carry"]).includes("2–3 controlled reps")'));
  console.log('PASS: specialist equipment removed; four-phase core rotation with both weight types; filters; legacy active session, reps/history and backup; carry and technical exercise guidance.');
 })().catch(e=>{console.error(e);process.exit(1)});
