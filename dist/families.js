@@ -24,6 +24,12 @@ function plannedCircuit(d,p){
    // rather than rotating to a back-control drill simply because it is unused).
    const primary=movementFunction(base[0]);
    if(candidates.some(m=>movementFunction(m)===primary)){preferred.clear();preferred.add(primary);}
+   // Rotate core work through regular trunk work, farmer, suitcase and marches.
+   // Filters still win, and saved custom circuits bypass this automatic choice.
+   const coreFamily=[null,'farmer','suitcase','march'][occurrence%4];
+   if(group==='core'&&coreFamily&&candidates.some(m=>movementFamily(m)[0]===coreFamily)){
+    preferred.clear();preferred.add(coreFamily);
+   }
    const target=exp==='beginner'?1:exp==='advanced'?4:3;
    candidates.sort((a,b)=>{
     const score=m=>Number(!preferred.has(movementFunction(m)))*1000+Number(families.includes(movementFunction(m)))*250+Number(!m.loadDependent)*35+(m.loadDependent?techniqueLevel(m)*2:Math.abs(m.challenge-target)*10)+(ids.includes(m.id)?ids.indexOf(m.id):40);

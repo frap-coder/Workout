@@ -1,7 +1,7 @@
 const assert=require('node:assert/strict'),{harness}=require('./release.cjs');
 (async()=>{
  const h=harness();await h.run('bootReady');const {run}=h;
- assert.equal(run('EXERCISE_GUIDES.length'),20);
+ assert.equal(run('EXERCISE_GUIDES.length'),32);
  assert(run('EXERCISE_GUIDES.every(([ids,cue,start,steps,mistakes,easier])=>ids.every(id=>MOVES[id])&&cue&&start&&steps.length===3&&mistakes.length===2&&easier)'));
  for(const id of run('[...guideById.keys()]')){
   h.context.id=id;
@@ -11,7 +11,7 @@ const assert=require('node:assert/strict'),{harness}=require('./release.cjs');
   assert(html.includes(run('countingHint(MOVES[id])')));
  }
  // Untailored and custom exercises keep their own specific instructions and escaping.
- assert(run('movementGuide(MOVES["kb-snatch"]).includes(esc(MOVES["kb-snatch"].description))'));
+ assert(run('movementGuide(MOVES.halo).includes(esc(MOVES.halo.description))'));
  assert.equal(run('exerciseGuideData({...MOVES.rdl,description:"My own coaching"})'),null);
  const custom=run('movementGuide({name:"My exercise",description:"<script>alert(1)</script>",equipment:["Bodyweight"],reps:"8"})');
  assert(!custom.includes('<script>'));assert(custom.includes('&lt;script&gt;'));
@@ -33,5 +33,5 @@ const assert=require('node:assert/strict'),{harness}=require('./release.cjs');
  assert(run('trainingView(activeSession(),currentCircuit()).includes("exercise-instructions")'));
  const fingerprint=run('activeSession().fingerprint');run('movementGuide(currentCircuit()[0].main);addReps(0,5)');
  assert.equal(run('activeSession().fingerprint'),fingerprint);assert.equal(run('countTotal(repEntries(activeSession()))'),5);
- console.log('PASS: 20 structured guides, exact exercise mapping, original/custom fallback, counting and load advice, closed offline cards, five translations and unchanged workout logging.');
+ console.log('PASS: 32 structured guides, exact exercise mapping, original/custom fallback, counting and load advice, closed offline cards, five translations and unchanged workout logging.');
 })().catch(e=>{console.error(e);process.exit(1)});

@@ -46,7 +46,7 @@ function readStoredState(key='daily-reps-engine-v2'){
 function migrateState(value){
  validateState(value);
  for(const p of value.profiles){
-  p.equipment=normalizeEquipment([...p.equipment,'Bodyweight']);p.kettlebellCount??=1;p.dumbbellCount??=2;
+  p.equipment=normalizeEquipment([...p.equipment,'Bodyweight']).filter(e=>!ARCHIVED_EQUIPMENT.includes(e));p.kettlebellCount??=1;p.dumbbellCount??=2;
   if(p.onboardingComplete===undefined)p.onboardingComplete=true;
   p.loads??={};p.preferences??={keepAwake:true,sound:true,compact:true};
   // Saved history and live circuits are immutable. Only old built-in compound
@@ -57,7 +57,7 @@ function migrateState(value){
     if(m.name==='Overhead Triceps Extension + V-Ups')r[key]=JSON.parse(JSON.stringify(MOVES.dbextension));
     if(m.name==='Calf Raises + Hollow Hold')r[key]=JSON.parse(JSON.stringify(MOVES.calf));
    }
-   if((value.schemaVersion||1)<3)p.workoutOverrides=null;
+   if((value.schemaVersion||1)<3||Object.values(p.workoutOverrides?.slots||{}).some(rows=>rows.some(r=>r.main?.equipment?.some(e=>ARCHIVED_EQUIPMENT.includes(e)))))p.workoutOverrides=null;
   }
  }
  value.schemaVersion=DATA_VERSION;return value;

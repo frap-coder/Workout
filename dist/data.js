@@ -3861,3 +3861,8 @@ for(const id of ["dbpress", "kbpress", "lateral", "pushdown", "bandtri", "dbrow"
 for(const id of ["bandpush", "wheel", "thruster", "clean", "snatch", "bandpull", "lib-step-back-burpee", "lib-bear-crawl-steps", "doublekb-thruster", "reverse-nordic", "new-nordic", "new-turkish", "kb-clean-jerk", "doublekb-clean-jerk", "kb-snatch", "doublekb-snatch"])MOVES[id].skillLevel=4;
 PRESETS.Push[2]=['lib-dumbbell-floor-fly','lib-standing-band-chest-fly','lib-cable-chest-fly','kneepush','pushup','kbpress'];
 PRESETS.Pull[1]=['lat','lib-cable-lat-pulldown','new-pullup','lib-dumbbell-pullover-on-floor','bandrow','kbrow','reverseangel'];
+
+// Archived catalog entries remain readable in old sessions and backups.
+const ARCHIVED_EQUIPMENT=['Preacher Bench','Landmine Attachment','T-Bar Row Handle','Trap Bar','Nordic Foot Anchor','Leg Press Machine','Leg Extension Machine','Lying Leg Curl Machine','Seated Leg Curl Machine','Calf Raise Machine'];
+for(const m of Object.values(MOVES))if(m.equipment.some(e=>ARCHIVED_EQUIPMENT.includes(e))){m.retired=true;RETIRED_MOVEMENT_IDS.add(m.id);}
+for(const list of [EQUIPMENT,EXTENDED_GYM_EQUIPMENT])for(let i=list.length-1;i>=0;i--)if(ARCHIVED_EQUIPMENT.includes(list[i]))list.splice(i,1);

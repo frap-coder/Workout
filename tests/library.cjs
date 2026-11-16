@@ -3,8 +3,8 @@ const {harness}=require('./release.cjs');
 (async()=>{
  const {run,context,events}=harness();await run('bootReady');
  const counts=run('Object.fromEntries(Object.keys(MUSCLE_GROUPS).map(g=>[g,libraryForGroup(g).length]))');
- for(const [group,count] of Object.entries(counts))assert(count>=20,`${group}: ${count}, expected at least 20 exercises`);
- assert(run('Object.values(MOVES).every(m=>m.description&&m.pattern&&m.equipment.every(e=>EQUIPMENT.includes(e)))'));
+ for(const [group,count] of Object.entries(counts))assert(count>=19,`${group}: ${count}, expected at least 19 active exercises`);
+ assert(run('Object.values(MOVES).every(m=>m.description&&m.pattern&&m.equipment.every(e=>EQUIPMENT.includes(e)||(m.retired&&ARCHIVED_EQUIPMENT.includes(e))))'));
  assert.equal(run('new Set(Object.values(MOVES).filter(m=>!m.libraryAlias).map(m=>m.name)).size'),run('Object.values(MOVES).filter(m=>!m.libraryAlias).length'));
  run('profile().equipment=EQUIPMENT.slice();profile().bans=[]');
  for(let day=0;day<3;day++){
@@ -38,5 +38,5 @@ const {harness}=require('./release.cjs');
  const count={},empty={},search={value:''},filter={value:'all'};context.document.querySelectorAll=sel=>sel==='[data-exercise-family]'?[]:nodes;context.document.querySelector=sel=>sel.startsWith('#search')?search:sel.includes('level-filter')?filter:sel.includes('count')?count:empty;
  const input=events.input.find(fn=>fn.toString().includes("exerciseSearch"));search.value='db lunges';input({target:{dataset:{exerciseSearch:'0'},value:'db lunges'}});assert.equal(nodes[0].hidden,false);assert.equal(nodes[1].hidden,true);assert.equal(count.textContent,'1 options');
  search.value='nothing matches';input({target:{dataset:{exerciseSearch:'0'},value:'nothing matches'}});assert.equal(empty.hidden,false);
- console.log('PASS: >=20 unique exercises per group; complete untruncated choices; lunges; equipment and bans; workout-specific builder; saved routine; text-only coaching; search and empty state.');console.log(counts);
+ console.log('PASS: >=19 active exercises per group; complete untruncated choices; lunges; equipment and bans; workout-specific builder; saved routine; text-only coaching; search and empty state.');console.log(counts);
 })().catch(e=>{console.error(e);process.exit(1)});

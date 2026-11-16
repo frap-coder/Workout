@@ -14,6 +14,6 @@ const assert=require('node:assert/strict');const {harness}=require('./release.cj
  run('profile().bans=[];profile().equipment=["Bodyweight"]');assert(!run('allowed(MOVES.stepup)'));assert(run('allowed(MOVES.wallsit)'));run('profile().equipment.push("Step / Platform")');assert(run('allowed(MOVES.stepup)'));assert(!run('allowed(MOVES["cable-legextension"])'));
  run('profile().equipment=EQUIPMENT.slice();const choices=alternativesFor(currentCircuit()[0],0);swapExercise(0,choices.findIndex(m=>m.id==="wallsit"));start();addReps(0,10)');assert.equal(run('countTotal(repEntries(activeSession()),"sec")'),10);assert.equal(run('countTotal(repEntries(activeSession()))'),0);assert(run('validateState(state)'));
  assert.equal(run('new Set(Object.values(MOVES).filter(m=>!m.libraryAlias).map(m=>m.name)).size'),run('Object.values(MOVES).filter(m=>!m.libraryAlias).length'));
- assert(run('Object.values(MOVES).every(m=>m.equipment.every(e=>EQUIPMENT.includes(e)))'));
+ assert(run('Object.values(MOVES).every(m=>m.equipment.every(e=>EQUIPMENT.includes(e)||(m.retired&&ARCHIVED_EQUIPMENT.includes(e))))'));
  console.log('PASS: generic kettlebell label; quantity-aware doubles; setup/save/reload; old equipment migration; leg alternatives beyond squats/lunges; exclusions; platform/strap filters; wall-sit seconds; unique complete library.');
 })().catch(e=>{console.error(e);process.exit(1)});

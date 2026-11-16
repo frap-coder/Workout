@@ -34,6 +34,14 @@ const {chromium}=require('playwright'),http=require('http'),fs=require('fs'),pat
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
   await page.screenshot({path:'/tmp/workout-floorpress-picker-nl.png',fullPage:true});
   await page.locator('.picker-top button').click();
+  // Carries and snatches expose the same full instructions before selection.
+  for(const name of ['Dumbbell Farmer Carry','Single-Arm Dumbbell Snatch']){
+   await page.evaluate(()=>openExercisePicker(0));await page.locator('#search-0').fill(name);
+   const option=page.locator('[data-exercise-option]').filter({has:page.getByRole('heading',{name,exact:true})});
+   await option.locator('.option-details > summary').click();
+   await option.getByRole('heading',{name:'Uitvoering in drie stappen',exact:true}).waitFor();
+   assert.equal(await option.locator('ol > li').count(),3);await page.locator('.picker-top button').click();
+  }
   await page.evaluate(async()=>{await navigator.serviceWorker.ready;});await page.waitForFunction(()=>!!navigator.serviceWorker.controller);
   await ctx.setOffline(true);await page.reload();await page.locator('.exercise-instructions > summary').click();
   assert(await page.getByRole('heading',{name:'Uitvoering in drie stappen',exact:true}).isVisible());assert.equal(await page.evaluate(()=>countTotal(repEntries(activeSession()))),5);

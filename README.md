@@ -33,7 +33,7 @@ These exercise the real app logic in a Node VM and the actual service-worker han
 - `training.js`: one-movement training view and data/settings actions.
 - `guides.js`: text-only form cues and muscle-group context.
 
-During training, the active exercise shows a short execution cue and its counting rule. Open “How to do this exercise” for equipment, setup, steps, common mistakes, counting, weight progression and an easier option. Twenty common movements cover 30 exact exercise IDs, including matching dumbbell/kettlebell variants; other movements retain their existing specific descriptions. Custom coaching is preserved. Written guidance is included in the offline shell and all six app languages. Demonstration links open NHS or Mayo Clinic libraries only on request, require internet and may show different variants. The app does not embed or redistribute third-party videos or illustrations. These instructions have not been independently reviewed by a trainer.
+During training, the active exercise shows a short execution cue and its counting rule. Open “How to do this exercise” for equipment, setup, steps, common mistakes, counting, weight progression and an easier option. Thirty-two instruction cards cover 50 exact exercise IDs, including matching dumbbell/kettlebell variants; other movements retain their existing specific descriptions. Custom coaching is preserved. Written guidance is included in the offline shell and all six app languages. Demonstration links open NHS or Mayo Clinic libraries only on request, require internet and may show different variants. The app does not embed or redistribute third-party videos or illustrations. These instructions have not been independently reviewed by a trainer.
 - `setup.js`: equipment/schedule setup, weekly goals and Echo.
 - `calendar.js`: history calendar, legacy schedule correction and asynchronous startup.
 - `sw.js`: versioned, same-origin offline application shell.
@@ -70,26 +70,26 @@ A browser cannot promise an alarm when it is closed or suspended or the device i
 
 ## Curated exercise library — 3 November 2026
 
-The library contains 341 distinct selectable exercises, grouped by primary training role:
+The library contains 331 distinct selectable exercises, grouped by primary training role:
 
 | Group | Exercises |
 | --- | ---: |
 | Chest | 29 |
-| Shoulders | 27 |
+| Shoulders | 26 |
 | Triceps | 24 |
-| Back | 32 |
-| Biceps & forearms | 26 |
+| Back | 31 |
+| Biceps & forearms | 25 |
 | Core | 33 |
-| Quads & legs | 46 |
-| Hamstrings & posterior chain | 32 |
+| Quads & legs | 44 |
+| Hamstrings & posterior chain | 28 |
 | Glutes | 25 |
 | Hip abductors & adductors | 20 |
-| Calves | 20 |
+| Calves | 19 |
 | Full body | 27 |
 
 Groups describe primary training roles, not isolated muscles. Exercises often train secondary muscles. Hip control drills and shoulder control drills differ from loaded strength work; the pattern labels make those differences explicit.
 
-Open “Form & choose exercise” on any workout card. Search by exercise name, equipment or movement pattern. Forward, reverse, walking, lateral and split-stance lunges are available in the quads/legs slot of Lower. The matching list shows exercises compatible with your enabled equipment and exclusions, excluding the current exercise and other occupied slots. The library has at least 20 exercises per group; fewer may match your filters. Add equipment in Settings only when it is actually available. Some moves need an anchored band, cable attachment, stable support or rack as described in the form cues. No diagram figures or generated people are shown.
+Open “Form & choose exercise” on any workout card. Search by exercise name, equipment or movement pattern. Forward, reverse, walking, lateral and split-stance lunges are available in the quads/legs slot of Lower. The matching list shows exercises compatible with your enabled equipment and exclusions, excluding the current exercise and other occupied slots. The library has at least 19 active exercises per group; fewer may match your filters. Add equipment in Settings only when it is actually available. Some moves need an anchored band, cable attachment, stable support or rack as described in the form cues. No diagram figures or generated people are shown.
 
 Choosing an exercise updates the current workout, including during a running session, without resetting the timer or losing recorded reps. During a session it disables Echo comparisons. Use “Save choices as my … routine” before starting or after finishing to retain those choices for future workouts. The picker filters by the muscle groups belonging to the selected workout. Full Body permits every training group, including the previously hidden integrated movements. Timed holds continue to use seconds rather than reps.
 
@@ -192,3 +192,9 @@ Stop & save confirms and stores a shorter workout with its actual active duratio
 Full-message translation keys with named variables handle per-side counts, distribution, result counts and the new finish flow. Arithmetic examples are included in extraction and tested explicitly across all six languages. International exercise names may remain English by design.
 
 Exercise-family headings use standard English fitness terminology in all six UI languages. They are protected from automatic translation; muscle-group names, instructions, buttons and counts remain localized. The build also overrides old cached family translations, preventing headings such as Dutch “Kraakpanden”, “Goedemorgen” and “Kikkerpompen” from returning.
+
+## Simplified equipment and core variety — November 2026
+
+Preacher benches, landmine attachments, T-bar handles, trap bars, Nordic anchors and the five specialist leg/calf machines are archived with their ten dependent movements. They are absent from setup, settings and new exercise choices. History, backups and active sessions remain readable. Upcoming routines replace unavailable archived movements through their existing group filters. General equipment and required band/cable attachments remain available.
+
+Default core slots rotate after saved workouts of the same type: regular core work, farmer carry, suitcase carry, then an available core march. Equipment quantity, exclusions, skill and saved custom routines retain priority. If a category is unavailable, regular core selection remains available. There is no new technical-exercise setting or automatic inclusion of snatches. Expanded instruction cards cover carries, loaded marches, swings, snatches, clean and press, clean and jerk, and thrusters.
