@@ -33,7 +33,7 @@ These exercise the real app logic in a Node VM and the actual service-worker han
 - `training.js`: one-movement training view and data/settings actions.
 - `guides.js`: text-only form cues and muscle-group context.
 
-During training, the active exercise shows a short execution cue and its counting rule. Open “How to do this exercise” for equipment, setup, steps, common mistakes, counting, weight progression and an easier option. Thirty-two instruction cards cover 50 exact exercise IDs, including matching dumbbell/kettlebell variants; other movements retain their existing specific descriptions. Custom coaching is preserved. Written guidance is included in the offline shell and all six app languages. External demonstration/example links have been removed; exercise instructions are written and work offline. These instructions have not been independently reviewed by a trainer.
+During training, the active exercise shows a short execution cue and its counting rule. Open “How to do this exercise” for equipment, setup, steps, common mistakes, counting, weight progression and an easier option. Thirty-two instruction cards cover 50 exact exercise IDs, including matching dumbbell/kettlebell variants; other movements retain their existing specific descriptions. Custom coaching is preserved. Written guidance is included in the offline shell and all six app languages. Examples buttons open a Google Videos search for the canonical exercise name on request. Written exercise instructions work offline; video searches need internet. These instructions have not been independently reviewed by a trainer.
 - `setup.js`: equipment/schedule setup, weekly goals and Echo.
 - `calendar.js`: history calendar, legacy schedule correction and asynchronous startup.
 - `sw.js`: versioned, same-origin offline application shell.
@@ -70,11 +70,11 @@ A browser cannot promise an alarm when it is closed or suspended or the device i
 
 ## Curated exercise library — 3 November 2026
 
-The library contains 339 distinct selectable exercises, grouped by primary training role:
+The library contains 338 distinct selectable exercises, grouped by primary training role:
 
 | Group | Exercises |
 | --- | ---: |
-| Chest | 29 |
+| Chest | 28 |
 | Shoulders | 26 |
 | Triceps | 24 |
 | Back | 31 |
@@ -206,3 +206,15 @@ Default biceps slots rotate through compatible regular curls, hammer curls, reve
 ## Direct forearm exercises and Dutch timer status
 
 Eight direct forearm choices are available in the biceps/forearms group on Pull: dumbbell and band wrist flexion/extension, dumbbell pronation/supination, and dumbbell/kettlebell grip holds. Forearms can rest on the thighs; specialist benches are not required. Search `onderarm` to find them. They are manual alternatives, preserving the existing automatic biceps-family rotation. Grip holds log seconds per side, while the other exercises log repetitions per side. Dutch timer statuses explicitly say `Extra tijd · timer loopt` and `Extra tijd · gepauzeerd`; running means the timer is active.
+
+## Surprise selections, matching kettlebells and Examples — 22 November 2026
+
+Surprise me replaces the current workout or an individual slot with random compatible choices. It preserves the slot muscle group, filters equipment/exclusions and enforces the selected technical experience cap. Within these constraints it prefers exercises without positive logged entries in history. It avoids duplicates and the currently selected movement where alternatives exist. A zero-count historical entry is not treated as a performed exercise. Preview overrides survive a same-day reload; saved routines remain intact. The previous selection can be restored before starting. Surprise actions are disabled during active sessions.
+
+The existing `kettlebellCount` value remains backward compatible: 1 means no confirmed matching pair, 2 means a matching pair is available. The interface now asks explicitly whether two kettlebells have equal weight rather than how many are owned. Selecting No keeps all single-kettlebell movements available, even if the user owns several different weights. Doubles require selecting Yes.
+
+Dumbbell Squeeze Floor Press is archived from active choices. Stored history and active sessions are retained, and upcoming choices use other compatible movements. Other meaningful variants remain available.
+
+Examples appears beside compact workout entries, the active exercise, the current picker exercise and alternative choices. It opens Google Videos with the canonical English exercise name, in a new tab; no search is made before clicking and no weights, history or profile fields are appended. These are search results, not a curated demonstration library.
+
+See [GOOGLE_PLAY_PLAN.md](GOOGLE_PLAY_PLAN.md) for the Android packaging recommendation, update strategy, data migration and current official Play Console requirements. No Play Console app or Android release has been created by this web update.

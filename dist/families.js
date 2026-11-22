@@ -53,3 +53,37 @@ function workoutSelectionNote(rows=currentCircuit()){const note=pullingLimit(row
 function recommendedChoices(main,choices){const result=[],seen=new Set();for(const m of choices){if(!sameMovement(main,m))continue;const key=movementFamily(m)[0]+':'+m.equipment.join(':');if(seen.has(key))continue;seen.add(key);result.push(m);if(result.length===3)break;}return result;}
 
 function renderPickerChoices(choices,main,renderRow){const suggested=recommendedChoices(main,choices),ids=new Set(suggested.map(m=>m.name));return `${suggested.length?`<section class="suggested-exercises" data-suggested><h3>Suggested alternatives</h3><p class="small muted">The same movement, matched to your available equipment. Adjust the weight to suit you.</p>${suggested.map(renderRow).join('')}</section>`:''}<h3 class="all-exercises-label">All other alternatives</h3>${renderChoiceFamilies(choices.filter(m=>!ids.has(m.name)),renderRow)}`;}
+
+let surpriseUndo=null;
+function surpriseRows(rows,p=profile(),slot=null,rng=Math.random){
+ const next=clone(rows),seen=new Set((p.history||[]).flatMap(h=>(h.repEntries||[]).filter(e=>e.count>0).map(e=>e.name)));
+ const cap={beginner:2,intermediate:3,advanced:5}[p.experience||'intermediate'];
+ for(let i=0;i<next.length;i++){
+  if(slot!==null&&i!==slot)continue;
+  const current=rows[i].main;if(!current)continue;
+  const occupied=new Set(next.filter((_,n)=>n!==i).map(r=>r.main?.name));
+  const candidates=Object.values(MOVES).filter(m=>!m.retired&&!m.libraryAlias&&m.group===moveGroup(current)&&allowed(m,p)&&techniqueLevel(m)<=cap&&(p.experience!=='beginner'||m.loadDependent||m.challenge<=2)&&!occupied.has(m.name)&&m.name!==current.name);
+  const pools=[candidates.filter(m=>!seen.has(m.name)&&sameMovement(current,m)),candidates.filter(m=>!seen.has(m.name)),candidates.filter(m=>sameMovement(current,m)),candidates];
+  const pool=pools.find(items=>items.length);if(!pool)continue;
+  const chosen=pool[Math.min(pool.length-1,Math.max(0,Math.floor(rng()*pool.length)))];
+  next[i]={main:clone(reviewedMovement(chosen)),alt:clone(current)};
+ }
+ return next;
+}
+function surpriseWorkout(slot=null){
+ if(hasActive())return;
+ const p=profile(),rows=currentCircuit(),next=surpriseRows(rows,p,slot);
+ if(next.every((r,i)=>r.main?.name===rows[i].main?.name)){toast('No other exercises match your equipment and level.');return;}
+ surpriseUndo={profile:p.id,day,rows:clone(rows)};
+ if(p.workoutOverrides?.date!==localDate())p.workoutOverrides={date:localDate(),slots:{}};
+ p.workoutOverrides.slots[day]=next;persist();render();
+ if(slot!==null)openExercisePicker(slot);
+ toast('New exercises selected. Your saved routine is unchanged.');
+}
+function undoSurprise(){
+ if(hasActive()||surpriseUndo?.profile!==profile().id||surpriseUndo.day!==day)return;
+ profile().workoutOverrides={date:localDate(),slots:{...(profile().workoutOverrides?.date===localDate()?profile().workoutOverrides.slots:{}),[day]:clone(surpriseUndo.rows)}};
+ surpriseUndo=null;persist();render();
+}
+function surpriseControls(){return `<div class="surprise-controls"><button data-action="surprise-workout" ${hasActive()?'disabled':''} title="Prefer exercises you have not logged yet, matched to your equipment and level.">Surprise me</button>${surpriseUndo?.profile===profile().id&&surpriseUndo.day===day?`<button class="text-button" data-action="undo-surprise" ${hasActive()?'disabled':''}>Undo surprise</button>`:''}</div>`;}
+document.addEventListener('click',event=>{const b=event.target.closest?.('[data-action]');if(!b||b.disabled)return;const action=b.dataset.action;if(action==='surprise-workout')surpriseWorkout();if(action==='surprise-slot')surpriseWorkout(Number(b.dataset.i));if(action==='undo-surprise')undoSurprise();});

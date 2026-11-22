@@ -63,6 +63,7 @@ jobs:
           node tests/catalog-carries.cjs
           node tests/arm-variety.cjs
           node tests/forearms-timer.cjs
+          node tests/surprise-examples.cjs
       - name: Install browser test tools
         run: |
           npm install --prefix "$RUNNER_TEMP/workout-browser" --no-package-lock --no-save playwright@1.58.2
@@ -74,6 +75,8 @@ jobs:
         run: NODE_PATH="$RUNNER_TEMP/workout-browser/node_modules" node tests/languages-browser.cjs
       - name: Check exercise guidance and offline access
         run: NODE_PATH="$RUNNER_TEMP/workout-browser/node_modules" node tests/exercise-guidance-browser.cjs
+      - name: Check surprise selections and video searches
+        run: NODE_PATH="$RUNNER_TEMP/workout-browser/node_modules" node tests/surprise-browser.cjs
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
         with:

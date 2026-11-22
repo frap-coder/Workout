@@ -57,7 +57,7 @@ function migrateState(value){
     if(m.name==='Overhead Triceps Extension + V-Ups')r[key]=JSON.parse(JSON.stringify(MOVES.dbextension));
     if(m.name==='Calf Raises + Hollow Hold')r[key]=JSON.parse(JSON.stringify(MOVES.calf));
    }
-   if((value.schemaVersion||1)<3||Object.values(p.workoutOverrides?.slots||{}).some(rows=>rows.some(r=>r.main?.equipment?.some(e=>ARCHIVED_EQUIPMENT.includes(e)))))p.workoutOverrides=null;
+   if((value.schemaVersion||1)<3||Object.values(p.workoutOverrides?.slots||{}).some(rows=>rows.some(r=>r.main?.equipment?.some(e=>ARCHIVED_EQUIPMENT.includes(e))||r.main?.id==='squeezepress'||r.main?.name===MOVES.squeezepress.name)))p.workoutOverrides=null;
   }
  }
  value.schemaVersion=DATA_VERSION;return value;

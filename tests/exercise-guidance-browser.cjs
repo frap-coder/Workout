@@ -63,6 +63,6 @@ const {chromium}=require('playwright'),http=require('http'),fs=require('fs'),pat
   await page.waitForFunction(()=>document.querySelector('#timer-status')?.textContent==='Extra tijd · timer loopt');
   await page.locator('[data-action="active-move"][data-i="3"]').click();
   await page.screenshot({path:'/tmp/workout-forearms-overtime-nl.png',fullPage:true});
-  assert.deepEqual(errors,[]);console.log('PASS: keyboard disclosure, responsive written guidance, running timer, rep logging, Dutch guidance, offline reload, visible biceps alternatives and hammer-curl selection; external examples absent.');
+  assert.deepEqual(errors,[]);console.log('PASS: keyboard disclosure, responsive written guidance, running timer, rep logging, Dutch guidance, offline reload, visible biceps alternatives and hammer-curl selection; legacy demonstration panels absent.');
  }finally{await browser?.close();await new Promise(r=>server.close(r));}
 })().catch(e=>{console.error(e);process.exit(1)});

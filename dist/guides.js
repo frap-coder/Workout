@@ -59,3 +59,5 @@ document.addEventListener('toggle',event=>{
  if(!m||!body)return;
  body.innerHTML=movementGuide(m);details.dataset.guideReady='true';translateDOM(body);
 },true);
+
+function examplesLink(m){return m?`<a class="examples-link" data-examples-name="${esc(m.name)}" data-no-i18n href="https://www.google.com/search?tbm=vid&amp;q=${encodeURIComponent(m.name+' exercise technique')}" target="_blank" rel="noopener noreferrer" title="Search Google Videos for this exercise">Examples</a>`:'';}

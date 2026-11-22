@@ -2815,7 +2815,7 @@ function reviewedMovement(m){
 // Kettlebells are a general material; quantity is a separate preference.
 function normalizeEquipment(items){return [...new Set(items.map(e=>e==='1x Kettlebell'?'Kettlebells':e))];}
 function requiredKettlebells(m){if(!m)return 0;const known=(m.id&&MOVES[m.id])||Object.values(MOVES).find(x=>x.name===m.name);return Math.max(m.kettlebellCount||0,known?.kettlebellCount||0,normalizeEquipment(m.equipment||[]).includes('Kettlebells')?1:0);}
-function equipmentCaption(m){return normalizeEquipment(m.equipment||[]).map(e=>e==='Dumbbells'&&requiredDumbbells(m)>1?'Dumbbells (2 required)':e==='Kettlebells'&&requiredKettlebells(m)>1?'Kettlebells (2 required)':e).join(' + ');}
+function equipmentCaption(m){return normalizeEquipment(m.equipment||[]).map(e=>e==='Dumbbells'&&requiredDumbbells(m)>1?'Dumbbells (2 required)':e==='Kettlebells'&&requiredKettlebells(m)>1?'Kettlebells (matching pair required)':e).join(' + ');}
 EQUIPMENT.push('Step / Platform');
 const ADDITIONAL_EQUIPMENT_MOVES=[
  {
@@ -3882,3 +3882,9 @@ for(const [id,name,equipment,family,label,reps,description] of FOREARM_MOVEMENTS
  MOVES[id]={id,name,equipment,group:'biceps',pattern:family,family,reps,description,challenge:1,skillLevel:1,loadDependent:true,searchAliases:'forearm onderarm onderarmen '+(family==='wrist-flexion'?'wrist curl polsbuiging pols polsen':family==='wrist-extension'?'wrist extension polsstrekking pols polsen':family==='grip-hold'?'grip grijpkracht vasthouden':id==='forearm-pronation'?'pronation pronatie naar binnen draaien':'supination supinatie naar buiten draaien'),tags:name+' forearm wrist grip'};
  MOVEMENT_FAMILIES[family]??={label,ids:[]};MOVEMENT_FAMILIES[family].ids.push(id);
 }
+
+// Redundant squeeze variation is archived; existing sessions and history remain readable.
+MOVES.squeezepress.retired=true;RETIRED_MOVEMENT_IDS.add('squeezepress');
+
+// Single-leg hip hinges add a balance demand beyond the beginner variants.
+for(const m of Object.values(MOVES))if(m.family==='rdl'&&/single-leg/i.test(m.name))m.skillLevel=Math.max(m.skillLevel||2,3);

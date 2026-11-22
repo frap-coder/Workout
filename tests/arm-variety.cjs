@@ -21,5 +21,5 @@ const assert=require('node:assert/strict'),{harness}=require('./release.cjs');
  const custom=run('circuit()[3].main.name');run('start()');h.advance(1200000);run('finish(activeSession())');assert.equal(run('circuit()[3].main.name'),custom);
  run('profile().schedule[0].custom=null;profile().bans=["move:hammer","move:lib-cross-body-hammer-curl"]');assert(run('circuit().every(r=>r.main&&allowed(r.main))'));
  for(const m of run('Object.values(MOVES)')){h.context.m=m;const html=run('movementGuide(m)');assert(!html.includes('mayoclinic.org'));assert(!html.includes('nhs.uk'));assert(!html.includes('demonstration-sources'));}
- console.log('PASS: biceps, hammer, reverse and supported curl rotation; equipment fallback, saved routines, exclusions; no external examples in any exercise instructions.');
+ console.log('PASS: biceps, hammer, reverse and supported curl rotation; equipment fallback, saved routines, exclusions; old third-party demonstration panels absent from written instructions.');
 })().catch(e=>{console.error(e);process.exit(1)});
