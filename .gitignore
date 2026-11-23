@@ -3,3 +3,8 @@ node_modules/
 *.log
 .env
 .env.*
+*.jks
+*.keystore
+signing*.json
+android-signing/
+artifacts/

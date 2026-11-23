@@ -1,0 +1,19 @@
+{
+  "appId": "nl.frapcoder.workout",
+  "appName": "Daily Reps",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false,
+    "backgroundColor": "#0d1629"
+  },
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "native",
+      "style": "DARK"
+    }
+  }
+}

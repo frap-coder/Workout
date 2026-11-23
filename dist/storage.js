@@ -91,7 +91,11 @@ async function recoverStorage(){
  saveState(state,{backup:false});
 }
 function backupPayload(){return {app:'daily-reps',formatVersion:1,exportedAt:new Date().toISOString(),state:JSON.parse(JSON.stringify(state))};}
-function exportBackup(){
+async function exportBackup(){
+ if(isNativeApp()){
+  try{const result=await callNative('saveBackup',{filename:`daily-reps-backup-${localDate()}.json`,data:JSON.stringify(backupPayload(),null,2)});if(result.saved){profile().lastExportAt=Date.now();persist();toast('Backup saved.');}}
+  catch{toast('Could not save the backup. Try again.');}return;
+ }
  const url=URL.createObjectURL(new Blob([JSON.stringify(backupPayload(),null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=`daily-reps-backup-${localDate()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);profile().lastExportAt=Date.now();persist();toast('Backup downloaded. Keep it somewhere safe.');
 }
 function decodeBackup(raw){

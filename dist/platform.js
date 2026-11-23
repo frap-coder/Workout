@@ -1,7 +1,10 @@
 'use strict';
 let screenLock=null,wakePending=false,wakeStatus='Not active',offlineStatus='Checking offline availability…',swRegistration=null;
 const browserNavigator=()=>typeof navigator==='undefined'?{}:navigator;
-function runtimeStatus(){return `${browserNavigator().onLine===false?'Offline':'Online'} · ${swRegistration?.waiting?(hasActive()?'Update ready · finish your session before installing':'Update ready · tap Install update'):offlineStatus}`;}
+function isNativeApp(){return typeof globalThis.Capacitor?.isNativePlatform==='function'&&globalThis.Capacitor.isNativePlatform();}
+function callNative(method,options={}){return globalThis.Capacitor.nativePromise('WorkoutNative',method,options);}
+function runtimeStatus(){if(isNativeApp())return 'Android app · available offline';return `${browserNavigator().onLine===false?'Offline':'Online'} · ${swRegistration?.waiting?(hasActive()?'Update ready · finish your session before installing':'Update ready · tap Install update'):offlineStatus}`;}
+function offlineUpdateSettings(){return isNativeApp()?'<section class="section"><h2>Offline & updates</h2><p>The app files are included. Workouts work without an internet connection.</p><p class="small muted">App updates are delivered through Google Play. Video searches need internet.</p></section>':'<section class="section"><h2>Offline & updates</h2><p class="small" id="offline-detail">'+esc(runtimeStatus())+'</p><p class="small muted">Open once online and wait for “Offline copy ready” before training without a connection. Device storage can still be cleared by your browser.</p><button id="update-app-button" data-action="update-app" style="margin-top:16px">Check for updates</button></section>';}
 function paintRuntimeStatus(){
  const sound=document.querySelector('#sound-state'),enable=document.querySelector('#sound-enable');if(sound)sound.textContent=profile().preferences?.sound===false?'20-minute chime off':audioCtx?.state==='running'?'20-minute chime ready · keep the page open':'Tap to enable the 20-minute chime';if(enable)enable.hidden=profile().preferences?.sound===false||audioCtx?.state==='running';
  const status=document.querySelector('#runtime-status');if(status)status.textContent=runtimeStatus();
@@ -13,6 +16,9 @@ function paintRuntimeStatus(){
 }
 function wantsWakeLock(){return !!(activeSession()?.running&&!activeSession().finished&&profile().preferences?.keepAwake!==false&&!document.hidden);}
 async function syncWakeLock(){
+ if(isNativeApp()){
+  const enabled=wantsWakeLock();try{await callNative('setKeepAwake',{enabled});wakeStatus=enabled?'Screen stays awake':'Not active';}catch{wakeStatus='Unavailable · check battery or browser settings';}paintRuntimeStatus();return;
+ }
  if(!wantsWakeLock()){
   const previous=screenLock;screenLock=null;if(previous)try{await previous.release();}catch{}
   wakeStatus=browserNavigator().wakeLock?'Not active':'Not supported by this browser';paintRuntimeStatus();return;
@@ -26,6 +32,7 @@ async function syncWakeLock(){
 }
 function syncSessionRuntime(){syncWakeLock();syncFinishAudio();paintRuntimeStatus();}
 async function initOffline(){
+ if(isNativeApp()){offlineStatus='App files included';paintRuntimeStatus();return;}
  const nav=browserNavigator();if(!('serviceWorker' in nav)){offlineStatus='Offline caching unavailable';paintRuntimeStatus();return;}
  try{
   swRegistration=await nav.serviceWorker.register('./sw.js',{updateViaCache:'none'});
@@ -36,6 +43,7 @@ async function initOffline(){
  }catch{offlineStatus='Offline copy unavailable · open again while online';paintRuntimeStatus();}
 }
 async function updateOfflineApp(){
+ if(isNativeApp())return;
  if(hasActive()){toast('Finish or reset the session before updating.');return;}
  if(swRegistration?.waiting){browserNavigator().serviceWorker.addEventListener('controllerchange',()=>location.reload(),{once:true});swRegistration.waiting.postMessage({type:'ACTIVATE_UPDATE'});}
  else if(browserNavigator().onLine!==false){await swRegistration?.update();toast('Checked for updates. Reopen Settings if an update is ready.');}
@@ -44,3 +52,17 @@ async function updateOfflineApp(){
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){tick();syncSessionRuntime();}else syncWakeLock();});
 window.addEventListener('online',()=>{paintRuntimeStatus();initOffline();});window.addEventListener('offline',paintRuntimeStatus);
 window.addEventListener('pagehide',()=>{persist();});
+document.addEventListener('workoutPause',()=>{persist();});
+document.addEventListener('workoutResume',()=>{tick();syncSessionRuntime();});
+globalThis.workoutHandleBack=()=>{
+ const modal=document.querySelector('#modal');if(modal?.open){modal.close();return true;}
+ if(profile().onboardingComplete===false)return false;
+ if(tab!=='Workout'){tab='Workout';setupDraft=null;render();return true;}
+ if(focusMode){focusMode=false;render();return true;}
+ persist();return false;
+};
+document.addEventListener('click',event=>{
+ if(!isNativeApp())return;const link=event.target.closest?.('a[href]');if(!link)return;
+ const url=new URL(link.href,location.href);if(url.protocol!=='https:'||url.origin===location.origin)return;
+ event.preventDefault();callNative('openExternal',{url:url.href}).catch(()=>toast('Could not open the browser.'));
+},true);

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Daily Reps</string>
+    <string name="title_activity_main">Daily Reps</string>
+    <string name="package_name">nl.frapcoder.workout</string>
+    <string name="custom_url_scheme">nl.frapcoder.workout</string>
+</resources>

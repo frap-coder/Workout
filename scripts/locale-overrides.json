@@ -1218,7 +1218,14 @@
     "Prefer exercises you have not logged yet, matched to your equipment and level.": "Kiest bij voorkeur nog niet gedane oefeningen die passen bij je materiaal en niveau.",
     "No other exercises match your equipment and level.": "Er zijn geen andere oefeningen die passen bij je materiaal en niveau.",
     "New exercises selected. Your saved routine is unchanged.": "Nieuwe oefeningen gekozen. Je opgeslagen routine blijft behouden.",
-    "Search Google Videos for this exercise": "Zoek deze oefening op Google Video’s"
+    "Search Google Videos for this exercise": "Zoek deze oefening op Google Video’s",
+    "Android app · available offline": "Android-app · offline beschikbaar",
+    "App files included": "Appbestanden inbegrepen",
+    "The app files are included. Workouts work without an internet connection.": "De appbestanden zijn inbegrepen. Je kunt trainen zonder internetverbinding.",
+    "App updates are delivered through Google Play. Video searches need internet.": "Appupdates ontvang je via Google Play. Voor video’s zoeken heb je internet nodig.",
+    "Backup saved.": "Backup opgeslagen.",
+    "Could not save the backup. Try again.": "De backup kon niet worden opgeslagen. Probeer het opnieuw.",
+    "Could not open the browser.": "De browser kon niet worden geopend."
   },
   "de": {
     "Workout": "Training",

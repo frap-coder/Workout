@@ -64,6 +64,7 @@ jobs:
           node tests/arm-variety.cjs
           node tests/forearms-timer.cjs
           node tests/surprise-examples.cjs
+          node tests/android-runtime.cjs
       - name: Install browser test tools
         run: |
           npm install --prefix "$RUNNER_TEMP/workout-browser" --no-package-lock --no-save playwright@1.58.2
@@ -77,6 +78,8 @@ jobs:
         run: NODE_PATH="$RUNNER_TEMP/workout-browser/node_modules" node tests/exercise-guidance-browser.cjs
       - name: Check surprise selections and video searches
         run: NODE_PATH="$RUNNER_TEMP/workout-browser/node_modules" node tests/surprise-browser.cjs
+      - name: Check Android runtime bridge behavior
+        run: NODE_PATH="$RUNNER_TEMP/workout-browser/node_modules" node tests/android-browser.cjs
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
         with:

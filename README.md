@@ -1,6 +1,6 @@
 # Daily Reps — web release
 
-English, browser-local workout app. Five movements per training session, a 20-minute target with optional overtime, rolling Push/Pull/Lower or fixed weekdays. No accounts, analytics, advertising SDKs, paid features or mobile wrapper.
+English, browser-local workout app. Five movements per training session, a 20-minute target with optional overtime, rolling Push/Pull/Lower or fixed weekdays. No accounts, analytics, advertising SDKs, paid features.
 
 ## Run
 
@@ -217,4 +217,8 @@ Dumbbell Squeeze Floor Press is archived from active choices. Stored history and
 
 Examples appears beside compact workout entries, the active exercise, the current picker exercise and alternative choices. It opens Google Videos with the canonical English exercise name, in a new tab; no search is made before clicking and no weights, history or profile fields are appended. These are search results, not a curated demonstration library.
 
-See [GOOGLE_PLAY_PLAN.md](GOOGLE_PLAY_PLAN.md) for the Android packaging recommendation, update strategy, data migration and current official Play Console requirements. No Play Console app or Android release has been created by this web update.
+See [GOOGLE_PLAY_PLAN.md](GOOGLE_PLAY_PLAN.md) for the Android packaging recommendation, update strategy, data migration and current official Play Console requirements. The Android project is now implemented; see ANDROID_BUILD.md. No Play Console app has been created.
+
+## Android package
+
+The Capacitor 8.6.2 project in `android/` bundles `dist/` as Daily Reps (`nl.frapcoder.workout`), targeting Android API 36. Android skips service-worker updates, keeps the screen awake natively, exports backups through the document picker, handles the Back button without clearing sessions and opens external video searches in the system browser. See [ANDROID_BUILD.md](ANDROID_BUILD.md) for signed AAB builds and Play Console upload. Signing material is kept outside the repository. The separate test APK uses `.debug` in its app ID.
