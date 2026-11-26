@@ -18,6 +18,7 @@ public class MainActivity extends BridgeActivity {
         // passes them through on WebView 140+, allowing page content under bars.
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         View decor = getWindow().getDecorView();
+        decor.setBackgroundColor(android.graphics.Color.rgb(13, 22, 41));
         ViewCompat.setOnApplyWindowInsetsListener(decor, (view, insets) -> {
             int bars = WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout();
             Insets safe = insets.getInsets(bars);
