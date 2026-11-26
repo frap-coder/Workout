@@ -10,11 +10,11 @@ on:
       version_code:
         description: Higher than every previously uploaded Play version
         required: true
-        default: '1'
+        default: '2'
       version_name:
         description: User-visible version
         required: true
-        default: '1.0.0'
+        default: '1.0.1'
 permissions:
   contents: read
 jobs:

@@ -1225,7 +1225,16 @@
     "App updates are delivered through Google Play. Video searches need internet.": "Appupdates ontvang je via Google Play. Voor video’s zoeken heb je internet nodig.",
     "Backup saved.": "Backup opgeslagen.",
     "Could not save the backup. Try again.": "De backup kon niet worden opgeslagen. Probeer het opnieuw.",
-    "Could not open the browser.": "De browser kon niet worden geopend."
+    "Could not open the browser.": "De browser kon niet worden geopend.",
+    "Saved on this device ·": "Opgeslagen op dit apparaat ·",
+    "Your plan, equipment, weights and workout history are saved on this device. There is no account or automatic synchronization.": "Je schema, materiaal, gewichten en trainingsgeschiedenis worden op dit apparaat opgeslagen. Er is geen account of automatische synchronisatie.",
+    "Uninstalling the app or clearing its data removes your saved workouts.": "Als je de app verwijdert of de appgegevens wist, verdwijnen je opgeslagen trainingen.",
+    "The app contains no advertising or analytics SDK. Your workout history is not automatically uploaded.": "De app bevat geen advertenties of analyse-SDK. Je trainingsgeschiedenis wordt niet automatisch geüpload.",
+    "You can delete your local data in Settings. Enable sound and keep the app open for the chime. A closed or suspended app cannot guarantee an alarm.": "Je kunt je lokale gegevens verwijderen in Instellingen. Zet het geluid aan en houd de app open voor het eindsignaal. Bij een gesloten of onderbroken app is het signaal niet gegarandeerd.",
+    "Enable sound and keep the app open for the chime. A closed or suspended app cannot guarantee an alarm.": "Zet het geluid aan en houd de app open voor het eindsignaal. Bij een gesloten of onderbroken app is het signaal niet gegarandeerd.",
+    "You know the technique and can choose more challenging exercises.": "Je beheerst de techniek en kunt uitdagendere oefeningen kiezen.",
+    "Storage unavailable. Your changes could not be saved.": "Opslag niet beschikbaar. Je wijzigingen konden niet worden opgeslagen.",
+    "Unavailable · check battery settings": "Niet beschikbaar · controleer de batterij-instellingen"
   },
   "de": {
     "Workout": "Training",

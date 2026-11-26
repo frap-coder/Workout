@@ -6,7 +6,7 @@ De zelfstandige Android-app staat in `android/`. De webbestanden zitten in het p
 
 - Naam: **Daily Reps**.
 - Productie application ID: **`nl.frapcoder.workout`**.
-- Eerste versie: **1.0.0**, `versionCode` **1**.
+- Huidige versie: **1.0.1**, `versionCode` **2**.
 - Android: minimaal 7.0 / API 24; target en compile API **36**.
 - Test-APK: **`nl.frapcoder.workout.debug`**, label **Daily Reps Test**. Deze testapp staat apart van de Play Store-app.
 
@@ -30,10 +30,10 @@ Een release vereist een uploadsleutel. Die staat **niet** in GitHub. Bewaar de o
 De privébundel bevat de keystore, een openbaar certificaat en `signing.json`. Het buildscript kan dat bestand direct gebruiken:
 
 ```sh
-python scripts/build-android.py --release --signing-file /veilige/map/signing.json --version-code 1 --version-name 1.0.0
+python scripts/build-android.py --release --signing-file /veilige/map/signing.json --version-code 2 --version-name 1.0.1
 ```
 
-Resultaat: `artifacts/daily-reps-1.0.0-play.aab`. Bij een volgende versie verhoog je bijvoorbeeld versionCode naar 2 en versionName naar 1.0.1. Sleutels en wachtwoorden horen niet in commits, screenshots of openbare logs.
+Resultaat: `artifacts/daily-reps-1.0.1-play.aab`. Bij een volgende versie verhoog je bijvoorbeeld versionCode naar 3 en versionName naar 1.0.2. Sleutels en wachtwoorden horen niet in commits, screenshots of openbare logs.
 
 Als alternatief gebruikt Gradle de omgevingsvariabelen `WORKOUT_KEYSTORE_FILE`, `WORKOUT_STORE_PASSWORD`, `WORKOUT_KEY_ALIAS` en `WORKOUT_KEY_PASSWORD`. Een release zonder ondertekengegevens wordt expliciet geweigerd.
 
@@ -47,7 +47,7 @@ Als alternatief gebruikt Gradle de omgevingsvariabelen `WORKOUT_KEYSTORE_FILE`, 
 
 ## GitHub Actions
 
-De workflow **Build Android app** bouwt de test-APK en voert Android-lint en JVM-tests uit. Download de APK onder de workflow-artifacts.
+De workflow **Build Android app** bouwt de test-APK en voert Android-lint en de beschikbare JVM-testtaken uit. Download de APK onder de workflow-artifacts.
 
 Een handmatig gestarte workflow kan ook een getekende AAB bouwen. Voeg daarvoor zelf deze repositorysecrets toe: `ANDROID_KEYSTORE_BASE64`, `ANDROID_STORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`. Het eerste secret is de base64-inhoud van de keystore. De workflow schrijft de sleutel alleen tijdelijk en verwijdert hem na de build. Een handmatige release zonder de secrets stopt met een duidelijke fout.
 
@@ -55,8 +55,8 @@ Een handmatig gestarte workflow kan ook een getekende AAB bouwen. Voeg daarvoor 
 
 - Appbestanden inbegrepen; geen web-updateknop in Android.
 - Native `FLAG_KEEP_SCREEN_ON` tijdens een zichtbare actieve training.
-- Backup exporteren via de Android-bestandskiezer, zonder brede opslagrechten.
-- JSON-import via de bestandskiezer van de WebView.
+- Appgerichte teksten zonder GitHub-/browseruitleg of zichtbare back-upopties. De webversie behoudt export/import.
+- Statusbalk, schermuitsparingen, navigatiebalk en toetsenbordruimte worden native vrijgehouden, onafhankelijk van de WebView-versie.
 - Terugknop sluit eerst een dialoog of gaat terug naar het workoutscherm; de training wordt niet gewist.
 - Google Video-zoekacties en andere externe HTTPS-links openen in de browser.
 - Lokale gegevens blijven lokaal; geen account, advertenties of analytics-SDK.

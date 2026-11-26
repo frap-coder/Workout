@@ -221,4 +221,6 @@ See [GOOGLE_PLAY_PLAN.md](GOOGLE_PLAY_PLAN.md) for the Android packaging recomme
 
 ## Android package
 
-The Capacitor 8.6.2 project in `android/` bundles `dist/` as Daily Reps (`nl.frapcoder.workout`), targeting Android API 36. Android skips service-worker updates, keeps the screen awake natively, exports backups through the document picker, handles the Back button without clearing sessions and opens external video searches in the system browser. See [ANDROID_BUILD.md](ANDROID_BUILD.md) for signed AAB builds and Play Console upload. Signing material is kept outside the repository. The separate test APK uses `.debug` in its app ID.
+The Capacitor 8.6.2 project in `android/` bundles `dist/` as Daily Reps (`nl.frapcoder.workout`), targeting Android API 36. Android skips service-worker updates, keeps the screen awake natively, uses app-specific data copy without web backup controls, reserves system-bar and keyboard insets natively, handles the Back button without clearing sessions and opens external video searches in the system browser. See [ANDROID_BUILD.md](ANDROID_BUILD.md) for signed AAB builds and Play Console upload. Signing material is kept outside the repository. The separate test APK uses `.debug` in its app ID.
+
+Android 1.0.1 (2) removes website/source/backup controls from the native UI. Extra equipment stays expanded after choices; the Experienced description now describes technique and harder exercises. The browser retains backup/source controls.

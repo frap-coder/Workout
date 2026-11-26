@@ -9,8 +9,8 @@ import subprocess
 parser = argparse.ArgumentParser()
 parser.add_argument('--release', action='store_true')
 parser.add_argument('--signing-file', type=Path)
-parser.add_argument('--version-code', type=int, default=1)
-parser.add_argument('--version-name', default='1.0.0')
+parser.add_argument('--version-code', type=int, default=2)
+parser.add_argument('--version-name', default='1.0.1')
 args = parser.parse_args()
 root = Path(__file__).resolve().parent.parent
 env = os.environ.copy()

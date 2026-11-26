@@ -17,7 +17,7 @@ function paintRuntimeStatus(){
 function wantsWakeLock(){return !!(activeSession()?.running&&!activeSession().finished&&profile().preferences?.keepAwake!==false&&!document.hidden);}
 async function syncWakeLock(){
  if(isNativeApp()){
-  const enabled=wantsWakeLock();try{await callNative('setKeepAwake',{enabled});wakeStatus=enabled?'Screen stays awake':'Not active';}catch{wakeStatus='Unavailable · check battery or browser settings';}paintRuntimeStatus();return;
+  const enabled=wantsWakeLock();try{await callNative('setKeepAwake',{enabled});wakeStatus=enabled?'Screen stays awake':'Not active';}catch{wakeStatus='Unavailable · check battery settings';}paintRuntimeStatus();return;
  }
  if(!wantsWakeLock()){
   const previous=screenLock;screenLock=null;if(previous)try{await previous.release();}catch{}
@@ -66,3 +66,8 @@ document.addEventListener('click',event=>{
  const url=new URL(link.href,location.href);if(url.protocol!=='https:'||url.origin===location.origin)return;
  event.preventDefault();callNative('openExternal',{url:url.href}).catch(()=>toast('Could not open the browser.'));
 },true);
+
+// Android copy describes local app storage; website-only controls stay in the web build.
+function appDataFooter(){return isNativeApp()?'<span>Saved on this device · <button class="text-button" data-action="about-app">About & data</button></span>':'<span>Saved on this browser · <button class="text-button" data-action="export-backup">Back up data</button> · <button class="text-button" data-action="about-app">About & data</button></span>';}
+function nativeDataSettings(){return '<section class="section"><h2>Your data</h2><p>Your plan, equipment, weights and workout history are saved on this device. There is no account or automatic synchronization.</p><p class="small muted">Uninstalling the app or clearing its data removes your saved workouts.</p><button class="danger-button" data-action="delete-data">Delete all local data</button></section>';}
+function showNativeAbout(){modal(`<h2>About Daily Reps</h2><p>20-minute circuits with your own equipment, exercise choices and rep tracking. Choose your app language in Settings.</p><h3>Your data</h3><p>Your plan, equipment, weights and workout history are saved on this device. There is no account or automatic synchronization.</p><p>Uninstalling the app or clearing its data removes your saved workouts.</p><p>The app contains no advertising or analytics SDK. Your workout history is not automatically uploaded.</p><p>You can delete your local data in Settings. Enable sound and keep the app open for the chime. A closed or suspended app cannot guarantee an alarm.</p><p><a href="https://frap-coder.github.io/Workout/privacy.html" target="_blank" rel="noopener">Privacy policy</a></p><button class="primary" data-action="close">Close</button>`);document.querySelector('#modal').setAttribute('aria-label','About Daily Reps and local data');}
