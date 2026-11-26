@@ -6,7 +6,7 @@ De zelfstandige Android-app staat in `android/`. De webbestanden zitten in het p
 
 - Naam: **Daily Reps**.
 - Productie application ID: **`nl.frapcoder.workout`**.
-- Huidige versie: **1.0.1**, `versionCode` **2**.
+- Huidige versie: **1.0.2**, `versionCode` **3**.
 - Android: minimaal 7.0 / API 24; target en compile API **36**.
 - Test-APK: **`nl.frapcoder.workout.debug`**, label **Daily Reps Test**. Deze testapp staat apart van de Play Store-app.
 
@@ -30,10 +30,10 @@ Een release vereist een uploadsleutel. Die staat **niet** in GitHub. Bewaar de o
 De privébundel bevat de keystore, een openbaar certificaat en `signing.json`. Het buildscript kan dat bestand direct gebruiken:
 
 ```sh
-python scripts/build-android.py --release --signing-file /veilige/map/signing.json --version-code 2 --version-name 1.0.1
+python scripts/build-android.py --release --signing-file /veilige/map/signing.json --version-code 3 --version-name 1.0.2
 ```
 
-Resultaat: `artifacts/daily-reps-1.0.1-play.aab`. Bij een volgende versie verhoog je bijvoorbeeld versionCode naar 3 en versionName naar 1.0.2. Sleutels en wachtwoorden horen niet in commits, screenshots of openbare logs.
+Resultaat: `artifacts/daily-reps-1.0.2-play.aab`. Bij een volgende versie verhoog je bijvoorbeeld versionCode naar 4 en versionName naar 1.0.3. Sleutels en wachtwoorden horen niet in commits, screenshots of openbare logs.
 
 Als alternatief gebruikt Gradle de omgevingsvariabelen `WORKOUT_KEYSTORE_FILE`, `WORKOUT_STORE_PASSWORD`, `WORKOUT_KEY_ALIAS` en `WORKOUT_KEY_PASSWORD`. Een release zonder ondertekengegevens wordt expliciet geweigerd.
 

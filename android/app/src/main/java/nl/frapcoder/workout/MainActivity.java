@@ -2,6 +2,8 @@ package nl.frapcoder.workout;
 
 import android.os.Bundle;
 import android.view.View;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
@@ -18,8 +20,17 @@ public class MainActivity extends BridgeActivity {
         // passes them through on WebView 140+, allowing page content under bars.
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         View decor = getWindow().getDecorView();
-        decor.setBackgroundColor(android.graphics.Color.rgb(13, 22, 41));
-        ViewCompat.setOnApplyWindowInsetsListener(decor, (view, insets) -> {
+        int background = Color.rgb(13, 22, 41);
+        getWindow().setBackgroundDrawable(new ColorDrawable(background));
+        decor.setBackgroundColor(background);
+        View content = findViewById(android.R.id.content);
+        content.setBackgroundColor(background);
+        WindowCompat.getInsetsController(getWindow(), decor).setAppearanceLightStatusBars(false);
+        WindowCompat.getInsetsController(getWindow(), decor).setAppearanceLightNavigationBars(false);
+        // Pad the content container: its background paints the entire safe area,
+        // including transparent Android 15/16 system bars. Decor padding can expose
+        // AppCompat's light status-bar background instead.
+        ViewCompat.setOnApplyWindowInsetsListener(content, (view, insets) -> {
             int bars = WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout();
             Insets safe = insets.getInsets(bars);
             Insets keyboard = insets.getInsets(WindowInsetsCompat.Type.ime());
@@ -28,7 +39,7 @@ public class MainActivity extends BridgeActivity {
                 .setInsets(bars | WindowInsetsCompat.Type.ime(), Insets.NONE)
                 .build();
         });
-        decor.post(() -> ViewCompat.requestApplyInsets(decor));
+        content.post(() -> ViewCompat.requestApplyInsets(content));
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {

@@ -84,3 +84,6 @@ select.profile{appearance:none;-webkit-appearance:none;padding:9px 30px 9px 10px
 
 .surprise-controls{display:flex;flex-wrap:wrap;gap:8px}.home-summary{flex-wrap:wrap}.surprise-controls button,.surprise-slot{font-size:13px;min-height:40px}.examples-link{display:inline-block;color:var(--mint);padding:10px 12px;min-height:44px;font-size:13px;text-decoration:underline}.workout-compact-list>li{position:relative}.workout-compact-list>li>.examples-link{position:absolute;right:6px;bottom:0;min-height:30px;padding:7px 4px;font-size:10px}.workout-compact-list .compact-level small{visibility:hidden}.exercise>.examples-link{margin:0 16px 8px}.examples-link:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
 .home-heading{flex-wrap:wrap}.home-heading>div{min-width:0;flex:1 1 180px}.home-heading>.text-button{flex-shrink:0;white-space:normal}.home-heading h1{overflow-wrap:anywhere}.workout-compact-list>li>.examples-link{min-height:44px;display:flex;align-items:flex-end}
+
+/* Shared ring logo in the app header and installed icon. */
+.logo{background:transparent;box-shadow:none;border-radius:50%;overflow:hidden}.logo img{display:block;width:100%;height:100%;object-fit:contain}
